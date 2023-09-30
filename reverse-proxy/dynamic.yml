@@ -1,0 +1,15 @@
+http:
+  routers:
+    traefik:
+      entryPoints:
+        - web-secure
+      rule: "Host(`traefik.at-first-sight.localhost`)"
+      service: "api@internal"
+      tls:
+        domains:
+          - main: "traefik.at-first-sight.localhost"
+
+tls:
+  certificates:
+    - certFile: "/etc/certs/local-cert.pem"
+      keyFile: "/etc/certs/local-key.pem"
