@@ -1,18 +1,14 @@
 {
-  "name": "at-first-sight",
-  "module": "run-dev-mode.ts",
-  "type": "module",
+  "name": "@at-first-sight/root",
   "scripts": {
-    "dev": "bun run --watch run-dev-mode.ts"
+    "dev": "docker-compose -f docker-compose.dev.yml up"
   },
-  "devDependencies": {
-    "@types/cookie": "^0.5.2",
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  },
+  "type": "module",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
   "dependencies": {
-    "cookie": "^0.5.0"
+    "pm2": "^5.3.0"
   }
 }
