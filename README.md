@@ -34,4 +34,5 @@ I always suggest starting the development of a new product (application) with th
 
 This whole process can be described in one word — design — and it is the first step in our instructions, which is presented on a separate page.
 
-- Design / [in English](./docs/en/design.md) / [на русском языке](./docs/ru/design.md)
+- Design / [in English](./docs/en/01-design.md) / [на русском языке](./docs/ru/01-design.md)
+- Interface development / [in English](./docs/en/02-interface.md) / [на русском языке](./docs/ru/02-interface.md)
