@@ -3,12 +3,5 @@
   "scripts": {
     "dev": "docker-compose -f docker-compose.dev.yml up"
   },
-  "type": "module",
-  "workspaces": [
-    "backend",
-    "frontend"
-  ],
-  "dependencies": {
-    "pm2": "^5.3.0"
-  }
+  "type": "module"
 }
