@@ -26,7 +26,7 @@ Since this repository was created to participate in the [Telegram Mini App Conte
 
 - **Performance monitoring** — Even a well-tested application may unexpectedly break down due to circumstances beyond your control. You need to set up monitoring of important metrics of your application and set up a notification system if something suddenly starts to differ greatly from the norm.
 
--**Teamwork** — if you plan to actively develop and change the application, then most likely you need to think about selecting a team and setting up a project for teamwork. For example, this may consist in setting up CI/CD pipelines that will allow you to automatically monitor the quality of the code, review the code and automatically deploy it to the servers…
+- **Teamwork** — if you plan to actively develop and change the application, then most likely you need to think about selecting a team and setting up a project for teamwork. For example, this may consist in setting up CI/CD pipelines that will allow you to automatically monitor the quality of the code, review the code and automatically deploy it to the servers…
 
 ### Shall we begin?
 
