@@ -29,15 +29,13 @@ This editor is completely free, suitable for any operating system, has a huge se
 
 3. Check that everything is fine
    Let's open a terminal inside VSCode and execute a simple command there:
-   ``
+   ```
    bun -v
    ```
    If you received something in the spirit of `1.0.3` in response, then everything is going according to plan and we can continue
-   ```
 
 Well, finally we can start writing code! To begin with, let's learn how to create an empty application with you and open it inside Telegram, and after that we will start working out the logic inside the application.
 
 Next — [Creating an empty application](./03-create-empty-project.md)
 
 <br clear="right"/>
-```
