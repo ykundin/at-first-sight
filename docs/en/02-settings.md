@@ -16,22 +16,26 @@ Absolutely all Web Apps in Telegram are a bot that needs to be registered. This 
 
 Now we need to prepare all the necessary tools to start convenient development. Two mandatory things are necessary for our task:
 
-1. Any code editor, for example, VSCode
+1. Any code editor, for example, VSCod
 
-This editor is completely free, suitable for any operating system, has a huge set of features that are enough to complete our task. If you don't have it, then you can download and install it from the official website
+   This editor is completely free, suitable for any operating system, has a huge set of features that are enough to complete our task. If you don't have it, then you can download and install it from the official website
 
-[Install VSCode](https://code.visualstudio.com/docs/setup/setup-overview)
+   [Install VSCode](https://code.visualstudio.com/docs/setup/setup-overview)
 
-2. Bun to run the code
+1. Bun to run the code
+
    And the second mandatory program for development is Bun. This tool allows you to run TypeScript code, install the necessary packages, and configure everything you need to work much easier and faster. And it also has almost all the features of NodeJS, works faster and is also suitable for any operating system.
 
-[Install Bun](https://bun.sh/)
+   [Install Bun](https://bun.sh/)
 
-3. Check that everything is fine
+1. Check that everything is fine
+
    Let's open a terminal inside VSCode and execute a simple command there:
+
    ```
    bun -v
    ```
+
    If you received something in the spirit of `1.0.3` in response, then everything is going according to plan and we can continue
 
 Well, finally we can start writing code! To begin with, let's learn how to create an empty application with you and open it inside Telegram, and after that we will start working out the logic inside the application.
