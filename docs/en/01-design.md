@@ -22,7 +22,7 @@ Now we need to design the interface in the form of several screens that will all
 
 Figma is free and available in an online format, so you can see the result directly from the link.
 
-[Open Layout](https://www.figma.com/file/Zg8AVusk4C620Vsvy7uiyu/At-first-sight !?type=design&node-id=0%3A1&mode=design&t=qsCjvDPdpzYcKCqL-1)
+[Open Layout](https://www.figma.com/file/Zg8AVusk4C620Vsvy7uiyu/At-first-sight!?type=design&node-id=0%3A1&mode=design&t=qsCjvDPdpzYcKCqL-1)
 
 ### Application Screens
 
