@@ -1,9 +1,102 @@
 .screen {
-  min-height: 100vh;
-  color: black;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  left: 0;
+  right: 0;
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.iconFire {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+
+.iconClock {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.iconClock:active {
+  opacity: 1;
+}
+
+.fire {
+  position: relative;
+  color: white;
+  text-decoration: none;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.fire.actived {
+  opacity: 1;
+}
+
+.count {
+  position: absolute;
+  top: 0;
+  right: -10px;
+  background-color: #dd2c00;
+  color: white;
+  padding: 2px;
+  border-radius: 50%;
+  font-size: 14px;
+  line-height: 1;
+}
+
+.photo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  flex-shrink: 0;
+}
+
+.photo:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  z-index: 2;
+  box-shadow: inset 0 60px 20px rgba(0, 0, 0, 0.5);
+  content: "";
+}
+
+.image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: inherit;
+  object-fit: cover;
+}
+
+.footer {
+  display: flex;
   flex-direction: column;
+  padding: 10px 15px 30px;
+  gap: 40px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.buttons {
+  display: flex;
   justify-content: center;
-  text-align: center;
 }
