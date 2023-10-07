@@ -14,7 +14,7 @@ bun create vite tg-web-app
 
 ## Запускам проект
 
-   <img align="right" width="300" height="190" src="../images/create-vite-project/screenshot-in-browser.png">
+<img align="right" width="300" height="190" src="../images/create-vite-project/screenshot-in-browser.png">
 
 После того, как проект будет создан нам предложат выполнить следующий набор команд, которые нужно выполнить в терминале поочередно.
 
