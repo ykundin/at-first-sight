@@ -1,53 +1,13 @@
 version: "3.3"
 services:
-  reverse-proxy:
-    image: traefik:v2.10
-    ports:
-      - 80:80
-      - 443:443
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./reverse-proxy/certs:/etc/certs
-      - ./reverse-proxy/traefik.yml:/etc/traefik/traefik.yml:ro
-      - ./reverse-proxy/dynamic.yml:/etc/traefik/dynamic.yml:ro
-
   backend:
     image: oven/bun:1.0.3
     restart: always
     working_dir: /app
     volumes:
-      - ./backend:/app
+      - ./backend:/app:ro
     env_file:
       - ./backend/.env
     environment:
       - PORT=4000
     command: bun run dev
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.backend.entrypoints=web-secure
-      - traefik.http.routers.backend.rule=Host(`at-first-sight.localhost`) && PathPrefix(`/api`, `/webhook`)
-      - traefik.http.routers.backend.tls.domains.main=at-first-sight.localhost
-      - traefik.http.routers.backend.middlewares=backend-add-cors
-      - traefik.http.middlewares.backend-add-cors.headers.accesscontrolallowmethods=GET,OPTIONS,POST
-      - traefik.http.middlewares.backend-add-cors.headers.accesscontrolallowheaders=*
-      - traefik.http.middlewares.backend-add-cors.headers.accesscontrolalloworiginlist=https://at-first-sight.localhost
-      - traefik.http.services.backend.loadbalancer.server.port=4000
-
-  frontend:
-    image: oven/bun:1.0.3
-    restart: always
-    working_dir: /app
-    volumes:
-      - ./frontend:/app
-    env_file:
-      - ./frontend/.env
-    environment:
-      - PORT=3000
-    command: bun run dev
-    labels:
-      - traefik.enable=true
-      - traefik.http.routers.frontend.entrypoints=web-secure
-      - traefik.http.routers.frontend.rule=Host(`at-first-sight.localhost`)
-      - traefik.http.routers.frontend.tls.domains.main=at-first-sight.localhost
-      - traefik.http.services.frontend.loadbalancer.server.port=3000

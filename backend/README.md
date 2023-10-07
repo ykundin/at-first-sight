@@ -1,2 +1,3 @@
-# at-first-sight
-Example of Telegram Web App for dating
+# At first sight! / Backend
+
+HTTP Server, that use [Bun](https://bun.sh/) as runtime.

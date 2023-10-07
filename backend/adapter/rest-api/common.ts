@@ -5,9 +5,7 @@ export const commonRoutes: HttpRoute[] = [
     method: "GET",
     path: "/health",
     handler() {
-      return Promise.resolve(
-        `Application is running on port ${process.env.PORT}!`
-      );
+      return Promise.resolve(`Backend is running on port ${process.env.PORT}!`);
     },
   },
 
