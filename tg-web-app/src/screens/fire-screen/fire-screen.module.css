@@ -1,9 +1,49 @@
 .screen {
-  min-height: 100vh;
-  color: black;
   display: flex;
-  align-items: center;
   flex-direction: column;
-  justify-content: center;
-  text-align: center;
+  justify-content: flex-end;
+  height: 100vh;
+  padding: 15px;
+  box-sizing: border-box;
+  gap: 30px;
+  background-color: #efeff3;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.iconFire {
+  width: 100px;
+  height: 100px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.groupTitle {
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }

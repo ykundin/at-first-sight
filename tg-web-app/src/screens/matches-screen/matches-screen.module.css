@@ -54,6 +54,8 @@
   border-radius: 50%;
   font-size: 14px;
   line-height: 1;
+  min-width: 15px;
+  text-align: center;
 }
 
 .photo {

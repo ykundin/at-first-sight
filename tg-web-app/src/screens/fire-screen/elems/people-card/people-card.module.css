@@ -1,0 +1,47 @@
+.card {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 8px;
+}
+
+.card.locked .photo {
+  filter: blur(10px);
+}
+
+.photo {
+  width: 100px;
+  height: 100px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.name {
+  font-size: 18px;
+}
+
+.description {
+  font-size: 14px;
+}
+
+.link {
+  font-size: 16px;
+  text-decoration: none;
+  color: #4e92e2;
+}
