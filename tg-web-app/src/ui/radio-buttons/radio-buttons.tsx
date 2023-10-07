@@ -28,6 +28,10 @@ const RadioButtons: FC<RadioButtons> = (props) => {
     (e: MouseEvent, id: Item["id"]) => {
       setValue(id);
       if (onChange) onChange(e, id);
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const webApp = (window as any).Telegram.WebApp;
+      webApp.HapticFeedback.selectionChanged();
     },
     [onChange]
   );
