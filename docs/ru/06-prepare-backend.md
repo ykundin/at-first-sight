@@ -32,67 +32,70 @@
 
 Процесс упаковывания наших сервис внутрь Docker называется контейнеризацией. Давайте сделаем это для бэкенда и фронтенда нашего приложения, после чего мы сможем запускать весь проект одной командой.
 
-1. Создаём `docker-compose.dev.yml`
-   Данный файл является конфигурацией для каждого из микросервисов, глядя на который можно сразу понять из чего состоит весь проект.
-   Давайте для начала я добавлю в него лишь один сервис.
+1.  **Создаём `docker-compose.dev.yml`**
 
-   ```yml
-   version: "3.3"
-   services:
-     backend:
-       image: oven/bun:1.0.3 # Мы используем Bun
-       restart: always
-       working_dir: /app
-       ports:
-         - 4000:4000 # Открываем порт для доступа
-       volumes:
-         - ./backend:/app:ro # Все файлы из директории /backend относятся к данному микросервису
-       env_file:
-         - ./backend/.env # А это файл с приватными переменными, например, токен для Telegram
-       environment:
-         - PORT=4000 # На этом порту будет запущен микросервис
-       command: bun run dev # А это команда для запуска
-   ```
+    Данный файл является конфигурацией для каждого из микросервисов, глядя на который можно сразу понять из чего состоит весь проект.
+    Давайте для начала я добавлю в него лишь один сервис.
 
-2. А теперь добавим фронтенд
+    ```yml
+    version: "3.3"
+    services:
+      backend:
+        image: oven/bun:1.0.3 # Мы используем Bun
+        restart: always
+        working_dir: /app
+        ports:
+          - 4000:4000 # Открываем порт для доступа
+        volumes:
+          - ./backend:/app:ro # Все файлы из директории /backend относятся к данному микросервису
+        env_file:
+          - ./backend/.env # А это файл с приватными переменными, например, токен для Telegram
+        environment:
+          - PORT=4000 # На этом порту будет запущен микросервис
+        command: bun run dev # А это команда для запуска
+    ```
 
-   ```yml
-   version: "3.3"
-   services:
-     backend:
-       ...
+2.  **А теперь добавим фронтенд**
 
-    tg-web-app:
-       image: oven/bun:1.0.4-alpine
-       restart: always
-       working_dir: /app
-       ports:
-         - 5173:5173
-       volumes:
-         - ./tg-web-app:/app
-       env_file:
-         - ./tg-web-app/.env
-       environment:
-         - PORT=5173
-       command: bun run dev
-   ```
+    ```yml
+    version: "3.3"
+    services:
+      backend:
+        ...
 
-   Как видите, конфигурация довольно простая и очень похожа для каждого из сервисов и в этом прелесть Docker.
+     tg-web-app:
+        image: oven/bun:1.0.4-alpine
+        restart: always
+        working_dir: /app
+        ports:
+          - 5173:5173
+        volumes:
+          - ./tg-web-app:/app
+        env_file:
+          - ./tg-web-app/.env
+        environment:
+          - PORT=5173
+        command: bun run dev
+    ```
 
-3. Обновляем команду для запуска проекта
-   А теперь добавим файл `package.json` в корень репозитория, чтобы добавить команду для запуска всего проекта одной командой.
+    Как видите, конфигурация довольно простая и очень похожа для каждого из сервисов и в этом прелесть Docker.
 
-   ```json
-   {
-     "name": "@at-first-sight/root",
-     "scripts": {
-       "dev": "docker-compose -f docker-compose.dev.yml up"
-     },
-     "type": "module"
-   }
-   ```
+3.  **Обновляем команду для запуска проекта**
 
-4. Запускаем проект в Docker
-   <img align="right" width="300" height="169" src="../images/prepare-backend/docker-compose.png">
+    А теперь добавим файл `package.json` в корень репозитория, чтобы добавить команду для запуска всего проекта одной командой.
 
-   Теперь давайте остановим приложение, которое было у нас запущено во время разработки интерфейса и теперь запустим команду `bun run dev` в корне репозитория. И Docker запустит для нас сразу два сервиса — бэкенд и фронтенд!
+    ```json
+    {
+      "name": "@at-first-sight/root",
+      "scripts": {
+        "dev": "docker-compose -f docker-compose.dev.yml up"
+      },
+      "type": "module"
+    }
+    ```
+
+4.  **Запускаем проект в Docker**
+
+    <img align="right" width="300" height="169" src="../images/prepare-backend/docker-compose.png">
+
+    Теперь давайте остановим приложение, которое было у нас запущено во время разработки интерфейса и теперь запустим команду `bun run dev` в корне репозитория. И Docker запустит для нас сразу два сервиса — бэкенд и фронтенд!
