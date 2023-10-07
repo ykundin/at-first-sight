@@ -1,0 +1,62 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  justify-content: flex-end;
+  padding-bottom: 30px;
+  width: 100%;
+  height: 100%;
+  flex-grow: 1;
+  box-sizing: border-box;
+  background-color: #efeff3;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0 20px;
+}
+
+.message {
+  display: flex;
+}
+
+.message.in {
+  justify-content: flex-start;
+}
+
+.message.out {
+  justify-content: flex-end;
+}
+
+.messageContent {
+  max-width: 90%;
+}
+
+.textMessage {
+  display: inline-flex;
+  border-radius: 10px;
+  background-color: white;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.uploadMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.uploadMessagePreview {
+  border-radius: 10px;
+  border: 1px solid #868585;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.uploadMessageImage {
+  display: flex;
+  width: 100%;
+}
