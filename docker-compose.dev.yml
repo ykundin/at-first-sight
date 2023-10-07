@@ -1,5 +1,18 @@
 version: "3.3"
 services:
+  db:
+    image: mongo:5.0.2
+    restart: always
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=at-first-sight
+      - MONGO_INITDB_ROOT_PASSWORD=at-first-sight
+      - MONGODB_DATABASE=at-first-sight
+    ports:
+      - 27017:27017
+    volumes:
+      - db_data:/data/db
+      - ./mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+
   backend:
     image: oven/bun:1.0.4
     restart: always
@@ -27,3 +40,6 @@ services:
     environment:
       - PORT=5173
     command: bun run dev
+
+volumes:
+  db_data:
