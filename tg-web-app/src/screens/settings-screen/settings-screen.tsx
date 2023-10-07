@@ -1,11 +1,52 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+
+import RadioButtons from "../../ui/radio-buttons";
+import photo from "./images/photo.png";
 import styles from "./settings-screen.module.css";
 
 import type { FC } from "react";
 
+const interestItems = [
+  { id: "man", text: "A man" },
+  { id: "woman", text: "A woman" },
+];
+
+const ageItems = [
+  { id: "14-18", text: "14-18" },
+  { id: "19-23", text: "19-23" },
+  { id: "24-30", text: "24-30" },
+  { id: "31-36", text: "31-36" },
+  { id: "37-45", text: "37-45" },
+  { id: "46-53", text: "46-53" },
+  { id: "older", text: "53 and older" },
+];
+
 const SettingsScreen: FC = () => {
   const navigate = useNavigate();
+
+  const handleSave = useCallback(() => {
+    console.log("Save the changes...");
+    navigate("/matches");
+  }, [navigate]);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    const cleanup = () => {
+      webApp.MainButton.hide();
+      webApp.MainButton.offClick(handleSave);
+    };
+
+    // Show the main button
+    webApp.MainButton.show();
+    webApp.MainButton.setText("Save changes");
+
+    // Open the payment by click
+    webApp.MainButton.onClick(handleSave);
+
+    return cleanup;
+  }, [handleSave]);
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,7 +64,42 @@ const SettingsScreen: FC = () => {
 
   return (
     <div className={styles.screen}>
-      <span>Settings Screen!</span>
+      <div className={styles.photo}>
+        <img className={styles.image} src={photo} alt="" />
+        <div className={styles.photoFooter}>
+          <span className={styles.changePhoto}>Change photo</span>
+        </div>
+        <input
+          className={styles.upload}
+          type="file"
+          accept="image/png, image/jpeg"
+        />
+      </div>
+
+      <div className={styles.footer}>
+        <div className={styles.profile}>
+          <div className={styles.name}>Yury Kundin, 27</div>
+          <div className={styles.description}>Work smart, not hard</div>
+        </div>
+
+        <div className={styles.separator} />
+
+        <div className={styles.content}>
+          <div className={styles.group}>
+            <div className={styles.label}>Interests:</div>
+            <div className={styles.groupContent}>
+              <RadioButtons items={interestItems} defaultValue="man" />
+            </div>
+          </div>
+
+          <div className={styles.group}>
+            <div className={styles.label}>Age:</div>
+            <div className={styles.groupContent}>
+              <RadioButtons items={ageItems} defaultValue="24-30" />
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

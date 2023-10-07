@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.item {
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #868585;
+  font-size: 16px;
+  line-height: 1;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.item.actived {
+  color: white;
+  background-color: #4e92e2;
+  border-color: #4e92e2;
+}
