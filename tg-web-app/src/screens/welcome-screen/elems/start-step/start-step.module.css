@@ -8,21 +8,23 @@
   height: 100%;
   flex-grow: 1;
   box-sizing: border-box;
+  background-color: var(--app-bg-color);
 }
 
 .logo {
   width: 240px;
   height: 240px;
   border-radius: 50%;
-  background-color: #b4b4b4;
+  background-color: var(--app-secondary-bg-color);
 }
 
 .text {
   font-size: 20px;
   text-align: center;
+  color: var(--app-text-color);
 }
 
 .text span {
   font-weight: 600;
-  color: #fd6569;
+  color: var(--app-brand-color);
 }

@@ -8,4 +8,5 @@ body {
   margin: 0;
   min-width: 320px;
   max-height: 100vh;
+  color: var(--app-text-color);
 }

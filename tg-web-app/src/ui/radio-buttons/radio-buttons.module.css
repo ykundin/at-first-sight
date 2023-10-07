@@ -10,7 +10,8 @@
 .item {
   padding: 10px 20px;
   border-radius: 10px;
-  border: 1px solid #868585;
+  color: var(--app-text-color);
+  border: 1px solid var(--app-hint-color);
   font-size: 16px;
   line-height: 1;
   transition: all 0.2s;
@@ -18,7 +19,7 @@
 }
 
 .item.actived {
-  color: white;
-  background-color: #4e92e2;
-  border-color: #4e92e2;
+  color: var(--app-button-text-color);
+  background-color: var(--app-button-color);
+  border-color: var(--app-button-color);
 }

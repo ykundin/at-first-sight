@@ -2,6 +2,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  color: var(--app-text-color);
+  background-color: var(--app-bg-color);
+  height: 100vh;
 }
 
 .header {
@@ -48,7 +51,7 @@
   position: absolute;
   top: 0;
   right: -10px;
-  background-color: #dd2c00;
+  background-color: var(--app-brand-color);
   color: white;
   padding: 2px;
   border-radius: 50%;
@@ -122,5 +125,5 @@
 }
 
 .message span {
-  color: #fd6569;
+  color: var(--app-brand-color);
 }
