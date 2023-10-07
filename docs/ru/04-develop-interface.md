@@ -145,4 +145,42 @@ export default FireScreen;
 
 [Посмотреть код](https://github.com/ykundin/at-first-sight/tree/docs/tg-web-app/src/screens)
 
+## Работа с основной кнопкой приложения
+
+Заметили, что на экране с настройками есть кнопка "Save changes"? Это ещё одна из встроенных возможностей Telegram Mini App, которая называется MainButton и работа с которой очень похожа на BackButton. Давайте разберём на примере:
+
+```tsx
+const SettingsScreen: FC = () => {
+  const navigate = useNavigate();
+
+  const handleSave = useCallback(() => {
+    console.log("Save the changes...");
+    navigate("/matches");
+  }, [navigate]);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    const cleanup = () => {
+      webApp.MainButton.hide();
+      webApp.MainButton.offClick(handleSave);
+    };
+
+    // Show the main button
+    webApp.MainButton.show();
+    webApp.MainButton.setText("Save changes");
+
+    // Open the payment by click
+    webApp.MainButton.onClick(handleSave);
+
+    return cleanup;
+  }, [handleSave]);
+
+  ....
+```
+
+В данном случае мы просто логируем нажатие на эту кнопку и сразу возвращаемся на основной экран. Но в дальнейшем именно здесь будет написан код, который сохраняет все изменения профиля, которые сделал пользователь.
+
+Обратите внимание на функцию `cleanup` — она будет автоматически вызвана при размонтировании компонента и позволяет скрыть кнопку и отписать от события, которое возникает по нажатию на неё. Если этого не сделать, то кнопка будет отображаться, даже если пользователь перейдёт на другой экран приложения.
+
 <br clear="right"/>
