@@ -89,4 +89,48 @@
    export default MatchesScreen;
    ```
 
+<br clear="right"/>
+
 ## Встроенная кнопка "Назад"
+
+<img align="right" width="300" height="649" src="../images/develop-interface/back-button-navigation.gif">
+
+Как мы видим из примера выше, некоторые из экранов должны возвращать нас на предыдущий экран. Например, если вы перешли на экран совпадений, то у вас должна быть кнопка "Назад", которая вернёт пользователя на предыдущий экран с поиском людей. И вместо того, чтобы размещать такую кнопку в дизайне, мы можем использовать нативную кнопку, которая выглядит привычно и которую нам предоставлят сам Telegram.
+
+[Документация по BackButton](https://core.telegram.org/bots/webapps#backbutton)
+
+Я сделаю это на экранах `fire-screen` и `settings-screen`, вот пример реализации:
+
+```tsx
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./fire-screen.module.css";
+
+import type { FC } from "react";
+
+const FireScreen: FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+
+    // Show the back button
+    webApp.BackButton.show();
+
+    // Hide back button by click and go to Matches screen
+    webApp.BackButton.onClick(() => {
+      webApp.BackButton.hide();
+      navigate("/matches");
+    });
+  }, [navigate]);
+
+  return (
+    <div className={styles.screen}>
+      <span>Fire Screen!</span>
+    </div>
+  );
+};
+
+export default FireScreen;
+```
