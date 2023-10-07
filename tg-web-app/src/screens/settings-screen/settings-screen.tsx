@@ -88,14 +88,22 @@ const SettingsScreen: FC = () => {
           <div className={styles.group}>
             <div className={styles.label}>Interests:</div>
             <div className={styles.groupContent}>
-              <RadioButtons items={interestItems} defaultValue="man" />
+              <RadioButtons
+                name="gender"
+                items={interestItems}
+                defaultValue="man"
+              />
             </div>
           </div>
 
           <div className={styles.group}>
             <div className={styles.label}>Age:</div>
             <div className={styles.groupContent}>
-              <RadioButtons items={ageItems} defaultValue="24-30" />
+              <RadioButtons
+                name="age-range"
+                items={ageItems}
+                defaultValue="24-30"
+              />
             </div>
           </div>
         </div>

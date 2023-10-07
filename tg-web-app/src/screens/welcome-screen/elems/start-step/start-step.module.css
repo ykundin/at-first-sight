@@ -1,0 +1,28 @@
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 140px;
+  height: 100%;
+  flex-grow: 1;
+  box-sizing: border-box;
+}
+
+.logo {
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background-color: #b4b4b4;
+}
+
+.text {
+  font-size: 20px;
+  text-align: center;
+}
+
+.text span {
+  font-weight: 600;
+  color: #fd6569;
+}
