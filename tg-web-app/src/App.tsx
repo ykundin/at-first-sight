@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   createBrowserRouter,
   Outlet,
@@ -22,6 +23,14 @@ const Root: FC = () => {
 };
 
 function App() {
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+
+    webApp.ready();
+    webApp.expand();
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",

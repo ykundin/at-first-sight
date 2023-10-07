@@ -88,3 +88,11 @@ function onClick() {
   webApp.HapticFeedback.selectionChanged();
 }
 ```
+
+[Посмотреть полный код](https://github.com/ykundin/at-first-sight/blob/docs/tg-web-app/src/ui/radio-buttons/radio-buttons.tsx)
+
+## Открытие на весь экран
+
+<img align="right" width="300" height="300" src="../images/interface-details/expand-app.png">
+
+По умолчанию приложение открывается у пользователей не на весь экран и им необходимо самостоятельно развернуть его полностью. Но во многих случаях это всего лишь лишнее действие и Telegram позволяет сразу же открыть приложение на весь экран (разница показана на скриншоте).
