@@ -40,6 +40,6 @@ Now we need to prepare all the necessary tools to start convenient development. 
 
 Well, finally we can start writing code! To begin with, let's learn how to create an empty application with you and open it inside Telegram, and after that we will start working out the logic inside the application.
 
-Next — [Creating an empty application](./03-create-empty-project.md)
+Next — [Creating an frontend application](./03-create-frontend-project.md)
 
 <br clear="right"/>
