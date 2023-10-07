@@ -1,9 +1,101 @@
 .screen {
-  min-height: 100vh;
-  color: black;
+  position: relative;
   display: flex;
-  align-items: center;
   flex-direction: column;
+}
+
+.photo {
+  position: relative;
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+  flex-shrink: 0;
+  height: 70vh;
+}
+
+.photo:before {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: block;
+  z-index: 2;
+  box-shadow: inset 0 -60px 20px rgba(0, 0, 0, 0.5);
+  content: "";
+}
+
+.photo.limited .image {
+  filter: blur(20px);
+  transform: scale(1.15);
+}
+
+.image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: inherit;
+  object-fit: cover;
+}
+
+.upload {
+  position: absolute;
+  z-index: 4;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0;
+}
+
+.photoFooter {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
   justify-content: center;
+  padding-bottom: 20px;
+}
+
+.changePhoto {
+  color: white;
+  font-size: 14px;
   text-align: center;
+}
+.changePhoto:active {
+  color: #4e92e2;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 15px 30px;
+}
+
+.name {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.separator {
+  margin: 20px 0;
+  border-bottom: 1px solid #dbd8d8;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  background-color: #efeff3;
+  border-radius: 15px;
+  gap: 15px;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
