@@ -30,6 +30,12 @@ const UploadButton: FC<UploadButton> = (props) => {
     [onChange]
   );
 
+  const handleClick = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    webApp.HapticFeedback.selectionChanged();
+  }, []);
+
   return (
     <div className={styles.container}>
       <input
@@ -37,6 +43,7 @@ const UploadButton: FC<UploadButton> = (props) => {
         name={name}
         type="file"
         accept="image/png, image/jpeg"
+        onClick={handleClick}
         onChange={handleChange}
       />
       {children}

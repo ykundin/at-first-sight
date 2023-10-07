@@ -18,10 +18,18 @@ const MatchesScreen: FC = () => {
 
   const handleNo = useCallback(() => {
     console.log("No!");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    webApp.HapticFeedback.selectionChanged();
   }, []);
 
   const handleYes = useCallback(() => {
     console.log("Yes!");
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    webApp.HapticFeedback.selectionChanged();
   }, []);
 
   const handlePayment = useCallback(() => {
