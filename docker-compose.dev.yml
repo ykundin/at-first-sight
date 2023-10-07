@@ -1,13 +1,29 @@
 version: "3.3"
 services:
   backend:
-    image: oven/bun:1.0.3
+    image: oven/bun:1.0.4
     restart: always
     working_dir: /app
+    ports:
+      - 4000:4000
     volumes:
-      - ./backend:/app:ro
+      - ./backend:/app
     env_file:
       - ./backend/.env
     environment:
       - PORT=4000
+    command: bun run dev
+
+  tg-web-app:
+    image: oven/bun:1.0.4-alpine
+    restart: always
+    working_dir: /app
+    ports:
+      - 5173:5173
+    volumes:
+      - ./tg-web-app:/app
+    env_file:
+      - ./tg-web-app/.env
+    environment:
+      - PORT=5173
     command: bun run dev
