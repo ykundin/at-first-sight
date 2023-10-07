@@ -3,5 +3,8 @@
   "scripts": {
     "dev": "docker-compose -f docker-compose.dev.yml up"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "classnames": "^2.3.2"
+  }
 }
