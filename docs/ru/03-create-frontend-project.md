@@ -90,6 +90,27 @@ bun run dev # запускам проект в режиме разработки
 7. Далее вводим название кнопки, например "Познакомиться"
 8. Всё! Переходим в своего бота и открываем приложение.
 
+## Инициализация Mini App
+
+Единственное, что осталось сделать, так это добавить в проект JS-скрипт от Telegram, чтобы получить доступ ко всем возможностям, которые описаны в [документации Telegram Mini Apps](https://core.telegram.org/bots/webapps#initializing-mini-apps). Делается это достаточно просто, достаточно вставить скрипт в файл `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <title>At first sight!</title>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
 После выполнения данных настроек мы можем вносить изменения в код проекта и они сразу же будут отображены внутри Telegram Web App даже без перезагрузки приложения. Этого достаточно, что отвлечься от настроек и наконец-то приступить к реализации нашей идеи!
 
 [Разрабатываем интерфейс приложения](./04-develop-interface.md)
