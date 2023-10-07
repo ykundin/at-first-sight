@@ -1,5 +1,6 @@
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-size: 16px;
   line-height: 1.5;
   font-weight: 400;
 }
@@ -9,4 +10,18 @@ body {
   min-width: 320px;
   max-height: 100vh;
   color: var(--app-text-color);
+}
+
+:root {
+  --app-brand-color: #fd6569;
+  --app-gender-man-color: #4e92e2;
+  --app-gender-woman-color: #fd6569;
+
+  --app-bg-color: var(--tg-theme-bg-color);
+  --app-secondary-bg-color: var(--tg-theme-secondary-bg-color);
+  --app-text-color: var(--tg-theme-text-color);
+  --app-hint-color: var(--tg-theme-hint-color);
+  --app-link-color: var(--tg-theme-link-color);
+  --app-button-color: var(--tg-theme-button-color);
+  --app-button-text-color: var(--tg-theme-button-text);
 }

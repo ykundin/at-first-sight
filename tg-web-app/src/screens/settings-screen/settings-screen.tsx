@@ -39,11 +39,13 @@ const SettingsScreen: FC = () => {
     };
 
     // Show the main button
-    webApp.MainButton.show();
-    webApp.MainButton.setText("Save changes");
+    if (!webApp.MainButton.isVisible) {
+      webApp.MainButton.setText("Save changes");
+      webApp.MainButton.show();
 
-    // Open the payment by click
-    webApp.MainButton.onClick(handleSave);
+      // Open the payment by click
+      webApp.MainButton.onClick(handleSave);
+    }
 
     return cleanup;
   }, [handleSave]);
