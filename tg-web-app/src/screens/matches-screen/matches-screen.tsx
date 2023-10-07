@@ -13,8 +13,8 @@ import styles from "./matches-screen.module.css";
 import { type FC } from "react";
 
 const MatchesScreen: FC = () => {
-  const count = 12;
-  const isLimited = true;
+  const count = 3;
+  const isLimited = false;
 
   const handleNo = useCallback(() => {
     console.log("No!");
