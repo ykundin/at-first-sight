@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
@@ -14,6 +14,7 @@ import { type FC } from "react";
 
 const MatchesScreen: FC = () => {
   const count = 12;
+  const isLimited = true;
 
   const handleNo = useCallback(() => {
     console.log("No!");
@@ -22,6 +23,30 @@ const MatchesScreen: FC = () => {
   const handleYes = useCallback(() => {
     console.log("Yes!");
   }, []);
+
+  const handlePayment = useCallback(() => {
+    console.log("Open the payment!");
+  }, []);
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    const cleanup = () => {
+      webApp.MainButton.hide();
+      webApp.MainButton.offClick(handlePayment);
+    };
+
+    if (!isLimited) return cleanup();
+
+    // Show the main button
+    webApp.MainButton.show();
+    webApp.MainButton.setText("I want to continue");
+
+    // Open the payment by click
+    webApp.MainButton.onClick(handlePayment);
+
+    return cleanup;
+  }, [isLimited, handlePayment]);
 
   return (
     <div className={styles.screen}>
@@ -39,27 +64,38 @@ const MatchesScreen: FC = () => {
         </Link>
       </div>
 
-      <div className={styles.photo}>
+      <div className={cn(styles.photo, { [styles.limited]: isLimited })}>
         <img className={styles.image} src={photo} alt="" />
       </div>
 
       <div className={styles.footer}>
-        <div className={styles.profile}>
-          <div className={styles.name}>Olga, 26</div>
-          <div className={styles.description}>
-            Project manager at IT company
+        {isLimited ? (
+          <div className={styles.message}>
+            <p>
+              You have already watched more than <span>50 people</span> today!
+              I'm sure you'll be noticed soon, let's wait?
+            </p>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className={styles.profile}>
+              <div className={styles.name}>Olga, 26</div>
+              <div className={styles.description}>
+                Project manager at IT company
+              </div>
+            </div>
 
-        <div className={styles.buttons}>
-          <CircleButton onClick={handleNo}>
-            <img src={iconNo} alt="" />
-          </CircleButton>
+            <div className={styles.buttons}>
+              <CircleButton onClick={handleNo}>
+                <img src={iconNo} alt="" />
+              </CircleButton>
 
-          <CircleButton onClick={handleYes}>
-            <img src={iconYes} alt="" />
-          </CircleButton>
-        </div>
+              <CircleButton onClick={handleYes}>
+                <img src={iconYes} alt="" />
+              </CircleButton>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
