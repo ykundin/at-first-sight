@@ -12,9 +12,7 @@
 
 ## Навигация
 
-<video width="400" height="240" controls>
-  <source src="../videos/create-interface/main-navigation.mp4" type="video/mp4">
-</video>
+<video width="400" height="240" src="../videos/create-interface/main-navigation.mp4" type="video/mp4" />
 
 Одна из ключевых механик, которая встречается в большинстве приложений и вебсайтов, позволяющая создавать много страниц/экранов и переходить между ними. Для этой цели я буду использовать проверенную и очень известную библиотеку — [React Router](https://reactrouter.com/en/main/start/tutorial#setup).
 
