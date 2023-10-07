@@ -93,6 +93,23 @@ function onClick() {
 
 ## Открытие на весь экран
 
-<img align="right" width="300" height="300" src="../images/interface-details/expand-app.png">
+<img align="right" width="400" height="419" src="../images/interface-details/expand-app.png">
 
 По умолчанию приложение открывается у пользователей не на весь экран и им необходимо самостоятельно развернуть его полностью. Но во многих случаях это всего лишь лишнее действие и Telegram позволяет сразу же открыть приложение на весь экран (разница показана на скриншоте).
+
+Делается это довольно легко, достаточно лишь при загрузке приложения вызвать следующий код. Я предлагаю делать это в файле `App.tsx`:
+
+```tsx
+function App() {
+  useEffect(() => {
+    const webApp = window.Telegram.WebApp;
+
+    webApp.ready();
+    webApp.expand();
+  }, []);
+
+  const router = createBrowserRouter(...);
+
+  return <RouterProvider router={router} />;
+}
+```
