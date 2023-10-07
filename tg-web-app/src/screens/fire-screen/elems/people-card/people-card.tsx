@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { useCallback } from "react";
 import cn from "classnames";
 
 import styles from "./people-card.module.css";
@@ -13,6 +13,14 @@ export interface PeopleCardProps extends HTMLAttributes<HTMLDivElement> {
 
 const PeopleCard: FC<PeopleCardProps> = (props) => {
   const { people, ...restProps } = props;
+
+  const handleOpenProfile = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+
+    // Link on user, for example https://t.me/ykundin
+    webApp.openTelegramLink(people.link);
+  }, [people.link]);
 
   return (
     <div
@@ -33,13 +41,11 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
 
         <div className={styles.footer}>
           {people.view === "opened" ? (
-            <Link className={styles.link} to="#">
-              Send a message
-            </Link>
-          ) : (
-            <Link className={styles.link} to="#">
+            <span className={styles.link} onClick={handleOpenProfile}>
               Open a profile
-            </Link>
+            </span>
+          ) : (
+            <span className={styles.link}>Unlock the user</span>
           )}
         </div>
       </div>

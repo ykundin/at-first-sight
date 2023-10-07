@@ -4,4 +4,5 @@ export interface People {
   description: string;
   view: string;
   image: string;
+  link: string;
 }
