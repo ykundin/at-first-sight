@@ -2,6 +2,9 @@
   position: relative;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  color: var(--app-text-color);
+  background-color: var(--app-bg-color);
 }
 
 .photo {
@@ -65,9 +68,6 @@
   font-size: 14px;
   text-align: center;
 }
-.changePhoto:active {
-  color: #4e92e2;
-}
 
 .footer {
   display: flex;
@@ -82,14 +82,14 @@
 
 .separator {
   margin: 20px 0;
-  border-bottom: 1px solid #dbd8d8;
+  border-bottom: 1px solid var(--app-hint-color);
 }
 
 .content {
   display: flex;
   flex-direction: column;
   padding: 15px;
-  background-color: #efeff3;
+  background-color: var(--app-secondary-bg-color);
   border-radius: 15px;
   gap: 15px;
 }

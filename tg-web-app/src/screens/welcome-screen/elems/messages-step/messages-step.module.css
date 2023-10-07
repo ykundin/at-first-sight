@@ -8,7 +8,7 @@
   height: 100%;
   flex-grow: 1;
   box-sizing: border-box;
-  background-color: #efeff3;
+  background-color: var(--tg-theme-bg-color);
 }
 
 .messages {
@@ -37,7 +37,8 @@
 .textMessage {
   display: inline-flex;
   border-radius: 10px;
-  background-color: white;
+  color: var(--app-text-color);
+  background-color: var(--app-secondary-bg-color);
   padding: 10px;
   font-size: 20px;
 }
@@ -51,7 +52,7 @@
 
 .uploadMessagePreview {
   border-radius: 10px;
-  border: 1px solid #868585;
+  border: 1px solid var(--app-hint-color);
   border-radius: 10px;
   overflow: hidden;
 }

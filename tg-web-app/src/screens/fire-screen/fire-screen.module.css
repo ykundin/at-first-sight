@@ -6,7 +6,8 @@
   padding: 15px;
   box-sizing: border-box;
   gap: 30px;
-  background-color: #efeff3;
+  color: var(--app-text-color);
+  background-color: var(--app-bg-color);
 }
 
 .header {

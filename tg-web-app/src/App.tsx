@@ -3,6 +3,7 @@ import WelcomeScreen from "./screens/welcome-screen";
 import MatchesScreen from "./screens/matches-screen";
 import SettingsScreen from "./screens/settings-screen";
 import FireScreen from "./screens/fire-screen";
+import "./ui/variables.css";
 
 function App() {
   const router = createBrowserRouter([
