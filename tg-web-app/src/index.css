@@ -10,6 +10,7 @@ body {
   min-width: 320px;
   max-height: 100vh;
   color: var(--app-text-color);
+  background: var(--app-bg-color);
 }
 
 :root {
