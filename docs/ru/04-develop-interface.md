@@ -147,7 +147,7 @@ export default FireScreen;
 
 ## Работа с основной кнопкой приложения
 
-Заметили, что на экране с настройками есть кнопка "Save changes"? Это ещё одна из встроенных возможностей Telegram Mini App, которая называется MainButton и работа с которой очень похожа на BackButton. Давайте разберём на примере:
+Заметили, что на экране с настройками есть кнопка "Save changes"? Это ещё одна из встроенных возможностей Telegram Mini App, которая называется [MainButton](https://core.telegram.org/bots/webapps#mainbutton) и работа с которой очень похожа на BackButton. Давайте разберём на примере:
 
 ```tsx
 const SettingsScreen: FC = () => {
@@ -176,11 +176,40 @@ const SettingsScreen: FC = () => {
     return cleanup;
   }, [handleSave]);
 
-  ....
+  return ....;
+});
 ```
 
-В данном случае мы просто логируем нажатие на эту кнопку и сразу возвращаемся на основной экран. Но в дальнейшем именно здесь будет написан код, который сохраняет все изменения профиля, которые сделал пользователь.
+В данном случае мы просто логируем нажатие на эту кнопку и сразу возвращаемся на основной экран. Но в дальнейшем именно здесь будет написан код, который сохраняет все изменения профиля, сделанные пользователем.
 
 Обратите внимание на функцию `cleanup` — она будет автоматически вызвана при размонтировании компонента и позволяет скрыть кнопку и отписать от события, которое возникает по нажатию на неё. Если этого не сделать, то кнопка будет отображаться, даже если пользователь перейдёт на другой экран приложения.
 
-<br clear="right"/>
+## Открытие ссылки внутри Telegram
+
+<img align="right" width="300" height="649" src="../images/develop-interface/open-link-in-telegram.gif">
+
+А вот на экране с совпадениями мы позволяем пользователю сразу же начать диалог с тем человеком, симпатия с которым совпала. Для этого у Telegram Mini App есть ещё одна функция, давайте посмотри на неё в действии:
+
+```tsx
+const PeopleCard: FC<PeopleCardProps> = (props) => {
+  const { people, ...restProps } = props;
+
+  const handleOpenProfile = useCallback(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+
+    // Link on user, for example https://t.me/ykundin
+    webApp.openTelegramLink(people.link);
+  }, [people.link]);
+
+  return (
+    <div {...restProps} className={styles.card}>
+      <div className={styles.footer}>
+        <span className={styles.link} onClick={handleOpenProfile}>
+          Open a profile
+        </span>
+      </div>
+    </div>
+  );
+};
+```

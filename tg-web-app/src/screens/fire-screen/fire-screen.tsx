@@ -19,6 +19,7 @@ const peoples = {
       description: "Project manager at IT company",
       view: "opened",
       image: firstImage,
+      link: "https://t.me/ykundin",
     },
     {
       id: 2,
@@ -27,6 +28,7 @@ const peoples = {
       description: "I love dogs and you!",
       view: "opened",
       image: secondImage,
+      link: "https://t.me/ykundin",
     },
   ],
   closed: [
@@ -37,6 +39,7 @@ const peoples = {
       description: "I keep my secrets carefully",
       view: "locked",
       image: thirdImage,
+      link: "https://t.me/ykundin",
     },
   ],
 };
