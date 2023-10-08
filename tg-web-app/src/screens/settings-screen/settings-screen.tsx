@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import RadioButtons from "../../ui/radio-buttons";
 import useWebApp from "../../queries/useWebApp";
-import photo from "./images/photo.png";
+import useUser from "../../queries/useUser";
 import styles from "./settings-screen.module.css";
 
 import type { FC } from "react";
@@ -25,6 +25,7 @@ const ageItems = [
 
 const SettingsScreen: FC = () => {
   const navigate = useNavigate();
+  const { data: user } = useUser();
   const webApp = useWebApp();
 
   const handleSave = useCallback(() => {
@@ -64,7 +65,7 @@ const SettingsScreen: FC = () => {
   return (
     <div className={styles.screen}>
       <div className={styles.photo}>
-        <img className={styles.image} src={photo} alt="" />
+        <img className={styles.image} src={user.photo} alt="" />
         <div className={styles.photoFooter}>
           <span className={styles.changePhoto}>Change photo</span>
         </div>
@@ -77,7 +78,9 @@ const SettingsScreen: FC = () => {
 
       <div className={styles.footer}>
         <div className={styles.profile}>
-          <div className={styles.name}>Yury Kundin, 27</div>
+          <div className={styles.name}>
+            {`${user.firstName} ${user.lastName}, 27`}
+          </div>
           <div className={styles.description}>Work smart, not hard</div>
         </div>
 
@@ -90,7 +93,7 @@ const SettingsScreen: FC = () => {
               <RadioButtons
                 name="gender"
                 items={interestItems}
-                defaultValue="man"
+                defaultValue={user.interestsGender}
               />
             </div>
           </div>
@@ -101,7 +104,7 @@ const SettingsScreen: FC = () => {
               <RadioButtons
                 name="age-range"
                 items={ageItems}
-                defaultValue="24-30"
+                defaultValue={user.ageRange}
               />
             </div>
           </div>
