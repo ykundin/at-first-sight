@@ -35,10 +35,9 @@ services:
       - 5173:5173
     volumes:
       - ./tg-web-app:/app
-    env_file:
-      - ./tg-web-app/.env
     environment:
       - PORT=5173
+      - BACKEND_URL=http://backend:4000
     command: bun run dev
 
 volumes:
