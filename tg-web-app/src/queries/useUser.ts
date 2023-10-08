@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 function useUser() {
   return useQuery({
     queryKey: ["user"],
+    keepPreviousData: true,
     queryFn: async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const initData = (window as any).Telegram.WebApp.initData;
