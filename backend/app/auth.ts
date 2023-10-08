@@ -99,10 +99,38 @@ class Auth {
     }
   }
 
-  async saveUser(user: User): Promise<boolean> {
+  async #saveUser(user: User): Promise<boolean> {
     const result = await this.#users.insertOne(user);
 
     return result.acknowledged;
+  }
+
+  async #editUserById(
+    userId: User["id"],
+    input: Partial<User>
+  ): Promise<boolean> {
+    const result = await this.#users.updateOne({ id: userId }, { $set: input });
+
+    return result.acknowledged;
+  }
+
+  async #uploadFile(file: Blob): Promise<string> {
+    const types = {
+      "image/jpeg": "jpg",
+      "image/jpg": "jpg",
+      "image/png": "png",
+    };
+    const extension = (types as any)[file.type];
+    const filename = `${nanoid()}.${extension}`;
+
+    if (!extension) throw new Error("Invalid format of photo!");
+
+    // Upload photo to object storage
+    const fileArrayBuffer = await file.arrayBuffer();
+    const fileBuffer = Buffer.from(fileArrayBuffer);
+    const fileInfo = await this.#objectStorage.uploadFile(filename, fileBuffer);
+
+    return `/image/${fileInfo.Key}`;
   }
 
   async getUserById(userId: User["id"]): Promise<User | null> {
@@ -129,18 +157,7 @@ class Auth {
   }
 
   async register(form: FormData, tgUser: TelegramUser): Promise<User> {
-    const types = {
-      "image/jpeg": "jpg",
-      "image/jpg": "jpg",
-      "image/png": "png",
-    };
     const file = form.get("photo") as Blob;
-    const extension = (types as any)[file.type];
-    const filename = `${nanoid()}.${extension}`;
-
-    // TODO: Add the validation of form data
-    if (!file) throw new Error("Photo is required!");
-    if (!extension) throw new Error("Invalid format of photo!");
 
     // Maybe user already exists?
     const dbUser = await this.getUserById(tgUser.id);
@@ -148,22 +165,41 @@ class Auth {
       return dbUser;
     }
 
-    // Upload photo to object storage
-    const fileArrayBuffer = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(fileArrayBuffer);
-    const fileInfo = await this.#objectStorage.uploadFile(filename, fileBuffer);
+    // TODO: Add the validation of form data
+    if (!file) throw new Error("Photo is required!");
 
     const user = {
       ...tgUser,
       gender: String(form.get("gender")) || "",
       interestsGender: String(form.get("interests")) || "",
       ageRange: String(form.get("age-range")) || "",
-      photo: `/image/${fileInfo.Key}`,
+      photo: await this.#uploadFile(file),
     };
 
-    await this.saveUser(user);
+    await this.#saveUser(user);
 
     return user;
+  }
+
+  async editUser(userId: User["id"], form: FormData) {
+    const file = form.get("photo") as Blob;
+    const user = await this.getUserById(userId);
+
+    if (!user) {
+      throw new Error("User not found!");
+    }
+
+    let input = {
+      interestsGender: String(form.get("interests")) || user.interestsGender,
+      ageRange: String(form.get("age-range")) || user.ageRange,
+      photo: user.photo,
+    };
+
+    if (file && file.size > 0) {
+      input.photo = await this.#uploadFile(file);
+    }
+
+    return await this.#editUserById(userId, input);
   }
 }
 

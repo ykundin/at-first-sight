@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import RadioButtons from "../../ui/radio-buttons";
@@ -6,7 +6,8 @@ import useWebApp from "../../queries/useWebApp";
 import useUser from "../../queries/useUser";
 import styles from "./settings-screen.module.css";
 
-import type { FC } from "react";
+import type { ChangeEventHandler, FC, FormEventHandler } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const interestItems = [
   { id: "man", text: "A man" },
@@ -26,12 +27,60 @@ const ageItems = [
 const SettingsScreen: FC = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
+  const [loading, setLoading] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
+  const queryClient = useQueryClient();
   const webApp = useWebApp();
+  const refButton = useRef<HTMLButtonElement>(null);
+
+  const src = useMemo(() => {
+    if (file) return URL.createObjectURL(file);
+
+    return user.photo;
+  }, [file, user.photo]);
 
   const handleSave = useCallback(() => {
-    console.log("Save the changes...");
-    navigate("/matches");
-  }, [navigate]);
+    refButton.current?.click();
+  }, []);
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    async (e) => {
+      e.preventDefault();
+      setLoading(true);
+
+      try {
+        const res = await fetch("/api/edit-profile", {
+          method: "POST",
+          body: new FormData(e.currentTarget),
+        });
+        const result = await res.json();
+
+        if (result.ok) {
+          queryClient.invalidateQueries(["user"]);
+          navigate("/matches");
+        } else {
+          throw new Error(result);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Unknown error, try later");
+      } finally {
+        setLoading(false);
+      }
+    },
+    [navigate, queryClient]
+  );
+
+  const handleChangePhoto: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      const inputFile = e.target.files?.item(0);
+
+      if (inputFile) {
+        setFile(inputFile);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
     const cleanup = () => {
@@ -52,6 +101,18 @@ const SettingsScreen: FC = () => {
   }, [handleSave, webApp]);
 
   useEffect(() => {
+    if (loading) {
+      webApp.MainButton.showProgress();
+    } else {
+      webApp.MainButton.hideProgress();
+    }
+
+    return () => {
+      webApp.MainButton.hideProgress();
+    };
+  }, [loading, webApp]);
+
+  useEffect(() => {
     // Show the back button
     webApp.BackButton.show();
 
@@ -63,16 +124,23 @@ const SettingsScreen: FC = () => {
   }, [navigate, webApp]);
 
   return (
-    <div className={styles.screen}>
+    <form
+      className={styles.screen}
+      method="POST"
+      action="/api/edit-profile"
+      onSubmit={handleSubmit}
+    >
       <div className={styles.photo}>
-        <img className={styles.image} src={user.photo} alt="" />
+        <img className={styles.image} src={src} alt="" />
         <div className={styles.photoFooter}>
           <span className={styles.changePhoto}>Change photo</span>
         </div>
         <input
           className={styles.upload}
           type="file"
+          name="photo"
           accept="image/png, image/jpeg"
+          onChange={handleChangePhoto}
         />
       </div>
 
@@ -91,7 +159,7 @@ const SettingsScreen: FC = () => {
             <div className={styles.label}>Interests:</div>
             <div className={styles.groupContent}>
               <RadioButtons
-                name="gender"
+                name="interests"
                 items={interestItems}
                 defaultValue={user.interestsGender}
               />
@@ -110,7 +178,11 @@ const SettingsScreen: FC = () => {
           </div>
         </div>
       </div>
-    </div>
+
+      <button type="submit" ref={refButton} hidden>
+        Submit
+      </button>
+    </form>
   );
 };
 

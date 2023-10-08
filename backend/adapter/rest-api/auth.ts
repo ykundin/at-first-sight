@@ -1,6 +1,7 @@
 import Auth from "~/app/auth";
 
 import type { HttpRoute } from "./entities/http-route";
+import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 export const authRoutes: HttpRoute[] = [
   {
@@ -61,6 +62,20 @@ export const authRoutes: HttpRoute[] = [
       return {
         ok: true,
         data: user,
+      };
+    },
+  },
+
+  {
+    method: "POST",
+    path: "/api/edit-profile",
+    before: [shouldBeAuth],
+    async handler({ request, user }) {
+      const auth = new Auth();
+      const status = await auth.editUser(user.id, request.body);
+
+      return {
+        ok: status,
       };
     },
   },
