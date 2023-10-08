@@ -1,11 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import cn from "classnames";
 
-import styles from "./messages-step.module.css";
-
-import type { HTMLAttributes, FC } from "react";
 import RadioButtons from "../../../../ui/radio-buttons";
 import UploadButton from "../../../../ui/upload-button";
+import styles from "./messages-step.module.css";
+
+import type { HTMLAttributes, FC, FormEventHandler } from "react";
 
 export interface MessagesStepProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
@@ -20,7 +20,7 @@ interface Variant {
 interface TextMessage {
   id: number;
   type: "in" | "out";
-  view: "text";
+  view: "text" | "submit";
   text: string;
 }
 
@@ -116,8 +116,14 @@ const allMessages: Message[] = [
   {
     id: 10,
     type: "in",
-    view: "text",
+    view: "submit",
     text: `Just a second, we save your information...`,
+  },
+  {
+    id: 10,
+    type: "in",
+    view: "text",
+    text: `Welcome!`,
   },
 ];
 
@@ -193,6 +199,9 @@ const UploadMessage: FC<MessageComponentProps<UploadMessage>> = (props) => {
 const MessagesStep: FC<MessagesStepProps> = (props) => {
   const { onEnd } = props;
   const [index, setIndex] = useState(1);
+  const refButton = useRef<HTMLButtonElement>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const initData = (window as any).Telegram.WebApp.initData;
 
   const messages = allMessages.slice(0, index);
 
@@ -201,13 +210,31 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
       const nextIndex = message.id + 1;
 
       if (index >= nextIndex) return;
-      if (nextIndex > allMessages.length) {
-        if (onEnd) onEnd();
-      }
 
       setIndex(message.id + 1);
     },
-    [index, onEnd]
+    [index]
+  );
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      const res = await fetch("/api/registration", {
+        method: "POST",
+        body: new FormData(e.currentTarget),
+      });
+      const result = await res.json();
+
+      if (result.ok) {
+        setIndex((p) => p + 1);
+
+        setTimeout(() => {
+          if (onEnd) onEnd();
+        }, 1000);
+      }
+    },
+    [onEnd]
   );
 
   useEffect(() => {
@@ -215,7 +242,12 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
   }, [index]);
 
   return (
-    <div className={styles.step}>
+    <form
+      className={styles.step}
+      method="POST"
+      action="/api/registration"
+      onSubmit={handleSubmit}
+    >
       <div className={styles.messages}>
         {messages.map((message) => (
           <div
@@ -230,6 +262,13 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
                 <TextMessage message={message} onEnd={handleNextMessage} />
               )}
 
+              {message.view === "submit" && (
+                <TextMessage
+                  message={message}
+                  onEnd={() => refButton.current?.click()}
+                />
+              )}
+
               {message.view === "variants" && (
                 <VariantsMessage message={message} onEnd={handleNextMessage} />
               )}
@@ -241,7 +280,13 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
           </div>
         ))}
       </div>
-    </div>
+
+      <input type="text" name="initData" value={initData} hidden />
+
+      <button type="submit" ref={refButton} hidden>
+        Submit
+      </button>
+    </form>
   );
 };
 

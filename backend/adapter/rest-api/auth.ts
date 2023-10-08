@@ -16,4 +16,19 @@ export const authRoutes: HttpRoute[] = [
       };
     },
   },
+
+  {
+    method: "POST",
+    path: "/api/registration",
+    async handler({ request }) {
+      const auth = new Auth();
+      const tgUser = auth.getUserByInitData(request.body.get("initData"));
+      const user = await auth.register(request.body, tgUser);
+
+      return {
+        ok: true,
+        data: user,
+      };
+    },
+  },
 ];

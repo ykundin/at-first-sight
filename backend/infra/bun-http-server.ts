@@ -24,7 +24,16 @@ export class BunHttpServer implements HttpServer {
       const userAgent = req.headers.get("user-agent") || "";
       const ip = String(req.headers.get("x-forwarded-for"));
 
-      const body = req.body ? await Bun.readableStreamToJSON(req.body) : null;
+      // Read the body of request
+      let body = null;
+      const contentType = req.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        body = req.body ? await Bun.readableStreamToJSON(req.body) : null;
+      }
+      if (contentType.includes("multipart/form-data")) {
+        body = await req.formData();
+      }
+
       const request = new HttpRequest({
         query: new URL(req.url).searchParams as any,
         body: body,
