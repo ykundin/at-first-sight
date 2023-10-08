@@ -242,13 +242,141 @@
 
    Все необходимые параметры для базы данных мы с вами уже указали в файле `docker-compose.dev.yml`. Обратите внимание, что для применения новых переменных окружения необходимо полностью перезапустить приложение в Docker. А для того, чтобы удобно смотреть то, что было в итоге сохранено в базу данных я рекомендую установить [расширение для VS Code](https://github.com/mongodb-js/vscode).
 
-## Регистрируемся только один раз
+## Авторизация пользователя
 
 <img align="right" width="300" height="649" src="../images/auth-reg/register-only-one.gif">
 
-Уже написанной логики достаточно для того, чтобы во время входа в приложение получить информацию о пользователе из собственной базы данных и предлагать пройти регистрацию только тем, кто зашёл к нам впервые.
+В нашем приложении будет довольно много API-методов, которые должны быть доступны только для авторизованных пользователей, но проверять каждый пользователя через `initData` от Telegram неудобно и приводит к тому, что эта часть кода будет повторяться из раза в раз.
 
-Разумеется, здесь необходимо выполнить ещё довольно много работы с авторизацией/регистрацией, чтобы сделать это процесс максимально стабильным и безопасным, но это уже выходит за рамки данной инструкции и зависит от потребностей конкретного приложения. Быть может я опишу это в контексте данного приложения в следующих итерациях ;)
+Поэтому давайте напишем простую авторизацию пользователя с помощью `cookie`, в котором мы будем хранить идентификатор сессии. Если пользователь приходит к нам с `cookie`, то мы попробуем получить всю необходимую информацию о нём по идентификатору, вместо `initData`. В данном примере намерено показано самая простая логика авторизация без использования фреймворков и готовых решений, чтобы объяснить принцип их работы.
+
+1. **Добавляем код для работы с сессией**
+
+   Начнём с того, что добавим в класс `Auth` два метода для создания сессии и для получения информации о пользователе из сессии (сессия это обычная коллекция в базе данных):
+
+   ```tsx
+   import { nanoid } from "nanoid";
+   import { MongoClient } from "mongodb";
+   import { ValidationError } from "../app/errors/validation-error";
+   import type { Collection, Db } from "mongodb";
+   import type { User } from "../domain/user";
+
+   interface Session {
+     id: string;
+     userId: User["id"];
+   }
+
+   class Auth {
+     #cookieName = "session_id";
+     ...
+     #sessions: Collection<Session>;
+
+     constructor() {
+       ...
+       this.#sessions = this.#db.collection("sessions");
+     }
+
+     get cookieName(): string {
+       return this.#cookieName;
+     }
+
+     async getUserById(userId: User["id"]): Promise<User | null> {
+       ...
+     }
+
+     async createSession(userId: User["id"]): Promise<string | null> {
+       const sessionId = nanoid();
+       const result = await this.#sessions.insertOne({
+         id: sessionId,
+         userId: userId,
+       });
+
+       return result.acknowledged ? sessionId : null;
+     }
+
+     async getUserFromSession(sessionId: string): Promise<User | null> {
+       const session = await this.#sessions.findOne({ id: sessionId });
+       const user = session ? await this.getUserById(session.userId) : null;
+
+       return user;
+     }
+   }
+   ```
+
+   Обратите внимание, что идентификатор сессии всегда уникален, поэтому я использую небольшую библиотеку `nanoid` для этой задачи, не забудьте её установить в сервис `backend`: `bun install nanoid`;
+
+2. **Сохраняем сессию после регистрации**
+
+   А теперь слегка отредактируем код обработчика регистрации, чтобы после успешной регистрации мы добавили пользователю `cookie` с идентификатором сессии. Именно этот идентификатор позволит нам понять, что пользователь уже авторизован, когда тот будет выполнять другие запросы.
+
+   ```tsx
+   // file /backend/adapter/rest-api/auth.ts
+   {
+    method: "POST",
+    path: "/api/registration",
+    async handler({ request, response }) {
+      const auth = new Auth();
+      const tgUser = auth.getUserByInitData(request.body.get("initData"));
+      const user = await auth.register(request.body, tgUser);
+      const sessionId = await auth.createSession(user.id);
+
+      if (user) {
+        const sessionId = await auth.createSession(user.id);
+
+        // Save the sessionId in cookie
+        if (sessionId) {
+          response.setCookie(auth.cookieName, sessionId, {
+            secure: true,
+            httpOnly: true,
+          });
+        }
+      }
+
+      return {
+        ok: true,
+        data: user,
+      };
+    },
+   },
+   ```
+
+3. **Добавляем пользователя в каждый обработчик**
+
+   А теперь мы сделаем то, ради чего всё и задумывалось — информация о пользователе будет доступна в каждом обработчике запроса и мы сможем сразу использовать его для написания нужной логики. Для этого будет пытаться получить пользователя из `cookie` перед началом обработчика:
+
+   ```tsx
+   // file /backend/infra/bun-http-server.ts
+
+   // Try to find user by sessionId in cookies
+   const cookies = cookie.parse(req.headers.get("Cookie") || "");
+   const sessionId = cookies[this.#auth.cookieName];
+   const user = await this.#auth.getUserFromSession(sessionId);
+
+   ...
+   // Add the user to every request handler
+    const result = await route.handler({ request, response, user });
+   ```
+
+4. **Что изменилось?**
+
+   Теперь если мы захотим сделать обработчик запроса, который доступен только для авторизованных пользователей, то код станет сильно проще в понимании и написание, например:
+
+   ```tsx
+   {
+    method: "POST",
+    path: "/api/unlock-profile",
+    before: [shouldBeAuth],
+    async handler({ request, user }) {
+      if (!user) {
+        throw new Error('User not authorized!');
+      }
+
+      return ...
+    },
+   }
+   ```
+
+Ещё больше примеров такого подхода вы увидите в следующих этапах разработки и быстро поймёте преимущества. Разумеется, это один из самых простых механизмов авторизации, который может иметь некоторые проблемы с безопасностью, но он отлично описывает общий принцип авторизации с помощью `cookie`.
 
 А сейчас нам с вами пора разобрать самую интригующую тему — работу с платежами!
 

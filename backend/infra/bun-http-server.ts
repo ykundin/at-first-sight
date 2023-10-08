@@ -34,7 +34,7 @@ export class BunHttpServer implements HttpServer {
       // Try to find user by sessionId in cookies
       const cookies = cookie.parse(req.headers.get("Cookie") || "");
       const sessionId = cookies[this.#auth.cookieName];
-      const user = await this.#auth.getUserFromSession(sessionId);
+      const user: any = await this.#auth.getUserFromSession(sessionId);
 
       // Read the body of request
       let body = null;

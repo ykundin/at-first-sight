@@ -6,7 +6,23 @@ export const authRoutes: HttpRoute[] = [
   {
     method: "POST",
     path: "/api/get-user",
-    async handler({ user }) {
+    async handler({ request, response }) {
+      const auth = new Auth();
+      const tgUser = auth.getUserByInitData(request.body.initData);
+      const user = await auth.getUserById(tgUser.id);
+
+      if (user) {
+        const sessionId = await auth.createSession(user.id);
+
+        // Save the sessionId in cookie
+        if (sessionId) {
+          response.setCookie(auth.cookieName, sessionId, {
+            secure: true,
+            httpOnly: true,
+          });
+        }
+      }
+
       return {
         ok: true,
         data: user,
@@ -21,14 +37,17 @@ export const authRoutes: HttpRoute[] = [
       const auth = new Auth();
       const tgUser = auth.getUserByInitData(request.body.get("initData"));
       const user = await auth.register(request.body, tgUser);
-      const sessionId = await auth.createSession(user.id);
 
-      // Save the sessionId in cookie
-      if (sessionId) {
-        response.setCookie(auth.cookieName, sessionId, {
-          secure: true,
-          httpOnly: true,
-        });
+      if (user) {
+        const sessionId = await auth.createSession(user.id);
+
+        // Save the sessionId in cookie
+        if (sessionId) {
+          response.setCookie(auth.cookieName, sessionId, {
+            secure: true,
+            httpOnly: true,
+          });
+        }
       }
 
       return {
