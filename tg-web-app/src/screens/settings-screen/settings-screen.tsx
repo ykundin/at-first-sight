@@ -2,6 +2,7 @@ import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 import RadioButtons from "../../ui/radio-buttons";
+import useWebApp from "../../queries/useWebApp";
 import photo from "./images/photo.png";
 import styles from "./settings-screen.module.css";
 
@@ -24,6 +25,7 @@ const ageItems = [
 
 const SettingsScreen: FC = () => {
   const navigate = useNavigate();
+  const webApp = useWebApp();
 
   const handleSave = useCallback(() => {
     console.log("Save the changes...");
@@ -31,8 +33,6 @@ const SettingsScreen: FC = () => {
   }, [navigate]);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
     const cleanup = () => {
       webApp.MainButton.hide();
       webApp.MainButton.offClick(handleSave);
@@ -48,12 +48,9 @@ const SettingsScreen: FC = () => {
     }
 
     return cleanup;
-  }, [handleSave]);
+  }, [handleSave, webApp]);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
     // Show the back button
     webApp.BackButton.show();
 
@@ -62,7 +59,7 @@ const SettingsScreen: FC = () => {
       webApp.BackButton.hide();
       navigate("/matches");
     });
-  }, [navigate]);
+  }, [navigate, webApp]);
 
   return (
     <div className={styles.screen}>

@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 
+import useWebApp from "../../queries/useWebApp";
 import styles from "./upload-button.module.css";
 
 import type {
@@ -19,6 +20,7 @@ export interface UploadButton
 
 const UploadButton: FC<UploadButton> = (props) => {
   const { name, children, onChange } = props;
+  const webApp = useWebApp();
 
   const handleChange: ChangeEventHandler<HTMLInputElement> = useCallback(
     (e) => {
@@ -31,10 +33,8 @@ const UploadButton: FC<UploadButton> = (props) => {
   );
 
   const handleClick = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
     webApp.HapticFeedback.selectionChanged();
-  }, []);
+  }, [webApp]);
 
   return (
     <div className={styles.container}>

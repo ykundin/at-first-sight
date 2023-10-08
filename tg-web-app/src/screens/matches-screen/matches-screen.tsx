@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
 import cn from "classnames";
 
+import useWebApp from "../../queries/useWebApp";
 import CircleButton from "./elems/circle-button";
 import iconFire from "./icons/fire.svg";
 import iconClock from "./icons/clock.svg";
@@ -15,30 +16,23 @@ import { type FC } from "react";
 const MatchesScreen: FC = () => {
   const count = 3;
   const isLimited = false;
+  const webApp = useWebApp();
 
   const handleNo = useCallback(() => {
     console.log("No!");
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
     webApp.HapticFeedback.selectionChanged();
-  }, []);
+  }, [webApp]);
 
   const handleYes = useCallback(() => {
     console.log("Yes!");
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
     webApp.HapticFeedback.selectionChanged();
-  }, []);
+  }, [webApp]);
 
   const handlePayment = useCallback(() => {
     console.log("Open the payment!");
   }, []);
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
     const cleanup = () => {
       webApp.MainButton.hide();
       webApp.MainButton.offClick(handlePayment);
@@ -54,7 +48,7 @@ const MatchesScreen: FC = () => {
     webApp.MainButton.onClick(handlePayment);
 
     return cleanup;
-  }, [isLimited, handlePayment]);
+  }, [isLimited, handlePayment, webApp]);
 
   return (
     <div className={styles.screen}>

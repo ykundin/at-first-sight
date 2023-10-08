@@ -11,12 +11,14 @@ import WelcomeScreen from "./screens/welcome-screen";
 import MatchesScreen from "./screens/matches-screen";
 import SettingsScreen from "./screens/settings-screen";
 import FireScreen from "./screens/fire-screen";
+import useUser from "./queries/useUser";
+import useWebApp from "./queries/useWebApp";
 
 import type { FC } from "react";
-import useUser from "./queries/useUser";
 
 const Root: FC = () => {
   const user = useUser();
+  const webApp = useWebApp();
 
   useEffect(() => {
     if (user.isLoading) return;
@@ -25,12 +27,9 @@ const Root: FC = () => {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
     webApp.ready();
     webApp.expand();
-  }, [user]);
+  }, [user, webApp]);
 
   if (user.isLoading || user.isError) return null;
 

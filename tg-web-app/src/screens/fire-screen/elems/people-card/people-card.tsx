@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import cn from "classnames";
 
+import useWebApp from "../../../../queries/useWebApp";
 import styles from "./people-card.module.css";
 
 import type { HTMLAttributes, FC } from "react";
@@ -13,19 +14,14 @@ export interface PeopleCardProps extends HTMLAttributes<HTMLDivElement> {
 
 const PeopleCard: FC<PeopleCardProps> = (props) => {
   const { people, ...restProps } = props;
+  const webApp = useWebApp();
 
   const handleOpenProfile = useCallback(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
     // Link on user, for example https://t.me/ykundin
     webApp.openTelegramLink(people.link);
-  }, [people.link]);
+  }, [people.link, webApp]);
 
   const handleUnlockUser = useCallback(async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
     const res = await fetch("/api/unlock-profile", {
       method: "POST",
       headers: {
@@ -39,7 +35,7 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
     webApp.openInvoice(result.data, (status: string) => {
       console.log(status);
     });
-  }, [people]);
+  }, [people, webApp]);
 
   return (
     <div

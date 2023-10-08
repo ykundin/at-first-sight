@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
+import PeopleCard from "./elems/people-card";
+import useWebApp from "../../queries/useWebApp";
 import iconFire from "./icons/fire.svg";
 import firstImage from "./images/first.jpg";
 import secondImage from "./images/second.png";
@@ -8,7 +10,6 @@ import thirdImage from "./images/third.png";
 import styles from "./fire-screen.module.css";
 
 import type { FC } from "react";
-import PeopleCard from "./elems/people-card";
 
 const peoples = {
   opened: [
@@ -46,11 +47,9 @@ const peoples = {
 
 const FireScreen: FC = () => {
   const navigate = useNavigate();
+  const webApp = useWebApp();
 
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
     // Show the back button
     webApp.BackButton.show();
 
@@ -59,7 +58,7 @@ const FireScreen: FC = () => {
       webApp.BackButton.hide();
       navigate("/matches");
     });
-  }, [navigate]);
+  }, [navigate, webApp]);
 
   return (
     <div className={styles.screen}>
