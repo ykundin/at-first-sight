@@ -1,19 +1,8 @@
 import TgBotApi from "~/infra/tg-bot-api";
 
+import type { Order } from "~/domain/order";
+
 type OrderType = "unlock-profile";
-
-interface LabeledPrice {
-  label: string;
-  amount: number;
-}
-
-interface Order {
-  title: string;
-  description: string;
-  currency: string;
-  prices: LabeledPrice[];
-  payload: string;
-}
 
 const orders: Record<OrderType, Order> = {
   "unlock-profile": {

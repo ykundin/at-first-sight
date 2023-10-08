@@ -26,13 +26,16 @@ const MatchesScreen: FC = () => {
   const count = fire.data ? fire.data.length : 0;
 
   const sendReaction = useCallback(
-    async (type: "no" | "yes") => {
+    async (reaction: "no" | "yes") => {
       webApp.HapticFeedback.selectionChanged();
 
       try {
         const res = await fetch("/api/send-reaction", {
           method: "POST",
-          body: JSON.stringify({ userId: firstPeople?.id, type }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ targetUserId: firstPeople?.id, reaction }),
         });
         const result = await res.json();
 
@@ -114,7 +117,7 @@ const MatchesScreen: FC = () => {
         {isLimited ? (
           <div className={styles.message}>
             <p>
-              You have already watched more than <span>50 people</span> today!
+              You have already watched more than <span>30 people</span> today!
               I'm sure you'll be noticed soon, let's wait?
             </p>
           </div>
