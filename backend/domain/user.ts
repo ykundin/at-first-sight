@@ -7,5 +7,6 @@ export interface User {
   gender: string;
   interestsGender: string;
   ageRange: string;
-  photo: any;
+  photo: string;
+  restScores: number;
 }

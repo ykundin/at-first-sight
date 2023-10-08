@@ -1,40 +1,21 @@
 import { shouldBeAuth } from "./middlewares/should-be-auth";
+import { shouldBeNotLimited } from "./middlewares/should-be-not-limited";
+import { Matcher } from "~/app/matcher";
 
 import type { HttpRoute } from "./entities/http-route";
-
-const peoples = [
-  {
-    id: 1,
-    firstName: "Olga",
-    age: 26,
-    description: "Project manager at IT company",
-    image:
-      "https://i.pinimg.com/736x/07/e1/2c/07e12ce93307d98b5bb175b77f42db16.jpg",
-    link: "https://t.me/ykundin",
-  },
-  {
-    id: 2,
-    firstName: "Alena",
-    age: 27,
-    description: "I love dogs and you!",
-    image:
-      "https://yobte.ru/uploads/posts/2019-11/devushki-s-sobakami-123-foto-90.jpg",
-    link: "https://t.me/ykundin",
-  },
-];
 
 export const recommendationsRoutes: HttpRoute[] = [
   {
     method: "GET",
     path: "/api/get-recommendations",
     before: [shouldBeAuth],
-    async handler() {
+    async handler({ user }) {
+      const matcher = new Matcher();
+      const info = await matcher.getRecommendations(user.id);
+
       return {
         ok: true,
-        data: {
-          locked: false,
-          peoples,
-        },
+        data: info,
       };
     },
   },
@@ -42,14 +23,20 @@ export const recommendationsRoutes: HttpRoute[] = [
   {
     method: "POST",
     path: "/api/send-reaction",
-    before: [shouldBeAuth],
-    async handler() {
+    before: [shouldBeNotLimited],
+    async handler({ user, request }) {
+      const matcher = new Matcher();
+      const targetUserId = request.body.targetUserId;
+      const reaction = request.body.reaction;
+      const info = await matcher.sendReaction({
+        userId: user.id,
+        targetUserId,
+        reaction,
+      });
+
       return {
         ok: true,
-        data: {
-          locked: false,
-          newPeople: peoples[1],
-        },
+        data: info,
       };
     },
   },

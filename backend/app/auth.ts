@@ -174,6 +174,7 @@ class Auth {
       interestsGender: String(form.get("interests")) || "",
       ageRange: String(form.get("age-range")) || "",
       photo: await this.#uploadFile(file),
+      restScores: 30,
     };
 
     await this.#saveUser(user);
@@ -200,6 +201,15 @@ class Auth {
     }
 
     return await this.#editUserById(userId, input);
+  }
+
+  async decreaseScores(userId: User["id"]) {
+    const result = await this.#users.updateOne(
+      { id: userId },
+      { $inc: { restScores: -1 } }
+    );
+
+    return result.acknowledged;
   }
 }
 
