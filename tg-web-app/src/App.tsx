@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   createBrowserRouter,
   Outlet,
@@ -31,6 +32,7 @@ function App() {
     webApp.expand();
   }, []);
 
+  const queryClient = new QueryClient();
   const router = createBrowserRouter([
     {
       path: "/",
@@ -57,7 +59,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;
