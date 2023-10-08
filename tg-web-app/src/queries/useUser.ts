@@ -4,7 +4,16 @@ function useUser() {
   return useQuery({
     queryKey: ["user"],
     queryFn: async () => {
-      const res = await fetch("/api/get-user");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const initData = (window as any).Telegram.WebApp.initData;
+
+      const res = await fetch(`/api/get-user`, {
+        method: "POST",
+        headers: {
+          ContentType: "application/json",
+        },
+        body: JSON.stringify({ initData }),
+      });
       const result = await res.json();
 
       if (!result.ok) {
