@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import cn from "classnames";
 
+import useWebApp from "../../queries/useWebApp";
 import styles from "./radio-buttons.module.css";
 
 import type { FC, HTMLAttributes, MouseEvent } from "react";
@@ -23,17 +24,16 @@ export interface RadioButtons
 const RadioButtons: FC<RadioButtons> = (props) => {
   const { name, items, defaultValue, align, onChange } = props;
   const [value, setValue] = useState(defaultValue);
+  const webApp = useWebApp();
 
   const handleClick = useCallback(
     (e: MouseEvent, id: Item["id"]) => {
       setValue(id);
       if (onChange) onChange(e, id);
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const webApp = (window as any).Telegram.WebApp;
       webApp.HapticFeedback.selectionChanged();
     },
-    [onChange]
+    [onChange, webApp]
   );
 
   return (
