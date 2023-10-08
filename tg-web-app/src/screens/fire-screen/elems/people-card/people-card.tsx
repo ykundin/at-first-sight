@@ -25,14 +25,13 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
   const handleUnlockUser = useCallback(async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const webApp = (window as any).Telegram.WebApp;
-    const initData = webApp.initData;
 
     const res = await fetch("/api/unlock-profile", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: people.id, initData }),
+      body: JSON.stringify({ userId: people.id }),
     });
     const result = await res.json();
 
