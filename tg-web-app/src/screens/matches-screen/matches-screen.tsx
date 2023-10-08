@@ -1,35 +1,60 @@
 import { useCallback, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import cn from "classnames";
 
 import useWebApp from "../../queries/useWebApp";
 import useFire from "../../queries/useFire";
+import useRecommendations from "../../queries/useRecommendations";
 import CircleButton from "./elems/circle-button";
 import iconFire from "./icons/fire.svg";
 import iconClock from "./icons/clock.svg";
 import iconNo from "./icons/no.svg";
 import iconYes from "./icons/yes.svg";
-import photo from "./photo.png";
 import styles from "./matches-screen.module.css";
 
 import { type FC } from "react";
 
 const MatchesScreen: FC = () => {
-  const fire = useFire();
+  const queryClient = useQueryClient();
   const webApp = useWebApp();
+  const fire = useFire();
+  const recommendations = useRecommendations();
 
-  const isLimited = false;
+  const isLimited = recommendations.data?.locked || false;
+  const [firstPeople, secondPeople] = recommendations.data?.peoples || [];
   const count = fire.data ? fire.data.length : 0;
 
-  const handleNo = useCallback(() => {
-    console.log("No!");
-    webApp.HapticFeedback.selectionChanged();
-  }, [webApp]);
+  const sendReaction = useCallback(
+    async (type: "no" | "yes") => {
+      webApp.HapticFeedback.selectionChanged();
 
-  const handleYes = useCallback(() => {
-    console.log("Yes!");
-    webApp.HapticFeedback.selectionChanged();
-  }, [webApp]);
+      try {
+        const res = await fetch("/api/send-reaction", {
+          method: "POST",
+          body: JSON.stringify({ userId: firstPeople?.id, type }),
+        });
+        const result = await res.json();
+
+        if (result.ok) {
+          const data = result.data;
+
+          queryClient.setQueryData(["recommendations"], () => {
+            return {
+              locked: data.locked,
+              peoples: [secondPeople, data.newPeople],
+            };
+          });
+        } else {
+          throw new Error(result);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Unknown error, try later");
+      }
+    },
+    [firstPeople, queryClient, secondPeople, webApp]
+  );
 
   const handlePayment = useCallback(() => {
     console.log("Open the payment!");
@@ -53,6 +78,8 @@ const MatchesScreen: FC = () => {
     return cleanup;
   }, [isLimited, handlePayment, webApp]);
 
+  if (!recommendations.data) return;
+
   return (
     <div className={styles.screen}>
       <div className={styles.header}>
@@ -70,7 +97,17 @@ const MatchesScreen: FC = () => {
       </div>
 
       <div className={cn(styles.photo, { [styles.limited]: isLimited })}>
-        <img className={styles.image} src={photo} alt="" />
+        <img
+          className={cn(styles.image, { [styles.first]: true })}
+          src={firstPeople.image}
+          alt=""
+        />
+
+        <img
+          className={cn(styles.image, { [styles.second]: true })}
+          src={secondPeople.image}
+          alt=""
+        />
       </div>
 
       <div className={styles.footer}>
@@ -84,18 +121,20 @@ const MatchesScreen: FC = () => {
         ) : (
           <>
             <div className={styles.profile}>
-              <div className={styles.name}>Olga, 26</div>
+              <div className={styles.name}>
+                {`${firstPeople.firstName}, ${firstPeople.age}`}
+              </div>
               <div className={styles.description}>
-                Project manager at IT company
+                {firstPeople.description}
               </div>
             </div>
 
             <div className={styles.buttons}>
-              <CircleButton onClick={handleNo}>
+              <CircleButton onClick={() => sendReaction("no")}>
                 <img src={iconNo} alt="" />
               </CircleButton>
 
-              <CircleButton onClick={handleYes}>
+              <CircleButton onClick={() => sendReaction("yes")}>
                 <img src={iconYes} alt="" />
               </CircleButton>
             </div>
