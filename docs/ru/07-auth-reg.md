@@ -127,3 +127,117 @@
    ```bash
    TELEGRAM_BOT_API=6406180840:AAFpHAa-a5IMDM25kef2tbScNCX8PjKy2a
    ```
+
+## Регистрация пользователя
+
+Логика регистрация пользователя никак не зависит от Telegram и может различаться в зависимости от типа приложения, а некоторым приложениям это вообще не нужно. В нашем приложении регистрация пользователя нужна, поэтому я коротко расскажу о самом важном в этом процессе.
+
+1. **Отправляем запрос на регистрацию**
+
+   Для начала нужно реализовать передачу всех данных для регистрации со стороны приложения. В моём случае при первом визите в приложение у пользователя есть экран с дополнительными вопросами. После ответа на все вопросы, мы просим пользователя выбрать фотографию, а затем отправляем это на бэкенд в виде POST-запроса на адрес `/api/registration`.
+
+   [Посмотреть код компонента](https://github.com/ykundin/at-first-sight/blob/docs/tg-web-app/src/screens/welcome-screen/elems/messages-step/messages-step.tsx) (ищите функцию `handleSubmit`)
+
+2. **Пишем обработчик запроса**
+
+   А теперь необходимо добавить обработчик на бэкенде для данного запроса:
+
+   ```tsx
+   {
+       method: "POST",
+       path: "/api/registration",
+       async handler({ request }) {
+         const auth = new Auth();
+         const tgUser = auth.getUserByInitData(request.body.get("initData"));
+         const user = await auth.register(request.body, tgUser);
+
+         return {
+           ok: true,
+           data: user,
+         };
+       },
+     },
+   ```
+
+3. **Реализуем регистрацию**
+
+   Как видите, обработчик запроса служит лишь для того, чтобы вызвать нужный метод в классе `Auth`, передав в него информацию из запроса. Давайте детальнее посмотрим на этот класс и метод `register`:
+
+   ```tsx
+   import crypto from "node:crypto";
+   import { MongoClient } from "mongodb";
+
+   import { ValidationError } from "../app/errors/validation-error";
+
+   import type { Collection, Db } from "mongodb";
+
+   class Auth {
+     #cookieName = "session_id";
+
+     #client: MongoClient;
+     #db: Db;
+     #users: Collection<User>;
+
+     constructor() {
+       this.#client = new MongoClient(process.env.MONGO_URI || "");
+       this.#db = this.#client.db(process.env.MONGO_DB || "");
+       this.#users = this.#db.collection("users");
+     }
+
+     async saveUser(user: User): Promise<boolean> {
+       const result = await this.#users.insertOne(user);
+
+       return result.acknowledged;
+     }
+
+     async getUserById(userId: User["id"]): Promise<User | null> {
+       const user = await this.#users.findOne({ id: userId });
+
+       return user;
+     }
+
+     async register(form: FormData, tgUser: TelegramUser): Promise<User> {
+       // TODO: Add the validation of form data
+
+       // Maybe user already exists?
+       const dbUser = await this.getUserById(tgUser.id);
+       if (dbUser) {
+         return dbUser;
+       }
+
+       const user = {
+         ...tgUser,
+         gender: String(form.get("gender")) || "",
+         interestsGender: String(form.get("interests")) || "",
+         ageRange: String(form.get("age-range")) || "",
+
+         // TODO: Upload photo to Object Store
+         photo: "",
+       };
+
+       await this.saveUser(user);
+
+       return user;
+     }
+   }
+
+   export default Auth;
+   ```
+
+   Как видите, на данном этапе я полностью пропустил стадию с валидацией полученных данных, а также не реализовал логику с сохранением фотографии пользователя. Но, разумеется, это обязательно сделать до того, как ваше приложение попадёт в продакшн. Мы займёмся этим чуть позже.
+
+   [Открыть файл](https://github.com/ykundin/at-first-sight/blob/docs/backend/app/auth.ts)
+
+4. **Взаимодействие с базой данных**
+
+   <img align="right" width="300" height="169" src="../images/auth-reg/user-in-database.png">
+
+   А также обратите внимание на конструктор внутри класса `Auth` — здесь мы создаём соединение с базой данных, а все необходимые данные для этого берём из переменных окружения. А значит пришла пора отредактировать файл `/backend/.env`:
+
+   ```bash
+   TELEGRAM_BOT_API=6406180840:AAFpHAa-a5IMDM25kef2tbScNCX8PjKy2a
+   MONGO_URI=mongodb://kundin:very-secret-password@db:27017/?authSource=admin&readPreference=primary&ssl=false&directConnection=true
+   MONGO_DB=at-first-sight
+   ```
+
+   Все необходимые параметры для базы данных мы с вами уже указали в файле `docker-compose.dev.yml`. Обратите внимание, что для применения новых переменных окружения необходимо полностью перезапустить приложение в Docker. А для того, чтобы удобно смотреть то, что было в итоге сохранено в базу данных я рекомендую установить [расширение для VS Code](https://github.com/mongodb-js/vscode).
