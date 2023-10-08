@@ -10,7 +10,7 @@ function useUser() {
       const res = await fetch(`/api/get-user`, {
         method: "POST",
         headers: {
-          ContentType: "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ initData }),
       });

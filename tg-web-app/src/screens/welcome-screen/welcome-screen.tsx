@@ -14,9 +14,7 @@ const WelcomeScreen: FC = () => {
   const navigate = useNavigate();
 
   const handleFinish = useCallback(() => {
-    setTimeout(() => {
-      navigate("/matches");
-    }, 2000);
+    navigate("/matches");
   }, [navigate]);
 
   return (

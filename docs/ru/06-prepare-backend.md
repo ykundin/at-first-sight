@@ -116,8 +116,8 @@ services:
     restart: always
     # Данные для подключения к базе данных
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=at-first-sight
-      - MONGO_INITDB_ROOT_PASSWORD=at-first-sight
+      - MONGO_INITDB_ROOT_USERNAME=kundin
+      - MONGO_INITDB_ROOT_PASSWORD=very-secret-password
       - MONGODB_DATABASE=at-first-sight
     ports:
       - 27017:27017
