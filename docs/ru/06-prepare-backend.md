@@ -71,8 +71,6 @@
           - 5173:5173
         volumes:
           - ./tg-web-app:/app
-        env_file:
-          - ./tg-web-app/.env
         environment:
           - PORT=5173
         command: bun run dev
@@ -131,12 +129,123 @@ volumes:
   db_data:
 ```
 
-После чего нам с вами остаётся лишь остановить запущенный ранее проект и запустить заново, чтобы Docker развернул для нас уже три микросервиса — базу данных, бэкенд и фронтенд.
+## Учимся делать запросы на бэкенд
 
-```bash
-bun run dev
-```
+Итак, у нас есть и бэкенд и фронтенд сервис, но осталось научиться выполнять запросы на свой же бэкенд и получать от него информацию. Давайте реализуем метод `getUser`, который пока что не будет возвращать реальную информацию (этим займёмся в следующей части), и этот метод мы будет вызывать при открытии приложения.
 
-Всё! Теперь у нас есть всё необходимое для того, чтобы реализовать регистрацию и авторизацию пользователей внутри приложения.
+1. **Реализуем запрос на бэкенде**
+   Здесь всё довольно просто и, скорее всего, даже не нуждается в комментариях:
+
+   ```ts
+   {
+    method: "GET",
+    path: "/api/get-user",
+    handler() {
+      return Promise.resolve({ ok: true, data: null });
+    },
+   }
+   ```
+
+   [Посмотреть весь код](https://github.com/ykundin/at-first-sight/blob/docs/backend/adapter/rest-api/auth.ts)
+
+2. **Передаём адрес бэкенда во фронтенд-приложение**
+   А вот здесь нам снова поможет Docker и файл `docker-compose.dev.yml`:
+
+   ```yml
+   version: "3.3"
+   services:
+     db:
+      ...
+
+     backend: # Название сервиса
+       ...
+
+     tg-web-app:
+       ...
+       environment:
+         - PORT=5173
+         - BACKEND_URL=http://backend:4000 # Добавляем адрес бэкенда в виде названия сервиса
+   ```
+
+3. **Проксируем запросы к API**
+   А теперь мы с вами сделаем так, что абсолютно все запросы, которые начинаются с `/api` будут автоматически отправляться на наш бэкенд-сервис. Это называется проксированием запросов и сильно упрощает интеграцию с бэкендом. С помощью Vite это реализуется буквально несколько строками в файле `/tg-web-app/vite.config.ts`:
+
+   ```ts
+   import { defineConfig } from "vite";
+   import react from "@vitejs/plugin-react";
+
+   // https://vitejs.dev/config/
+   export default defineConfig({
+     server: {
+       port: Number(process.env.PORT) || 3000,
+       proxy: {
+         "/api": {
+           target: process.env.BACKEND_URL, // Тот самый адрес, который мы указали в docker-compose.dev.yml
+         },
+       },
+     },
+     plugins: [react()],
+   });
+   ```
+
+4. **Добавляем QueryClient**
+
+   Работа с запросами заключается в том, что нам нужно будет получать статус запроса, необходимые данные, кэшировать запросы, чтобы не делать один и тот же запрос заново, обновлять полученную информацию через какое-то время, обрабатывать ошибки и много чего ещё. И весь этот функционал уже давно реализован в отдельным библиотеках, например, в [ReactQuery](https://tanstack.com/).
+
+   Давайте установим её в наше фронтенд-приложение:
+
+   ```bash
+   cd tg-web-app
+   bun install @tanstack/react-query
+   ```
+
+   И создадим клиент на уровне всего приложения, то есть в файле `App.tsx`:
+
+   ```tsx
+   import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+   function App() {
+     const queryClient = new QueryClient();
+     const router = createBrowserRouter(...);
+
+     return (
+       <QueryClientProvider client={queryClient}>
+         <RouterProvider router={router} />
+       </QueryClientProvider>
+     );
+   }
+
+   export default App;
+   ```
+
+5. **Получаем информацию о пользователе**
+   И теперь последний шаг, на котором мы напишем кастомный хук `useUser`, который будет отправлять запрос на бэкенд и возвращать нам информацию о текущем пользователе:
+
+   ```ts
+   import { useQuery } from "@tanstack/react-query";
+
+   function useUser() {
+     return useQuery({
+       queryKey: ["user"],
+       queryFn: async () => {
+         // А вот и сам запрос на наш бэкенд
+         const res = await fetch("/api/get-user");
+         const result = await res.json();
+
+         if (!result.ok) {
+           throw new Error(result.error);
+         }
+
+         return result.data;
+       },
+     });
+   }
+
+   export default useUser;
+   ```
+
+   [Посмотреть внутри компонента](https://github.com/ykundin/at-first-sight/blob/docs/tg-web-app/src/screens/welcome-screen/elems/start-step/start-step.tsx)
+
+Всё! Теперь у нас есть абсолютно всё необходимое для того, чтобы реализовать регистрацию и авторизацию пользователей внутри приложения.
 
 [Регистрация и авторизация](./07-auth-reg.md)
