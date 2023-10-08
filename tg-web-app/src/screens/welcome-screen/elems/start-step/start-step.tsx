@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import useUser from "../../../../queries/useUser";
 import logotype from "./images/logotype.png";
 import styles from "./start-step.module.css";
 
@@ -12,6 +13,9 @@ export interface StartStepProps extends HTMLAttributes<HTMLDivElement> {
 
 const StartStep: FC<StartStepProps> = (props) => {
   const { onEnd } = props;
+  const user = useUser();
+
+  console.log("user", user.data);
 
   useEffect(() => {
     const id = setTimeout(() => {
