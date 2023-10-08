@@ -9,21 +9,24 @@ import type { HTMLAttributes, FC } from "react";
 export interface StartStepProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   onEnd?: () => void;
+  onFinish?: () => void;
 }
 
 const StartStep: FC<StartStepProps> = (props) => {
-  const { onEnd } = props;
+  const { onEnd, onFinish } = props;
   const user = useUser();
-
-  console.log("user", user.data);
 
   useEffect(() => {
     const id = setTimeout(() => {
-      if (onEnd) onEnd();
+      if (user.data) {
+        if (onFinish) onFinish();
+      } else {
+        if (onEnd) onEnd();
+      }
     }, 3000);
 
     return () => clearTimeout(id);
-  }, [onEnd]);
+  }, [onEnd, onFinish, user]);
 
   return (
     <div className={styles.step}>

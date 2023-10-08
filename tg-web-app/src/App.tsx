@@ -13,8 +13,27 @@ import SettingsScreen from "./screens/settings-screen";
 import FireScreen from "./screens/fire-screen";
 
 import type { FC } from "react";
+import useUser from "./queries/useUser";
 
 const Root: FC = () => {
+  const user = useUser();
+
+  useEffect(() => {
+    if (user.isLoading) return;
+    if (user.isError) {
+      alert("Sorry! Try again later");
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+
+    webApp.ready();
+    webApp.expand();
+  }, [user]);
+
+  if (user.isLoading || user.isError) return null;
+
   return (
     <>
       <Outlet />
@@ -24,14 +43,6 @@ const Root: FC = () => {
 };
 
 function App() {
-  useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const webApp = (window as any).Telegram.WebApp;
-
-    webApp.ready();
-    webApp.expand();
-  }, []);
-
   const queryClient = new QueryClient();
   const router = createBrowserRouter([
     {

@@ -19,8 +19,10 @@ const WelcomeScreen: FC = () => {
 
   return (
     <div className={styles.screen}>
-      {step === "start" && <StartStep onEnd={() => setStep("messages")} />}
-      {step === "messages" && <MessagesStep onEnd={handleFinish} />}
+      {step === "start" && (
+        <StartStep onEnd={() => setStep("messages")} onFinish={handleFinish} />
+      )}
+      {step === "messages" && <MessagesStep onFinish={handleFinish} />}
     </div>
   );
 };
