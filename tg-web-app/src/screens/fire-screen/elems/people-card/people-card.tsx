@@ -22,6 +22,26 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
     webApp.openTelegramLink(people.link);
   }, [people.link]);
 
+  const handleUnlockUser = useCallback(async () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const webApp = (window as any).Telegram.WebApp;
+    const initData = webApp.initData;
+
+    const res = await fetch("/api/unlock-profile", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: people.id, initData }),
+    });
+    const result = await res.json();
+
+    console.log(result);
+    webApp.openInvoice(result.data, (status: string) => {
+      console.log(status);
+    });
+  }, [people]);
+
   return (
     <div
       {...restProps}
@@ -45,7 +65,9 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
               Open a profile
             </span>
           ) : (
-            <span className={styles.link}>Unlock the user</span>
+            <span className={styles.link} onClick={handleUnlockUser}>
+              Unlock the user
+            </span>
           )}
         </div>
       </div>
