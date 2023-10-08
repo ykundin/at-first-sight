@@ -75,7 +75,7 @@ export class BunHttpServer implements HttpServer {
   async listen(port: number, callback?: () => void): Promise<void> {
     const self = this;
 
-    const server = Bun.serve({
+    Bun.serve({
       port: port,
 
       async fetch(req) {
