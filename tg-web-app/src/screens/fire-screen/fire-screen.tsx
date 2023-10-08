@@ -1,53 +1,26 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PeopleCard from "./elems/people-card";
 import useWebApp from "../../queries/useWebApp";
+import useFire from "../../queries/useFire";
 import iconFire from "./icons/fire.svg";
-import firstImage from "./images/first.jpg";
-import secondImage from "./images/second.png";
-import thirdImage from "./images/third.png";
 import styles from "./fire-screen.module.css";
 
 import type { FC } from "react";
 
-const peoples = {
-  opened: [
-    {
-      id: 1,
-      firstName: "Olga",
-      age: 26,
-      description: "Project manager at IT company",
-      view: "opened",
-      image: firstImage,
-      link: "https://t.me/ykundin",
-    },
-    {
-      id: 2,
-      firstName: "Alena",
-      age: 27,
-      description: "I love dogs and you!",
-      view: "opened",
-      image: secondImage,
-      link: "https://t.me/ykundin",
-    },
-  ],
-  closed: [
-    {
-      id: 3,
-      firstName: "Victoria",
-      age: 23,
-      description: "I keep my secrets carefully",
-      view: "locked",
-      image: thirdImage,
-      link: "https://t.me/ykundin",
-    },
-  ],
-};
-
 const FireScreen: FC = () => {
   const navigate = useNavigate();
   const webApp = useWebApp();
+  const { data: fire } = useFire();
+
+  const openedPeoples = useMemo(() => {
+    return fire?.filter((people) => people.view === "opened") || [];
+  }, [fire]);
+
+  const lockedPeoples = useMemo(() => {
+    return fire?.filter((people) => people.view === "locked") || [];
+  }, [fire]);
 
   useEffect(() => {
     // Show the back button
@@ -70,20 +43,22 @@ const FireScreen: FC = () => {
       <div className={styles.groups}>
         <div className={styles.group}>
           <div className={styles.items}>
-            {peoples.opened.map((people) => (
+            {openedPeoples.map((people) => (
               <PeopleCard key={people.id} people={people} />
             ))}
           </div>
         </div>
 
-        <div className={styles.group}>
-          <div className={styles.groupTitle}>Showed interest</div>
-          <div className={styles.items}>
-            {peoples.closed.map((people) => (
-              <PeopleCard key={people.id} people={people} />
-            ))}
+        {lockedPeoples.length > 0 && (
+          <div className={styles.group}>
+            <div className={styles.groupTitle}>Showed interest</div>
+            <div className={styles.items}>
+              {lockedPeoples.map((people) => (
+                <PeopleCard key={people.id} people={people} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

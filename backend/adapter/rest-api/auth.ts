@@ -1,7 +1,7 @@
 import Auth from "~/app/auth";
+import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 import type { HttpRoute } from "./entities/http-route";
-import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 export const authRoutes: HttpRoute[] = [
   {
