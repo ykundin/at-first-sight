@@ -1,12 +1,12 @@
 import crypto from "node:crypto";
 import { nanoid } from "nanoid";
-import { MongoClient } from "mongodb";
 
-import { ObjectStorage } from "../infra/object-storage";
-import { ValidationError } from "../app/errors/validation-error";
+import { ObjectStorage } from "~/infra/object-storage";
+import { DI } from "~/infra/di";
+import { ValidationError } from "~/app/errors/validation-error";
 
-import type { Collection, Db } from "mongodb";
-import type { User } from "../domain/user";
+import type { User } from "~/domain/user";
+import type { MongoStore } from "~/infra/mongo-store";
 
 interface TelegramUser {
   id: number;
@@ -16,32 +16,28 @@ interface TelegramUser {
   languageCode: string;
 }
 
-interface Session {
-  id: string;
-  userId: User["id"];
-}
-
 class Auth {
   #cookieName = "session_id";
 
-  #client: MongoClient;
-  #db: Db;
-  #users: Collection<User>;
-  #sessions: Collection<Session>;
+  #store: MongoStore;
 
   #objectStorage: ObjectStorage;
 
   constructor() {
-    this.#client = new MongoClient(process.env.MONGO_URI || "");
-    this.#db = this.#client.db(process.env.MONGO_DB || "");
-    this.#users = this.#db.collection("users");
-    this.#sessions = this.#db.collection("sessions");
-
+    this.#store = DI.get().store;
     this.#objectStorage = new ObjectStorage();
   }
 
   get cookieName(): string {
     return this.#cookieName;
+  }
+
+  get #users() {
+    return this.#store.users;
+  }
+
+  get #sessions() {
+    return this.#store.sessions;
   }
 
   getUserByInitData(inputInitData: string): TelegramUser {
