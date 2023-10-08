@@ -1,12 +1,8 @@
 import { MongoClient } from "mongodb";
 
 import type { Collection, Db } from "mongodb";
-import type { User } from "../domain/user";
-
-interface Session {
-  id: string;
-  userId: User["id"];
-}
+import type { User } from "~/domain/user";
+import type { Session } from "~/domain/session";
 
 export class MongoStore {
   #client: MongoClient;
