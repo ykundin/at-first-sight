@@ -22,4 +22,22 @@ export const paymentsRoutes: HttpRoute[] = [
       };
     },
   },
+
+  {
+    method: "POST",
+    path: "/api/buy-scores",
+    before: [shouldBeAuth],
+    async handler({ request, user }) {
+      const payments = new Payments();
+
+      const link = await payments.buyScores({
+        currentUserId: user.id,
+      });
+
+      return {
+        ok: true,
+        data: link,
+      };
+    },
+  },
 ];

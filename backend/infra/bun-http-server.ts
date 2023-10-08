@@ -5,6 +5,7 @@ import { ValidationError } from "~/app/errors/validation-error";
 import { ServiceError } from "~/app/errors/service-error";
 import { restApiRoutes } from "~/adapter/rest-api";
 import { HttpRequest } from "~/adapter/rest-api/entities/http-request";
+import TgBotApi from "./tg-bot-api";
 
 import type { HttpRoute } from "~/adapter/rest-api/entities/http-route";
 import type { HttpResponse } from "~/adapter/rest-api/entities/http-response";
@@ -12,9 +13,11 @@ import type { HttpServer } from "~/infra/entities/http-server";
 
 export class BunHttpServer implements HttpServer {
   #auth: Auth;
+  #botApi: TgBotApi;
 
   constructor() {
     this.#auth = new Auth();
+    this.#botApi = new TgBotApi();
   }
 
   #createJSONResponse(params: { status: number; body: any }) {
@@ -94,6 +97,8 @@ export class BunHttpServer implements HttpServer {
 
   async listen(port: number, callback?: () => void): Promise<void> {
     const self = this;
+
+    await this.#botApi.setWebhook();
 
     Bun.serve({
       port: port,

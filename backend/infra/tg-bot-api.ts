@@ -7,6 +7,10 @@ class TgBotApi {
     this.#token = process.env.TELEGRAM_BOT_API || "";
   }
 
+  async setWebhook() {
+    return this.query("setWebhook", { url: process.env.BOT_WEBHOOK_URL || "" });
+  }
+
   async query<T>(method: string, body?: Record<any, any>): Promise<T> {
     const pathNameChunks = ["", `bot${this.#token}`, method].filter((chunk) => {
       return typeof chunk === "string";
@@ -24,7 +28,7 @@ class TgBotApi {
     const data = await res.json();
 
     if (!data.ok) {
-      throw new Error(data.error);
+      throw new Error(data.description);
     }
 
     return data.result;
