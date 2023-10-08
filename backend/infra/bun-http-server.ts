@@ -99,10 +99,12 @@ export class BunHttpServer implements HttpServer {
       port: port,
 
       async fetch(req) {
+        const url = new URL(req.url);
+
         // Handle all REST API routes
         const route = restApiRoutes.find((route) => {
           if (req.method !== route.method) return false;
-          if (new URL(req.url).pathname !== route.path) return false;
+          if (url.pathname !== route.path) return false;
 
           return true;
         });
