@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import cn from "classnames";
 
 import useWebApp from "../../queries/useWebApp";
+import useFire from "../../queries/useFire";
 import CircleButton from "./elems/circle-button";
 import iconFire from "./icons/fire.svg";
 import iconClock from "./icons/clock.svg";
@@ -14,9 +15,11 @@ import styles from "./matches-screen.module.css";
 import { type FC } from "react";
 
 const MatchesScreen: FC = () => {
-  const count = 3;
-  const isLimited = false;
+  const fire = useFire();
   const webApp = useWebApp();
+
+  const isLimited = false;
+  const count = fire.data ? fire.data.length : 0;
 
   const handleNo = useCallback(() => {
     console.log("No!");
