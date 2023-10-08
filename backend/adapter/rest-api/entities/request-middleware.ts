@@ -1,4 +1,4 @@
-import type { User } from "domain/entities/user";
+import type { User } from "../../../domain/user";
 import type { HttpRequest } from "./http-request";
 
 export type RequestMiddleware = (params: {

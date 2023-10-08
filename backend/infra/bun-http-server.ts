@@ -1,5 +1,6 @@
 import cookie from "cookie";
 
+import Auth from "~/app/auth";
 import { ValidationError } from "~/app/errors/validation-error";
 import { ServiceError } from "~/app/errors/service-error";
 import { restApiRoutes } from "~/adapter/rest-api";
@@ -10,6 +11,12 @@ import type { HttpResponse } from "~/adapter/rest-api/entities/http-response";
 import type { HttpServer } from "~/infra/entities/http-server";
 
 export class BunHttpServer implements HttpServer {
+  #auth: Auth;
+
+  constructor() {
+    this.#auth = new Auth();
+  }
+
   #createJSONResponse(params: { status: number; body: any }) {
     return new Response(JSON.stringify(params.body), {
       status: params.status,
@@ -23,6 +30,11 @@ export class BunHttpServer implements HttpServer {
     const requestHandler = async (req: Request) => {
       const userAgent = req.headers.get("user-agent") || "";
       const ip = String(req.headers.get("x-forwarded-for"));
+
+      // Try to find user by sessionId in cookies
+      const cookies = cookie.parse(req.headers.get("Cookie") || "");
+      const sessionId = cookies[this.#auth.cookieName];
+      const user = await this.#auth.getUserFromSession(sessionId);
 
       // Read the body of request
       let body = null;
@@ -55,7 +67,6 @@ export class BunHttpServer implements HttpServer {
           );
         },
       };
-      const user = null;
 
       // Run the before middlewares
       await Promise.all(

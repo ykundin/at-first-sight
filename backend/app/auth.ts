@@ -1,9 +1,11 @@
 import crypto from "node:crypto";
+import { nanoid } from "nanoid";
 import { MongoClient } from "mongodb";
 
 import { ValidationError } from "../app/errors/validation-error";
 
 import type { Collection, Db } from "mongodb";
+import type { User } from "../domain/user";
 
 interface TelegramUser {
   id: number;
@@ -13,16 +15,9 @@ interface TelegramUser {
   languageCode: string;
 }
 
-interface User {
-  id: number;
-  firstName: string;
-  lastName: string;
-  username: string;
-  languageCode: string;
-  gender: string;
-  interestsGender: string;
-  ageRange: string;
-  photo: any;
+interface Session {
+  id: string;
+  userId: User["id"];
 }
 
 class Auth {
@@ -31,11 +26,17 @@ class Auth {
   #client: MongoClient;
   #db: Db;
   #users: Collection<User>;
+  #sessions: Collection<Session>;
 
   constructor() {
     this.#client = new MongoClient(process.env.MONGO_URI || "");
     this.#db = this.#client.db(process.env.MONGO_DB || "");
     this.#users = this.#db.collection("users");
+    this.#sessions = this.#db.collection("sessions");
+  }
+
+  get cookieName(): string {
+    return this.#cookieName;
   }
 
   getUserByInitData(inputInitData: string): TelegramUser {
@@ -101,6 +102,23 @@ class Auth {
 
   async getUserById(userId: User["id"]): Promise<User | null> {
     const user = await this.#users.findOne({ id: userId });
+
+    return user;
+  }
+
+  async createSession(userId: User["id"]): Promise<string | null> {
+    const sessionId = nanoid();
+    const result = await this.#sessions.insertOne({
+      id: sessionId,
+      userId: userId,
+    });
+
+    return result.acknowledged ? sessionId : null;
+  }
+
+  async getUserFromSession(sessionId: string): Promise<User | null> {
+    const session = await this.#sessions.findOne({ id: sessionId });
+    const user = session ? await this.getUserById(session.userId) : null;
 
     return user;
   }
