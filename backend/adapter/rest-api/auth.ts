@@ -8,7 +8,8 @@ export const authRoutes: HttpRoute[] = [
     path: "/api/get-user",
     async handler({ request }) {
       const auth = new Auth();
-      const user = auth.getUserByInitData(request.body.initData);
+      const tgUser = auth.getUserByInitData(request.body.initData);
+      const user = await auth.getUserById(tgUser.id);
 
       return {
         ok: true,

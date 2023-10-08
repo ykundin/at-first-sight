@@ -9,7 +9,7 @@ import type { HTMLAttributes, FC, FormEventHandler } from "react";
 
 export interface MessagesStepProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
-  onEnd?: () => void;
+  onFinish?: () => void;
 }
 
 interface Variant {
@@ -197,7 +197,7 @@ const UploadMessage: FC<MessageComponentProps<UploadMessage>> = (props) => {
 };
 
 const MessagesStep: FC<MessagesStepProps> = (props) => {
-  const { onEnd } = props;
+  const { onFinish } = props;
   const [index, setIndex] = useState(1);
   const refButton = useRef<HTMLButtonElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -230,11 +230,11 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
         setIndex((p) => p + 1);
 
         setTimeout(() => {
-          if (onEnd) onEnd();
+          if (onFinish) onFinish();
         }, 1000);
       }
     },
-    [onEnd]
+    [onFinish]
   );
 
   useEffect(() => {
