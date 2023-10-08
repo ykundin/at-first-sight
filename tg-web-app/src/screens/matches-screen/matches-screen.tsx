@@ -59,14 +59,37 @@ const MatchesScreen: FC = () => {
     [firstPeople, queryClient, secondPeople, webApp]
   );
 
-  const handlePayment = useCallback(() => {
-    console.log("Open the payment!");
-  }, []);
+  const handleBuyScores = useCallback(async () => {
+    const res = await fetch("/api/buy-scores", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    });
+    const result = await res.json();
+
+    if (!result.ok) {
+      alert("Unknown error, try again");
+      return;
+    }
+
+    webApp.openInvoice(result.data, (status: string) => {
+      if (status !== "paid") return;
+
+      setTimeout(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        queryClient.setQueryData(["recommendations"], (prev: any) => {
+          return { ...prev, locked: false };
+        });
+      }, 1000);
+    });
+  }, [queryClient, webApp]);
 
   useEffect(() => {
     const cleanup = () => {
       webApp.MainButton.hide();
-      webApp.MainButton.offClick(handlePayment);
+      webApp.MainButton.offClick(handleBuyScores);
     };
 
     if (!isLimited) return cleanup();
@@ -76,10 +99,10 @@ const MatchesScreen: FC = () => {
     webApp.MainButton.setText("I want to continue");
 
     // Open the payment by click
-    webApp.MainButton.onClick(handlePayment);
+    webApp.MainButton.onClick(handleBuyScores);
 
     return cleanup;
-  }, [isLimited, handlePayment, webApp]);
+  }, [isLimited, handleBuyScores, webApp]);
 
   if (!recommendations.data) return;
 

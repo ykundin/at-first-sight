@@ -58,8 +58,6 @@ export class Matcher {
     const randomIndex = this.#getRandomInt(0, allPeoples.length - 1);
     const newPeople = allPeoples[randomIndex];
 
-    console.log("randomIndex", randomIndex);
-
     return {
       locked: user ? user.restScores < 1 : true,
       newPeople: newPeople,

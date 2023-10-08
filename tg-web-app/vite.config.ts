@@ -9,6 +9,9 @@ export default defineConfig({
       "/api": {
         target: process.env.BACKEND_URL,
       },
+      "/webhook": {
+        target: process.env.BACKEND_URL,
+      },
       "/image": {
         target: process.env.IMGPROXY_URL,
         rewrite(path) {

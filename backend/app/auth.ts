@@ -211,6 +211,15 @@ class Auth {
 
     return result.acknowledged;
   }
+
+  async addScores(userId: User["id"], scores: number) {
+    const result = await this.#users.updateOne(
+      { id: userId },
+      { $inc: { restScores: scores } }
+    );
+
+    return result.acknowledged;
+  }
 }
 
 export default Auth;
