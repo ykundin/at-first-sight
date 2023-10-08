@@ -6,7 +6,15 @@ export const authRoutes: HttpRoute[] = [
   {
     method: "POST",
     path: "/api/get-user",
-    async handler({ request, response }) {
+    async handler({ request, response, user: authUser }) {
+      // User already authorized
+      if (authUser) {
+        return {
+          ok: true,
+          data: authUser,
+        };
+      }
+
       const auth = new Auth();
       const tgUser = auth.getUserByInitData(request.body.initData);
       const user = await auth.getUserById(tgUser.id);
