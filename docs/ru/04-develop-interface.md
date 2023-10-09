@@ -23,10 +23,10 @@
 
    Создадим внутри приложения директорию `screens`, которая будет содержать каждый экран приложения:
 
-   - welcome-screen — знакомство и регистрация пользователя;
-   - matches-screen — поиск интересных людей;
-   - settings-screen — экран с настройками, редактированием профиля;
-   - fire-screen — просмотр совпадений;
+   - `welcome-screen` — знакомство и регистрация пользователя;
+   - `matches-screen` — поиск интересных людей;
+   - `settings-screen` — экран с настройками, редактированием профиля;
+   - `fire-screen` — просмотр совпадений;
 
      [Посмотреть код](https://github.com/ykundin/at-first-sight/tree/docs/tg-web-app/src/screens)
 
@@ -93,7 +93,7 @@
 
 <br clear="right"/>
 
-## Встроенная кнопка "Назад"
+## Встроенная кнопка "Назад" / BackButton
 
 <img align="right" width="300" height="649" src="../images/develop-interface/back-button-navigation.gif">
 
@@ -147,7 +147,7 @@ export default FireScreen;
 
 [Посмотреть код](https://github.com/ykundin/at-first-sight/tree/docs/tg-web-app/src/screens)
 
-## Работа с основной кнопкой приложения
+## Работа с основной кнопкой / MainButton
 
 Заметили, что на экране с настройками есть кнопка "Save changes"? Это ещё одна из встроенных возможностей Telegram Mini App, называющаяся [MainButton](https://core.telegram.org/bots/webapps#mainbutton), работа с которой очень похожа на BackButton. Давайте разберём на примере:
 
