@@ -2,6 +2,11 @@ import { useQuery } from "@tanstack/react-query";
 
 import type { People } from "../domain/people";
 
+export interface Result {
+  opened: People[];
+  locked: People[];
+}
+
 function useFire() {
   return useQuery({
     queryKey: ["fire"],
@@ -14,7 +19,7 @@ function useFire() {
         throw new Error(result.error);
       }
 
-      return result.data as People[];
+      return result.data as Result;
     },
   });
 }

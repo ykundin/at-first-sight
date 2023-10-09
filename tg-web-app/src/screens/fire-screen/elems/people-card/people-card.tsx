@@ -10,10 +10,11 @@ import type { People } from "../../../../domain/people";
 export interface PeopleCardProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
   people: People;
+  locked?: boolean;
 }
 
 const PeopleCard: FC<PeopleCardProps> = (props) => {
-  const { people, ...restProps } = props;
+  const { people, locked, ...restProps } = props;
   const webApp = useWebApp();
 
   const handleOpenProfile = useCallback(() => {
@@ -40,10 +41,10 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
   return (
     <div
       {...restProps}
-      className={cn(styles.card, { [styles.locked]: people.view === "locked" })}
+      className={cn(styles.card, { [styles.locked]: locked })}
     >
       <div className={styles.photo}>
-        <img className={styles.image} src={people.image} alt="" />
+        <img className={styles.image} src={people.photo} alt="" />
       </div>
 
       <div className={styles.content}>

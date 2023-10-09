@@ -1,7 +1,12 @@
 {
   "name": "@at-first-sight/root",
   "scripts": {
-    "dev": "docker-compose -f docker-compose.dev.yml up"
+    "object-storage": "docker-compose -f docker-compose.dev.yml up object-storage",
+    "dev": "docker-compose -f docker-compose.dev.yml up",
+    "public-link": "ngrok http 5173"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "ngrok": "^5.0.0-beta.2"
+  }
 }

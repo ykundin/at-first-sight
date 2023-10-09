@@ -4,6 +4,7 @@ db.auth("kundin", "very-secret-password");
 db = db.getSiblingDB("at-first-sight");
 
 db.users.insertMany([
+  // Women
   {
     id: 1,
     firstName: "Olga",
@@ -93,6 +94,73 @@ db.users.insertMany([
     gender: "woman",
     interestsGender: "man",
     ageRange: "24-30",
+    restScores: 30,
+  },
+
+  // Men
+  {
+    id: 8,
+    firstName: "Pavel",
+    age: 26,
+    description: "As Usual, There Is A Great Woman Behind Every Idiot",
+    photo:
+      "https://photo7.wambacdn.net/12/95/51/1697155921/2037850560_huge.jpg?hash=FMuslmPsXR2rVnpPDS-8Xw&expires=64060578000&updated=1597257207",
+    link: "https://t.me/ykundin",
+    gender: "man",
+    interestsGender: "woman",
+    ageRange: "24-30",
+    restScores: 30,
+  },
+  {
+    id: 9,
+    firstName: "Arthur",
+    age: 24,
+    description: "I am not stubborn, I am just always right.",
+    photo:
+      "https://sun9-4.userapi.com/impg/msvX3xWErduMIK5Z97lMCaEr11FY-EUeNOyhMg/pM5Uqnm5IKk.jpg?size=890x1080&quality=96&sign=30c4dc2210eeea674cd760b5912f9087&c_uniq_tag=Oe5PtjjPnPmb_4ReynkMXNsRCBT9KFprYfEk0hDvb0s&type=album",
+    link: "https://t.me/ykundin",
+    gender: "man",
+    interestsGender: "woman",
+    ageRange: "24-30",
+    restScores: 30,
+  },
+  {
+    id: 10,
+    firstName: "James",
+    age: 27,
+    description: "I need 6 months’ vacation, twice a year.",
+    photo:
+      "https://sun9-80.userapi.com/impg/oWG5QZuN2mIT0O3TgKj8o6OkH0fODPile8AqZw/-Bzl-0MHRik.jpg?size=340x604&quality=95&sign=2b8423abf2615fef889291fb2df74b3b&c_uniq_tag=zYKoTr2NqJ3TotngMVaOblygOrbCOUPUODcrQFKdpuU&type=album",
+    link: "https://t.me/ykundin",
+    gender: "man",
+    interestsGender: "woman",
+    ageRange: "24-30",
+    restScores: 30,
+  },
+  {
+    id: 11,
+    firstName: "Alexander",
+    age: 34,
+    description: "The secret of a happy marriage remains a secret.",
+    photo: "https://bestnokia.ru/wp-content/uploads/2023/02/2932644748.jpg",
+    link: "https://t.me/ykundin",
+    gender: "man",
+    interestsGender: "woman",
+    ageRange: "31-36",
+    restScores: 30,
+  },
+  {
+    id: 12,
+    firstName: "Logan",
+    age: 32,
+    description:
+      "The first five days after the weekend are always the hardest.",
+    photo:
+      "https://www.dr-ambrosius.de/wp-content/uploads/2018/05/dr-ambrosius-Erfolgsgeschichten-Timo.jpg",
+    link: "https://t.me/ykundin",
+    gender: "man",
+    interestsGender: "woman",
+    ageRange: "31-36",
     restScores: 30,
   },
 ]);

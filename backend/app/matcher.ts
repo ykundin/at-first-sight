@@ -55,4 +55,16 @@ export class Matcher {
       newPeople: newPeople,
     };
   }
+
+  async getFire(userId: User["id"]) {
+    const user = await this.#auth.getUserById(userId);
+    const peoples = await this.#findPeoples(user, 3);
+    const opened = [peoples[0], peoples[1]];
+    const locked = [peoples[2]];
+
+    return {
+      opened,
+      locked,
+    };
+  }
 }
