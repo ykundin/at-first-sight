@@ -68,17 +68,16 @@ services:
       - traefik.http.services.backend.loadbalancer.server.port=4000
 
   tg-web-app:
-    image: oven/bun:1.0.4-alpine
+    build:
+      context: ./tg-web-app
+      dockerfile: Dockerfile
     restart: always
     working_dir: /app
-    volumes:
-      - ./tg-web-app:/app
     env_file:
       - .env
     environment:
       - PORT=3000
       - IMGPROXY_URL=http://imgproxy:8080
-    command: bun run dev
     labels:
       - traefik.enable=true
       - traefik.http.routers.tg-web-app.entrypoints=web
