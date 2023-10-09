@@ -4,6 +4,6 @@ export interface People {
   age: number;
   description: string;
   view: string;
-  image: string;
+  photo: string;
   link: string;
 }

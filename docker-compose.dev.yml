@@ -31,8 +31,8 @@ services:
     environment:
       - IMGPROXY_USE_S3=true
       - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
-      - AWS_ACCESS_KEY_ID=xFPNwtB2GxBJ5C1Rhlbv
-      - AWS_SECRET_ACCESS_KEY=7K26H4Tgcs17dXAE9uGxRhsMKp3jevMQcOncLNyf
+      - AWS_ACCESS_KEY_ID=Rh5Vl03ij4oUg0nHpVQv
+      - AWS_SECRET_ACCESS_KEY=fw1Q6vGzB0JgGqo7fEeUQNlSxupU1c0uQ9Vthvwi
 
   backend:
     image: oven/bun:1.0.4
@@ -48,8 +48,8 @@ services:
       - PORT=4000
       - OBJECT_STORAGE_ENDPOINT=http://object-storage:9000
       - OBJECT_STORAGE_BUCKET=at-first-sight
-      - OBJECT_STORAGE_ACCESS_KEY=xFPNwtB2GxBJ5C1Rhlbv
-      - OBJECT_STORAGE_SECRET_KEY=7K26H4Tgcs17dXAE9uGxRhsMKp3jevMQcOncLNyf
+      - OBJECT_STORAGE_ACCESS_KEY=Rh5Vl03ij4oUg0nHpVQv
+      - OBJECT_STORAGE_SECRET_KEY=fw1Q6vGzB0JgGqo7fEeUQNlSxupU1c0uQ9Vthvwi
     command: bun run dev
 
   tg-web-app:

@@ -1,5 +1,7 @@
+import type { MongoStore } from "~/infra/mongo-store";
+
 export interface DIDeps {
-  store: any;
+  store: MongoStore;
 }
 
 interface DIStore {
