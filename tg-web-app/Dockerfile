@@ -8,7 +8,7 @@ RUN bun i
 # Build the app
 ENV NODE_ENV=production
 COPY src src/
-COPY tsconfig.json tsconfig.json
+COPY index.html tsconfig.json tsconfig.node.json vite.config.ts ./
 RUN bun run build
 
 # Build release image
