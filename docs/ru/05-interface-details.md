@@ -4,7 +4,7 @@
 
 ## Темы оформления
 
-<img style="padding-left: 20px" align="right" width="300" height="649" src="../images/interface-details/switch-themes.gif">
+<img align="right" height="649" src="../images/interface-details/switch-themes.gif">
 
 В современном мире огромное количество сайтов и приложений уже имеют как светлую, так и тёмную тему оформления, в том числе и Telegram. И будет не очень хорошо, если мы будем слепить пользователей темной темы своим светлым фоном.
 
