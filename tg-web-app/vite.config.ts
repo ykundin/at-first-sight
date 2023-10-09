@@ -6,12 +6,6 @@ export default defineConfig({
   server: {
     port: Number(process.env.PORT) || 3000,
     proxy: {
-      "/api": {
-        target: process.env.BACKEND_URL,
-      },
-      "/webhook": {
-        target: process.env.BACKEND_URL,
-      },
       "/image": {
         target: process.env.IMGPROXY_URL,
         rewrite(path) {

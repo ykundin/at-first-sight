@@ -1,5 +1,20 @@
 version: "3.3"
 services:
+  reverse-proxy:
+    image: traefik:v2.10
+    ports:
+      - 80:80
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./reverse-proxy/certs:/etc/certs
+      - ./reverse-proxy/traefik.yml:/etc/traefik/traefik.yml:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.http.routers.traefik.rule=Host(`traefik.at-first-sight.localhost`)
+      - traefik.http.routers.traefik.service=api@internal
+
   db:
     image: mongo:5.0.2
     restart: always
@@ -20,11 +35,14 @@ services:
       - MINIO_ROOT_USER=kundin
       - MINIO_ROOT_PASSWORD=very-secret-password
       - MINIO_SKIP_CLIENT=yes
-    ports:
-      - 9000:9000
-      - 9001:9001
     volumes:
       - minio_storage:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.s3.entrypoints=web
+      - traefik.http.routers.s3.rule=Host(`s3.at-first-sight.localhost`)
+      - traefik.http.routers.s3.service=object-storage
+      - traefik.http.services.object-storage.loadbalancer.server.port=9001
 
   imgproxy:
     image: darthsim/imgproxy
@@ -38,8 +56,6 @@ services:
     image: oven/bun:1.0.4
     restart: always
     working_dir: /app
-    ports:
-      - 4000:4000
     volumes:
       - ./backend:/app
     env_file:
@@ -51,21 +67,30 @@ services:
       - OBJECT_STORAGE_ACCESS_KEY=VGwBcnDIZjvNPQJ7LWj4
       - OBJECT_STORAGE_SECRET_KEY=3Hg8R3hh6l0dO9FzTUZ54MjmE0MltYLJKgZCmhl9
     command: bun run dev
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.entrypoints=web
+      - traefik.http.routers.backend.rule=Host(`at-first-sight.localhost`) && PathPrefix(`/api`, `/webhook`)
+      - traefik.http.routers.backend.service=backend
+      - traefik.http.services.backend.loadbalancer.server.port=4000
 
   tg-web-app:
     image: oven/bun:1.0.4-alpine
     restart: always
     working_dir: /app
-    ports:
-      - 5173:5173
     volumes:
       - ./tg-web-app:/app
     environment:
-      - PORT=5173
-      - BACKEND_URL=http://backend:4000
+      - PORT=3000
       - IMGPROXY_URL=http://imgproxy:8080
       - OBJECT_STORAGE_BUCKET=at-first-sight
     command: bun run dev
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tg-web-app.entrypoints=web
+      - traefik.http.routers.tg-web-app.rule=Host(`at-first-sight.localhost`)
+      - traefik.http.routers.tg-web-app.service=tg-web-app
+      - traefik.http.services.tg-web-app.loadbalancer.server.port=3000
 
 volumes:
   db_data:
