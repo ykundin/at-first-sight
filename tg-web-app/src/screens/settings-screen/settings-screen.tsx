@@ -56,6 +56,7 @@ const SettingsScreen: FC = () => {
         const result = await res.json();
 
         if (result.ok) {
+          queryClient.invalidateQueries(["recommendations"]);
           queryClient.invalidateQueries(["user"]);
           navigate("/matches");
         } else {

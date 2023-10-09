@@ -16,6 +16,7 @@
   height: 100px;
   border-radius: 8px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .image {
@@ -34,10 +35,15 @@
 
 .name {
   font-size: 18px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .description {
   font-size: 14px;
+  max-height: 42px;
+  overflow: hidden;
 }
 
 .link {

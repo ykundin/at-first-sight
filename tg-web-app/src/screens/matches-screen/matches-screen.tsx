@@ -23,7 +23,9 @@ const MatchesScreen: FC = () => {
 
   const isLimited = recommendations.data?.locked || false;
   const [firstPeople, secondPeople] = recommendations.data?.peoples || [];
-  const count = fire.data ? fire.data.length : 0;
+  const count = fire.data
+    ? fire.data.locked.length + fire.data.opened.length
+    : 0;
 
   const sendReaction = useCallback(
     async (reaction: "no" | "yes") => {
@@ -148,10 +150,11 @@ const MatchesScreen: FC = () => {
           <>
             <div className={styles.profile}>
               <div className={styles.name}>
-                {`${firstPeople.firstName}, ${firstPeople.age}`}
+                <span>{`${firstPeople.firstName}`}</span>
+                {firstPeople.age && <span>{`, ${firstPeople.age}`}</span>}
               </div>
               <div className={styles.description}>
-                {firstPeople.description}
+                {firstPeople.description || "No description"}
               </div>
             </div>
 

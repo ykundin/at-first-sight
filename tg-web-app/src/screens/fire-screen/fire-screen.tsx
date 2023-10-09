@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import PeopleCard from "./elems/people-card";
@@ -13,14 +13,6 @@ const FireScreen: FC = () => {
   const navigate = useNavigate();
   const webApp = useWebApp();
   const { data: fire } = useFire();
-
-  const openedPeoples = useMemo(() => {
-    return fire?.filter((people) => people.view === "opened") || [];
-  }, [fire]);
-
-  const lockedPeoples = useMemo(() => {
-    return fire?.filter((people) => people.view === "locked") || [];
-  }, [fire]);
 
   useEffect(() => {
     // Show the back button
@@ -43,18 +35,18 @@ const FireScreen: FC = () => {
       <div className={styles.groups}>
         <div className={styles.group}>
           <div className={styles.items}>
-            {openedPeoples.map((people) => (
+            {fire?.opened.map((people) => (
               <PeopleCard key={people.id} people={people} />
             ))}
           </div>
         </div>
 
-        {lockedPeoples.length > 0 && (
+        {(fire?.locked.length || 0) > 0 && (
           <div className={styles.group}>
             <div className={styles.groupTitle}>Showed interest</div>
             <div className={styles.items}>
-              {lockedPeoples.map((people) => (
-                <PeopleCard key={people.id} people={people} />
+              {fire?.locked.map((people) => (
+                <PeopleCard key={people.id} people={people} locked />
               ))}
             </div>
           </div>
