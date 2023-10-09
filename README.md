@@ -28,11 +28,16 @@ Since this repository was created to participate in the [Telegram Mini App Conte
 
 - **Teamwork** — if you plan to actively develop and change the application, then most likely you need to think about selecting a team and setting up a project for teamwork. For example, this may consist in setting up CI/CD pipelines that will allow you to automatically monitor the quality of the code, review the code and automatically deploy it to the servers…
 
-### Shall we begin?
+### Step-by-step guide how to create Telegram Web App
 
 I always suggest starting the development of a new product (application) with the formulation of the key idea and the values that we will offer to our audience. After that, we should start carefully thinking through all the necessary features that we want to present to users in the first version in order to hook them at first sight!
 
 This whole process can be described in one word — design — and it is the first step in our instructions, which is presented on a separate page.
 
 - Design / [in English](./docs/en/01-design.md) / [на русском языке](./docs/ru/01-design.md)
-- Interface development / [in English](./docs/en/02-interface.md) / [на русском языке](./docs/ru/02-interface.md)
+- Project Setup / [in English](./docs/en/02-design.md) / [на русском языке](./docs/ru/02-design.md)
+- Creating a project for the frontend / [in English](./docs/ru/03-create-frontend-project.md) / [на русском языке](./docs/ru/03-create-frontend-project.md)
+- Interface development / [in English](./docs/en/04-develop-interface.md) / [на русском языке](./docs/ru/04-develop-interface.md)
+- Detailed study of the interface / [in English](./docs/en/05-interface-details.md) / [на русском языке](./docs/ru/05-interface-details.md)
+- Preparing the backend for the application / [in English](./docs/en/06-prepare-backend.md) / [на русском языке](./docs/ru/06-prepare-backend.md)
+- Registration and authorization / [in English](./docs/en/07-auth-reg.md) / [на русском языке](./docs/ru/07-auth-reg.md)
