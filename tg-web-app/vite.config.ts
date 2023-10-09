@@ -10,7 +10,7 @@ export default defineConfig({
         target: process.env.IMGPROXY_URL,
         rewrite(path) {
           const key = path.split("/")[2];
-          const bucket = process.env.OBJECT_STORAGE_BUCKET;
+          const bucket = process.env.AWS_BUCKET;
 
           return `/insecure/plain/s3://${bucket}/${key}`;
         },
