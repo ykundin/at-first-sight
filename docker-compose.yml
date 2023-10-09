@@ -1,0 +1,91 @@
+version: "3.3"
+services:
+  reverse-proxy:
+    image: traefik:v2.10
+    ports:
+      - 80:80
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./reverse-proxy/certs:/etc/certs
+      - ./reverse-proxy/traefik.yml:/etc/traefik/traefik.yml:ro
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.http.routers.traefik.rule=Host(`traefik.kundin.pro`)
+      - traefik.http.routers.traefik.service=api@internal
+
+  db:
+    image: mongo:5.0.2
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - db_prod_data:/data/db
+      - ./mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
+
+  object-storage:
+    image: bitnami/minio:latest
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - minio_prod_storage:/data
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.s3.entrypoints=web
+      - traefik.http.routers.s3.rule=Host(`s3.kundin.pro`)
+      - traefik.http.routers.s3.service=object-storage
+      - traefik.http.services.object-storage.loadbalancer.server.port=9001
+
+  imgproxy:
+    image: darthsim/imgproxy
+    env_file:
+      - .env
+    environment:
+      - IMGPROXY_USE_S3=true
+      - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
+
+  backend:
+    image: oven/bun:1.0.4
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./backend:/app
+    env_file:
+      - .env
+    environment:
+      - PORT=4000
+      - AWS_ENDPOINT=http://object-storage:9000
+    command: bun run dev
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.backend.entrypoints=web
+      - traefik.http.routers.backend.rule=Host(`kundin.pro`) && PathPrefix(`/api`, `/webhook`)
+      - traefik.http.routers.backend.service=backend
+      - traefik.http.services.backend.loadbalancer.server.port=4000
+
+  tg-web-app:
+    image: oven/bun:1.0.4-alpine
+    restart: always
+    working_dir: /app
+    volumes:
+      - ./tg-web-app:/app
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+      - IMGPROXY_URL=http://imgproxy:8080
+    command: bun run dev
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.tg-web-app.entrypoints=web
+      - traefik.http.routers.tg-web-app.rule=Host(`kundin.pro`)
+      - traefik.http.routers.tg-web-app.service=tg-web-app
+      - traefik.http.services.tg-web-app.loadbalancer.server.port=3000
+
+volumes:
+  db_prod_data:
+  minio_prod_storage:
