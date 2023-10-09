@@ -8,16 +8,16 @@ export class ObjectStorage {
   constructor() {
     this.#client = new AWS.S3({
       credentials: {
-        accessKeyId: process.env.OBJECT_STORAGE_ACCESS_KEY || "",
-        secretAccessKey: process.env.OBJECT_STORAGE_SECRET_KEY || "",
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
       },
-      endpoint: process.env.OBJECT_STORAGE_ENDPOINT || "",
+      endpoint: process.env.AWS_ENDPOINT || "",
       s3ForcePathStyle: true,
       region: "us-east-1",
       apiVersion: "latest",
     });
 
-    this.#bucket = process.env.OBJECT_STORAGE_BUCKET || "";
+    this.#bucket = process.env.AWS_BUCKET || "";
   }
 
   uploadFile(key: string, file: any) {
