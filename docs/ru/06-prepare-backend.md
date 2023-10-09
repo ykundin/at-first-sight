@@ -49,7 +49,7 @@
         volumes:
           - ./backend:/app:ro # Все файлы из директории /backend относятся к данному микросервису
         env_file:
-          - ./backend/.env # А это файл с приватными переменными, например, токен для Telegram
+          - ..env # А это файл с приватными переменными, например, токен для Telegram
         environment:
           - PORT=4000 # На этом порту будет запущен микросервис
         command: bun run dev # А это команда для запуска
@@ -71,6 +71,8 @@
           - 5173:5173
         volumes:
           - ./tg-web-app:/app
+        env_file:
+          - .env
         environment:
           - PORT=5173
         command: bun run dev
@@ -114,7 +116,9 @@ services:
   db:
     image: mongo:5.0.2
     restart: always
-    # Данные для подключения к базе данных
+    env_file:
+      - .env
+    # Данные для подключения к базе данных (можно перенести в файл .env)
     environment:
       - MONGO_INITDB_ROOT_USERNAME=kundin
       - MONGO_INITDB_ROOT_PASSWORD=very-secret-password

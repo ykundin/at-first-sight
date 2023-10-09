@@ -1,6 +1,6 @@
 # At first sight!
 
-<img align="right" width="300" height="248" src="./docs/images/first-run/main-screenshot.png">
+<img align="right" width="300" height="724" src="./docs/images/first-run/main-screenshot.png">
 
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
 
