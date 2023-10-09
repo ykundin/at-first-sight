@@ -42,11 +42,13 @@ This whole process can be described in one word — design — and it is the fir
 - Preparing the backend for the application / [in English](./docs/en/06-prepare-backend.md) / [на русском языке](./docs/ru/06-prepare-backend.md)
 - Registration and authorization / [in English](./docs/en/07-auth-reg.md) / [на русском языке](./docs/ru/07-auth-reg.md)
 
-<img align="left" width="300" height="724" src="./docs/images/first-run/author.png">
-
 ### About author
 
-**Yury Kundin** — web developer from Vladimir, who started his way into IT with the development of interfaces, got bored and went further — backend on NodeJS and infrastructure.
+<img align="left" width="300" height="724" src="./docs/images/first-run/author.png">
+
+### Yury Kundin
+
+A web developer from Vladimir, who started his way into IT with the development of interfaces, got bored and went further — backend on NodeJS and infrastructure.
 
 In the last year, I have also been interested in participating in the development of a full-fledged product, and not just in writing code. This task is very interesting in this regard, especially considering the fact that I was able to devote only about 3 days to development.
 
