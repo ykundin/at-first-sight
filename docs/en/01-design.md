@@ -74,7 +74,4 @@ And finally, the most intriguing application screen that lights a flame in the h
 
 This is the end of the design of the first version and you can start working on these interfaces from the technical side. This process is described in detail on a separate page — [Interface Development](./02-interface.md)
 
-### Content
-
-- Design / [in English](./01-design.md) / [на русском языке](../ru/01-design.md)
-- Interface development / [in English](./02-interface.md) / [на русском языке](../ru/02-interface.md)
+[Project Setup](./02-settings.md)
