@@ -125,13 +125,13 @@ const MatchesScreen: FC = () => {
       <div className={cn(styles.photo, { [styles.limited]: isLimited })}>
         <img
           className={cn(styles.image, { [styles.first]: true })}
-          src={firstPeople.image}
+          src={firstPeople.photo}
           alt=""
         />
 
         <img
           className={cn(styles.image, { [styles.second]: true })}
-          src={secondPeople.image}
+          src={secondPeople.photo}
           alt=""
         />
       </div>
