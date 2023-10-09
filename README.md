@@ -1,5 +1,7 @@
 # At first sight!
 
+<img align="right" width="300" height="248" src="./docs/images/first-run/main-screenshot.png">
+
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
 
 ##### For users:
@@ -12,15 +14,13 @@ This repository contains an example of the Telegram Web App, which allows you to
 ##### For developers:
 
 - Detailed step-by-step instructions for developing a complex multifunctional application that is designed for millions of users;
-- Microservice architecture of the application, where each service performs its own strictly defined task, which can be developed by different people. You will understand exactly what tasks the designer, Backend developer, Frontend developer performs and what unites them;
-- A modern stack of technologies for developing the Frontend part of the application, which is suitable for almost any Telegram Web App, as well as for creating a modern website;
-- A great example of the Backend part, which consists of a REST API, working with a database and saving thousands of files. And all this without using any frameworks, the study of which takes a lot of time;
-- Work with HTTPS, load balancing and scaling with the growth of the audience of your application;
-- Description of how to run your application on a real domain and server to share it with the whole world!
+- Microservice architecture of the application, where each service performs its own strictly defined task, which can be developed by different people. You will understand exactly what tasks the designer, Backend-developer, Frontend-developer performs and what unites them;
+- A modern stack of technologies for developing the Frontend-part of the application, which is suitable for almost any Telegram Web App, as well as for creating a modern website;
+- An example of the Backend part, which consists of a REST API, working with a database and saving thousands of files. And all this without using any frameworks, the study of which takes a lot of time;
 
 ### What won't we consider?
 
-Since this repository was created to participate in the [Telegram Mini App Contest](https://t.me/contest/327) and the result must be sent on October 9, 2023, then some of the topics will intentionally not be affected by us. They will be quite important if you really intend to create an application for a huge audience of users or assemble a development team for this.
+Since this repository was created to participate in the [Telegram Mini App Contest](https://t.me/contest/327) and the result must be sent on October 10, 2023, then some of the topics will intentionally not be affected by us. They will be quite important if you really intend to create an application for a huge audience of users or assemble a development team for this.
 
 - **Testing** — the larger the audience of your application and the wider the capabilities of your application, the more important the testing process becomes. Take this seriously and study this topic, especially in the case when you will provide users with paid features and earn money from it.
 

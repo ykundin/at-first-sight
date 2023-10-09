@@ -3,10 +3,8 @@ services:
   db:
     image: mongo:5.0.2
     restart: always
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=kundin
-      - MONGO_INITDB_ROOT_PASSWORD=very-secret-password
-      - MONGODB_DATABASE=at-first-sight
+    env_file:
+      - .env
     ports:
       - 27017:27017
     volumes:
@@ -28,11 +26,11 @@ services:
 
   imgproxy:
     image: darthsim/imgproxy
+    env_file:
+      - .env
     environment:
       - IMGPROXY_USE_S3=true
       - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
-      - AWS_ACCESS_KEY_ID=VGwBcnDIZjvNPQJ7LWj4
-      - AWS_SECRET_ACCESS_KEY=3Hg8R3hh6l0dO9FzTUZ54MjmE0MltYLJKgZCmhl9
 
   backend:
     image: oven/bun:1.0.4
@@ -43,13 +41,10 @@ services:
     volumes:
       - ./backend:/app
     env_file:
-      - ./backend/.env
+      - .env
     environment:
       - PORT=4000
-      - OBJECT_STORAGE_ENDPOINT=http://object-storage:9000
-      - OBJECT_STORAGE_BUCKET=at-first-sight
-      - OBJECT_STORAGE_ACCESS_KEY=VGwBcnDIZjvNPQJ7LWj4
-      - OBJECT_STORAGE_SECRET_KEY=3Hg8R3hh6l0dO9FzTUZ54MjmE0MltYLJKgZCmhl9
+      - AWS_ENDPOINT=http://object-storage:9000
     command: bun run dev
 
   tg-web-app:
@@ -60,11 +55,13 @@ services:
       - 5173:5173
     volumes:
       - ./tg-web-app:/app
+    env_file:
+      - .env
     environment:
       - PORT=5173
       - BACKEND_URL=http://backend:4000
       - IMGPROXY_URL=http://imgproxy:8080
-      - OBJECT_STORAGE_BUCKET=at-first-sight
+      - AWS_BUCKET=at-first-sight
     command: bun run dev
 
 volumes:
