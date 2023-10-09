@@ -56,13 +56,13 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
         </div>
 
         <div className={styles.footer}>
-          {people.view === "opened" ? (
-            <span className={styles.link} onClick={handleOpenProfile}>
-              Open a profile
-            </span>
-          ) : (
+          {locked ? (
             <span className={styles.link} onClick={handleUnlockUser}>
               Unlock the user
+            </span>
+          ) : (
+            <span className={styles.link} onClick={handleOpenProfile}>
+              Open a profile
             </span>
           )}
         </div>
