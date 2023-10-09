@@ -188,7 +188,7 @@ const SettingsScreen: FC = () => {
 
 ## Открытие ссылки внутри Telegram
 
-<img align="right" width="300" height="598" src="../images/develop-interface/open-link-in-telegram.gif">
+<img align="right" width="300" height="681" src="../images/develop-interface/open-link-in-telegram.gif">
 
 А вот на экране с совпадениями мы позволяем пользователю сразу же начать диалог с тем человеком, симпатия с которым совпала. Для этого у Telegram Mini App есть ещё одна функция, давайте посмотрим на неё в действии:
 
