@@ -18,7 +18,7 @@ This repository contains an example of the Telegram Web App, which allows you to
 - A modern stack of technologies for developing the Frontend-part of the application, which is suitable for almost any Telegram Web App, as well as for creating a modern website;
 - An example of the Backend part, which consists of a REST API, working with a database and saving thousands of files. And all this without using any frameworks, the study of which takes a lot of time;
 
-### First run
+### First run of project
 
 This repository has client and server code, but also several infrastructure services, such as a MongoDB database, Minio object storage, and a server for proxying images from this storage. The entire set of services is started with a single command using Docker, but before that you need to create the necessary configuration files (as a rule, this is done only once).
 
