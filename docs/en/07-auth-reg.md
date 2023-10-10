@@ -136,7 +136,7 @@ The logic of user registration does not depend on Telegram in any way and may va
 
    First you need to implement the transfer of all data for registration from the application. In my case, on the first visit to the application, the user has a screen with additional questions. After answering all the questions, we ask the user to select a photo, and then send it to the backend as a POST request to the address `/api/registration'.
 
-   [View code компонента](https://github.com/ykundin/at-first-sight/blob/docs/tg-web-app/src/screens/welcome-screen/elems/messages-step/messages-step.tsx) (look for the `handleSubmit` function)
+   [View code](https://github.com/ykundin/at-first-sight/blob/docs/tg-web-app/src/screens/welcome-screen/elems/messages-step/messages-step.tsx) (look for the `handleSubmit` function)
 
 2. **Writing a request handler**
 

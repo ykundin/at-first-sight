@@ -97,7 +97,7 @@ One of the key mechanics that is found in most applications and websites, which 
 
 <br clear="right"/>
 
-## Built-in Back button / BackButton
+## Built-in Back button
 
 <img align="right" width="300" height="649" src="../images/develop-interface/back-button-navigation.gif">
 
@@ -151,7 +151,7 @@ For example, I did not make up the `welcome-screen` so that you understand that 
 
 [View code](https://github.com/ykundin/at-first-sight/tree/docs/tg-web-app/src/screens)
 
-## Working with the main button / MainButton
+## Working with the main button
 
 Have you noticed that there is a "Save changes" button on the settings screen? This is another of the built-in features of the Telegram Mini App, called [MainButton](https://core.telegram.org/bots/webapps#mainbutton), working with which is very similar to BackButton. Let's take an example:
 

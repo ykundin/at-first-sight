@@ -8,7 +8,7 @@ Since Docker is used to deploy microservices, first of all it must be installed 
 
 [Installation Instructions](https://docs.docker.com/engine/install)
 
-##1. We get a public link to the application
+## 1. We get a public link to the application
 
 <img align="right" width="300" height="190" src="../images/first-run/public-link.png">
 
