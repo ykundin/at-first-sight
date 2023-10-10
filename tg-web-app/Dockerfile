@@ -1,4 +1,4 @@
-FROM oven/bun:latest AS build
+FROM oven/bun:1.0.3 AS build
 WORKDIR /app
 
 # Install dependencies
@@ -11,5 +11,14 @@ COPY src src/
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts ./
 RUN bun run build
 
+# Build release image
+FROM node:16-alpine AS release
+WORKDIR /app
+ENV NODE_ENV=production
+
+COPY --from=build /app/node_modules ./node_modules/
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/dist ./dist/
+
 EXPOSE 3000
-CMD ["bun", "run", "preview"]
+CMD ["npm", "run", "preview"]
