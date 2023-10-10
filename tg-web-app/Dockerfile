@@ -11,12 +11,5 @@ COPY src src/
 COPY index.html tsconfig.json tsconfig.node.json vite.config.ts ./
 RUN bun run build
 
-# Build release image
-FROM oven/bun:1.0.3 AS release
-WORKDIR /app
-ENV NODE_ENV=production
-
-COPY --from=build /app/dist ./dist/
-
 EXPOSE 3000
 CMD ["bun", "run", "preview"]

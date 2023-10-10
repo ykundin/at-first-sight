@@ -49,17 +49,16 @@ services:
       - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
 
   backend:
-    image: oven/bun:1.0.4
+    build:
+      context: ./tg-web-app
+      dockerfile: Dockerfile
     restart: always
     working_dir: /app
-    volumes:
-      - ./backend:/app
     env_file:
       - .env
     environment:
       - PORT=4000
       - AWS_ENDPOINT=http://object-storage:9000
-    command: bun run dev
     labels:
       - traefik.enable=true
       - traefik.http.routers.backend.entrypoints=web
