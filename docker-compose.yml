@@ -50,7 +50,7 @@ services:
 
   backend:
     build:
-      context: ./tg-web-app
+      context: ./backend
       dockerfile: Dockerfile
     restart: always
     working_dir: /app
