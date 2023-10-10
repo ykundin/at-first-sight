@@ -3,6 +3,7 @@
 <img align="right" width="300" height="724" src="./docs/images/first-run/main-screenshot.png">
 
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
+Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first_sight_bot)
 
 ##### For users:
 
