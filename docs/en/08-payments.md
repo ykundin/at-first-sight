@@ -16,7 +16,8 @@ Each provider may have its own conditions for making payments and this is beyond
 
 ## 2. Get a provider token
 
-After connecting, each provider provides a certain unique token, which must be put in `.env'. We will use it during the creation of payments:
+After connecting, each provider provides a certain unique token, which must be put in `.env`.
+We will use it during the creation of payments:
 
 ```bash
 TELEGRAM_YOOKASSA_TOKEN=381764678:TEST:68550 # Payment provider token from @BotFather
