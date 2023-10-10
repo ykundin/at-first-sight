@@ -8,6 +8,7 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - ./reverse-proxy/traefik.yml:/traefik.yml:ro
+      - ./reverse-proxy/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
       - traefik.http.routers.traefik.entrypoints=web
