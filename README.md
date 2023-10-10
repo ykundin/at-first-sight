@@ -49,6 +49,7 @@ This whole process can be described in one word — design — and it is the fir
 - Detailed study of the interface / [in English](./docs/en/05-interface-details.md) / [на русском языке](./docs/ru/05-interface-details.md)
 - Preparing the backend for the application / [in English](./docs/en/06-prepare-backend.md) / [на русском языке](./docs/ru/06-prepare-backend.md)
 - Registration and authorization / [in English](./docs/en/07-auth-reg.md) / [на русском языке](./docs/ru/07-auth-reg.md)
+- Payments inside Telegram Web App / [in English](./docs/en/08-payments.md) / [на русском языке](./docs/ru/08-payments.md)
 
 ### About author
 
