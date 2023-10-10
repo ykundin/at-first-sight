@@ -16,7 +16,7 @@ Absolutely all Web Apps in Telegram are a bot that needs to be registered. This 
 
 Now we need to prepare all the necessary tools to start convenient development. Two mandatory things are necessary for our task:
 
-1. Any code editor, for example, VSCod
+1. Any code editor, for example, VSCode
 
    This editor is completely free, suitable for any operating system, has a huge set of features that are enough to complete our task. If you don't have it, then you can download and install it from the official website
 

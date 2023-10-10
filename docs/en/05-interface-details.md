@@ -10,7 +10,7 @@ In the modern world, a huge number of websites and applications already have bot
 
 Telegram provides several ready-made CSS variables that will automatically change their value during theme switching on the user's device. It remains only to add them to the application and use them during the styling of components.
 
-To begin with, let's declare all the variables in one `index.css` file%
+To begin with, let's declare all the variables in one `index.css` file:
 
 ```css
 :root {
@@ -41,7 +41,7 @@ And then in the component code we will use them as follows, for example:
 
 ## Getting a theme using TypeScript
 
-Quite often, you may want to work with a theme not only at the CSS level, but also inside TypeScript code to get the user's currently selected theme or individual colors of his design theme. All this is also provided by Telegram and is described in the [official documentation] (https://core.telegram.org/bots/webapps#themeparams ).
+Quite often, you may want to work with a theme not only at the CSS level, but also inside TypeScript code to get the user's currently selected theme or individual colors of his design theme. All this is also provided by Telegram and is described in the [official documentation](https://core.telegram.org/bots/webapps#themeparams).
 
 There is no need for this in this application, so I will limit myself to just a couple of code examples.
 

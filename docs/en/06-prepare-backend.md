@@ -6,7 +6,7 @@ To begin with, let's define what we have to do at this step. To develop the func
 
 For these purposes, you can choose the language, tool or framework that allows you to create an HTTP Server and write on it, in my case, my choice was TypeScript + Bun. I will not dwell on how to create a server using them, as this information is well described in the official documentation.
 
-Instead, I will focus on explaining how our server works and the part that is responsible for working with Telegram, for example, to check user authorization or make payments. In addition, you can view absolutely all the code at any time in the repository in the [backend] directory (https://github.com/ykundin/at-first-sight/blob/backend).
+Instead, I will focus on explaining how our server works and the part that is responsible for working with Telegram, for example, to check user authorization or make payments. In addition, you can view absolutely all the code at any time in the repository in the [backend directory](https://github.com/ykundin/at-first-sight/blob/backend).
 
 [Bun Documentation](https://bun.sh)
 

@@ -1,6 +1,6 @@
 # At first sight! / Creating a project for the frontend
 
-At this stage, our task is to create a project template and run it directly inside Telegram in the form of an application. We believe that our application will be actively developed and refined, so we will immediately choose a good and proven solution for the frontend in the form of [Vite] (https://vitejs.dev) and [React](https://react.dev).
+At this stage, our task is to create a project template and run it directly inside Telegram in the form of an application. We believe that our application will be actively developed and refined, so we will immediately choose a good and proven solution for the frontend in the form of [Vite](https://vitejs.dev) and [React](https://react.dev).
 
 ## Creating a Vite + React project
 
@@ -96,7 +96,7 @@ We are ready to start integrating the project into Telegram and open our applica
 
 ## Initializing the Mini App
 
-The only thing left to do is to add a Telegram JS script to the project in order to get access to all the features that are described in [Telegram Mini Apps documentation] (https://core.telegram.org/bots/webapps#initializing-mini-apps ). This is done quite simply, just insert the script into the file `index.html `
+The only thing left to do is to add a Telegram JS script to the project in order to get access to all the features that are described in [Telegram Mini Apps documentation](https://core.telegram.org/bots/webapps#initializing-mini-apps). This is done quite simply, just insert the script into the file `index.html `
 
 ```html
 <!DOCTYPE html>
