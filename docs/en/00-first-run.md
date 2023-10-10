@@ -33,7 +33,7 @@ Then open the page [http://localhost:9001 ](http://localhost:9001) and log in us
 
 - Create an access key (Access Keys => Create access key) and save, they will be needed later;
 - Create a new bucket for storing files (Object Browser => Create a Bucket), name it `at-first-sight`;
-- Done, press 'Ctrl +C` in the terminal to stop the application.
+- Done, press `Ctrl +C` in the terminal to stop the application.
 
 ## 3. Create a file with access
 
@@ -59,7 +59,7 @@ AWS_ACCESS_KEY_ID=nZmM2Np3dfaX8wglU1Py
 AWS_SECRET_ACCESS_KEY=L9VvkRFiW0b5Ak4Q2KbIbYNVYLPsd5KssWn1l3rK
 ```
 
-##4. Launch already!
+## 4. Launch already!
 
 Add a public link in your bot's settings, after which you can already open your bot and launch the Web App.
 

@@ -72,6 +72,6 @@ From the interesting — the button for saving changes will be implemented in th
 
 And finally, the most intriguing application screen that lights a flame in the heart! You can get to it only if there is at least one coincidence of interests and you can immediately start a dialogue with such people in Telegram. But if someone has shown sympathy for you, and you have not yet met such a person on the search screen, then the application will show him in the list. However, a photo to the user and the opportunity to write to him can be obtained only after the payment.
 
-This is the end of the design of the first version and you can start working on these interfaces from the technical side. This process is described in detail on a separate page — [Interface Development](./02-interface.md)
+This is the end of the design of the first version and you can start working on these interfaces from the technical side. To begin with, let's start by preparing the project for further work, this process is described on a separate page.
 
 [Project Setup](./02-settings.md)
