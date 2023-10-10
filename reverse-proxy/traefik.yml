@@ -32,7 +32,3 @@ providers:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
     watch: true
-
-log:
-  level: INFO
-  format: common
