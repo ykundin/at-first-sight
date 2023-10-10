@@ -52,6 +52,16 @@ services:
     environment:
       - IMGPROXY_USE_S3=true
       - IMGPROXY_S3_ENDPOINT=http://object-storage:9000
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.imgproxy.entrypoints=web-secure
+      - traefik.http.routers.imgproxy.rule=Host(`kundin.pro`) && PathPrefix(`/image`)
+      - traefik.http.middlewares.remove-image.stripprefix.prefixes=/image
+      - traefik.http.middlewares.add-bucket.addprefix.prefix=/insecure/plain/s3://at-first-sight
+      - traefik.http.routers.imgproxy.tls=true
+      - traefik.http.routers.imgproxy.tls.certresolver=letsEncrypt
+      - traefik.http.routers.imgproxy.middlewares=remove-image,add-bucket
+      - traefik.http.services.imgproxy.loadbalancer.server.port=8080
 
   backend:
     build:
@@ -79,13 +89,6 @@ services:
       dockerfile: Dockerfile
     restart: always
     working_dir: /app
-    env_file:
-      - .env
-    volumes:
-      - .env:/app/.env
-    environment:
-      - PORT=3000
-      - IMGPROXY_URL=http://imgproxy:8080
     labels:
       - traefik.enable=true
       - traefik.http.routers.tg-web-app.entrypoints=web-secure
@@ -93,7 +96,7 @@ services:
       - traefik.http.routers.tg-web-app.tls=true
       - traefik.http.routers.tg-web-app.tls.certresolver=letsEncrypt
       - traefik.http.routers.tg-web-app.service=tg-web-app
-      - traefik.http.services.tg-web-app.loadbalancer.server.port=3000
+      - traefik.http.services.tg-web-app.loadbalancer.server.port=4173
 
 volumes:
   db_prod_data:
