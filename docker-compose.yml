@@ -11,8 +11,10 @@ services:
       - ./reverse-proxy/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.http.routers.traefik.entrypoints=web-secure
       - traefik.http.routers.traefik.rule=Host(`traefik.kundin.pro`)
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=letsEncryptStaging
       - traefik.http.routers.traefik.service=api@internal
 
   db:
@@ -35,9 +37,11 @@ services:
       - minio_prod_storage:/data
     labels:
       - traefik.enable=true
-      - traefik.http.routers.s3.entrypoints=web
+      - traefik.http.routers.s3.entrypoints=web-secure
       - traefik.http.routers.s3.rule=Host(`s3.kundin.pro`)
       - traefik.http.routers.s3.service=object-storage
+      - traefik.http.routers.s3.tls=true
+      - traefik.http.routers.s3.tls.certresolver=letsEncryptStaging
       - traefik.http.services.object-storage.loadbalancer.server.port=9001
 
   imgproxy:
@@ -64,6 +68,8 @@ services:
       - traefik.http.routers.backend.entrypoints=web
       - traefik.http.routers.backend.rule=Host(`kundin.pro`) && PathPrefix(`/api`, `/webhook`)
       - traefik.http.routers.backend.service=backend
+      - traefik.http.routers.backend.tls=true
+      - traefik.http.routers.backend.tls.certresolver=letsEncryptStaging
       - traefik.http.services.backend.loadbalancer.server.port=4000
 
   tg-web-app:
