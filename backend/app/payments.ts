@@ -12,7 +12,7 @@ class Payments {
   async #createInvoiceLink(order: Order): Promise<string> {
     const link = this.#botApi.query<string>("createInvoiceLink", {
       ...order,
-      provider_token: process.env.YOOKASSA_TOKEN,
+      provider_token: process.env.TELEGRAM_YOOKASSA_TOKEN,
     });
 
     return link;
