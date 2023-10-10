@@ -82,10 +82,12 @@ services:
       - IMGPROXY_URL=http://imgproxy:8080
     labels:
       - traefik.enable=true
-      - traefik.http.routers.tg-web-app.entrypoints=web
+      - traefik.http.routers.tg-web-app.entrypoints=web-secure
       - traefik.http.routers.tg-web-app.rule=Host(`kundin.pro`)
+      - traefik.http.routers.tg-web-app.tls=true
+      - traefik.http.routers.tg-web-app.tls.certresolver=letsEncryptStaging
       - traefik.http.routers.tg-web-app.service=tg-web-app
-      - traefik.http.services.tg-web-app.loadbalancer.server.port=3000
+      - traefik.http.services.tg-web-app.loadbalancer.server.port=4173
 
 volumes:
   db_prod_data:

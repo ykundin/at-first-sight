@@ -11,21 +11,21 @@ entryPoints:
   web-secure:
     address: ":443"
 
-# certificatesResolvers:
-#   letsEncryptStaging:
-#     acme:
-#       email: ykundin@yandex.ru
-#       storage: /letsencrypt/acme-staging.json
-#       caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
-#       httpChallenge:
-#         entryPoint: web
+certificatesResolvers:
+  letsEncryptStaging:
+    acme:
+      email: ykundin@yandex.ru
+      storage: /letsencrypt/acme-staging.json
+      caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
+      httpChallenge:
+        entryPoint: web
 
-#   letsEncrypt:
-#     acme:
-#       email: ykundin@yandex.ru
-#       storage: /letsencrypt/acme.json
-#       httpChallenge:
-#         entryPoint: web
+  letsEncrypt:
+    acme:
+      email: ykundin@yandex.ru
+      storage: /letsencrypt/acme.json
+      httpChallenge:
+        entryPoint: web
 
 providers:
   docker:
