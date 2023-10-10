@@ -1,6 +1,6 @@
 # С первого взгляда! / Платежи внутри Telegram Web App
 
-<img align="right" width="300" height="649" src="../images/payments/example.gif">
+<img align="right" width="300" height="725" src="../images/payments/example.gif">
 
 Telegram предоставляет вашему приложению возможность проведения платежей прямо внутри приложения, что открывает огромный простор для возможностей монетизации приложений и предоставления платных услуг.
 

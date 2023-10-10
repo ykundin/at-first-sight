@@ -1,6 +1,6 @@
 # At first sight! / Payments inside Telegram Web App
 
-<img align="right" width="300" height="649" src="../images/payments/example.gif">
+<img align="right" width="300" height="725" src="../images/payments/example.gif">
 
 Telegram provides your application with the ability to make payments directly inside the application, which opens up a huge scope for the possibilities of monetization of applications and the provision of paid services.
 
