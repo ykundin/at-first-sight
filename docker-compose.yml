@@ -70,6 +70,9 @@ services:
     build:
       context: ./tg-web-app
       dockerfile: Dockerfile
+      args:
+        - PORT=3000
+        - IMGPROXY_URL=http://imgproxy:8080
     restart: always
     working_dir: /app
     env_file:
