@@ -4,7 +4,7 @@ services:
     image: traefik:v2.10
     ports:
       - 80:80
-      - "443:443"
+      - 443:443
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
@@ -12,7 +12,7 @@ services:
       - ./reverse-proxy/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=web
+      - traefik.http.routers.traefik.entrypoints=web-secure
       - traefik.http.routers.traefik.rule=Host(`traefik.kundin.pro`)
       - traefik.http.routers.traefik.tls=true
       - traefik.http.routers.traefik.tls.certresolver=letsEncryptStaging
