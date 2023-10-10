@@ -8,7 +8,7 @@ For example, each user has a daily limit on viewing other people's profiles, whi
 
 Let's look at the main stages of working with payments in this example.
 
-##1. Connecting the provider
+## 1. Connecting the provider
 
 Telegram provides access to many payment providers, the list of which is also constantly updated. And first of all, you need to connect one or more payment providers inside your bot settings (use @BotFather).
 
