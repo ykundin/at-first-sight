@@ -7,6 +7,12 @@ api:
 entryPoints:
   web:
     address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: web-secure
+          scheme: https
+          permanent: true
 
   web-secure:
     address: ":443"
