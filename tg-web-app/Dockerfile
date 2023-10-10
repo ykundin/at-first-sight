@@ -1,12 +1,6 @@
 FROM oven/bun:1.0.3 AS build
 WORKDIR /app
 
-ARG PORT
-ARG IMGPROXY_URL
-
-ENV PORT ${PORT:-}
-ENV IMGPROXY_URL ${IMGPROXY_URL:-}
-
 # Install dependencies
 COPY package.json bun.lockb ./
 RUN bun i

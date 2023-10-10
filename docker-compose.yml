@@ -77,13 +77,12 @@ services:
     build:
       context: ./tg-web-app
       dockerfile: Dockerfile
-      args:
-        - PORT=3000
-        - IMGPROXY_URL=http://imgproxy:8080
     restart: always
     working_dir: /app
     env_file:
       - .env
+    volumes:
+      - .env:/app/.env
     environment:
       - PORT=3000
       - IMGPROXY_URL=http://imgproxy:8080
@@ -94,7 +93,7 @@ services:
       - traefik.http.routers.tg-web-app.tls=true
       - traefik.http.routers.tg-web-app.tls.certresolver=letsEncrypt
       - traefik.http.routers.tg-web-app.service=tg-web-app
-      - traefik.http.services.tg-web-app.loadbalancer.server.port=4173
+      - traefik.http.services.tg-web-app.loadbalancer.server.port=3000
 
 volumes:
   db_prod_data:
