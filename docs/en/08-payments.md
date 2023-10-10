@@ -14,7 +14,7 @@ Telegram provides access to many payment providers, the list of which is also co
 
 Each provider may have its own conditions for making payments and this is beyond the scope of the instructions, but also each provider provides a test mode that is convenient during development and testing (I will use the provider YOOKASSA).
 
-## 2. We keep access
+## 2. Get a provider token
 
 After connecting, each provider provides a certain unique token, which must be put in `.env'. We will use it during the creation of payments:
 
@@ -54,7 +54,7 @@ class Payments {
 ```
 
 If everything was successful, then in response to this request, Telegram will return us a payment link that needs to be opened inside the Web App using
-the [openInvoice] method (https://core.telegram.org/bots/webapps#initializing-mini-apps):
+the [openInvoice](https://core.telegram.org/bots/webapps#initializing-mini-apps) method:
 
 ```ts
 const res = await fetch("/api/buy-scores", ...);
@@ -75,7 +75,7 @@ webApp.openInvoice(result.data, (status: string) => {
 
 Immediately after that, the user will have a window open inside the application with all the information about your service and the ability to pay for it using the provider you selected in the first step.
 
-##4. Getting Payment Information
+## 4. Getting Payment Information
 
 But after the user enters all the necessary data and clicks on the payment, our backend needs to somehow get information that such a payment has been made, check it and provide the service to the user (in our case, remove the restriction).
 
