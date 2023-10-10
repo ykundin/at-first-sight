@@ -11,10 +11,10 @@ services:
       - ./reverse-proxy/letsencrypt:/letsencrypt
     labels:
       - traefik.enable=true
-      - traefik.http.routers.traefik.entrypoints=web-secure
+      - traefik.http.routers.traefik.entrypoints=web
       - traefik.http.routers.traefik.rule=Host(`traefik.kundin.pro`)
-      - traefik.http.routers.traefik.tls=true
-      - traefik.http.routers.traefik.tls.certresolver=letsEncryptStaging
+      # - traefik.http.routers.traefik.tls=true
+      # - traefik.http.routers.traefik.tls.certresolver=letsEncryptStaging
       - traefik.http.routers.traefik.service=api@internal
 
   db:
