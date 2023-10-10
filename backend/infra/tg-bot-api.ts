@@ -8,7 +8,7 @@ class TgBotApi {
   }
 
   async setWebhook() {
-    return this.query("setWebhook", { url: process.env.BOT_WEBHOOK_URL || "" });
+    return this.query("setWebhook", { url: process.env.PUBLIC_URL || "" });
   }
 
   async query<T>(method: string, body?: Record<any, any>): Promise<T> {
