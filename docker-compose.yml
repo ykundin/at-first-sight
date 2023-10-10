@@ -66,7 +66,7 @@ services:
       - AWS_ENDPOINT=http://object-storage:9000
     labels:
       - traefik.enable=true
-      - traefik.http.routers.backend.entrypoints=web
+      - traefik.http.routers.backend.entrypoints=web-secure
       - traefik.http.routers.backend.rule=Host(`kundin.pro`) && PathPrefix(`/api`, `/webhook`)
       - traefik.http.routers.backend.service=backend
       - traefik.http.routers.backend.tls=true
