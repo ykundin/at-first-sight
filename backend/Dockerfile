@@ -7,8 +7,7 @@ RUN bun i
 
 # Build the app
 ENV NODE_ENV=production
-COPY src src/
-COPY tsconfig.json tsconfig.json
+COPY ./ ./
 RUN bun build ./src/infra/run-prod-mode.ts --outdir ./dist --target bun
 
 # Build release image
