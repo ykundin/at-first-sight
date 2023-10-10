@@ -82,6 +82,8 @@ services:
       - traefik.http.routers.backend.tls=true
       - traefik.http.routers.backend.tls.certresolver=letsEncrypt
       - traefik.http.services.backend.loadbalancer.server.port=4000
+    deploy:
+      replicas: 3
 
   tg-web-app:
     build:
