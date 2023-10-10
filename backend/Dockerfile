@@ -8,7 +8,7 @@ RUN bun i
 # Build the app
 ENV NODE_ENV=production
 COPY ./ ./
-RUN bun build ./src/infra/run-prod-mode.ts --outdir ./dist --target bun
+RUN bun build ./run-prod-mode.ts --outdir ./dist --target bun
 
 # Build release image
 FROM oven/bun:1.0.3 AS release
@@ -18,4 +18,4 @@ ENV NODE_ENV=production
 COPY --from=build /app/dist ./dist/
 
 EXPOSE 3000
-CMD ["bun", "run", "./dist/run-dev-mode.js"]
+CMD ["bun", "run", "./dist/run-prod-mode.js"]
