@@ -2,7 +2,9 @@
 
 <img align="right" width="300" height="649" src="../images/payments/example.gif">
 
-Telegram provides your application with the ability to make payments directly inside the application, which opens up a huge scope for the possibilities of monetization of applications and the provision of paid services. For example, each user has a daily limit on viewing other people's profiles, which is updated daily. But we also give the user the opportunity to increase the limit by paying for a virtual product directly through Telegram.
+Telegram provides your application with the ability to make payments directly inside the application, which opens up a huge scope for the possibilities of monetization of applications and the provision of paid services.
+
+For example, each user has a daily limit on viewing other people's profiles, which is updated daily. But we also give the user the opportunity to increase the limit by paying for a virtual product directly through Telegram.
 
 Let's look at the main stages of working with payments in this example.
 
