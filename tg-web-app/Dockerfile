@@ -1,4 +1,4 @@
-FROM oven/bun AS build
+FROM oven/bun:latest AS build
 WORKDIR /app
 
 # Install dependencies
