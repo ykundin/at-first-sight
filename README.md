@@ -3,6 +3,7 @@
 <img align="right" width="300" height="724" src="./docs/images/first-run/main-screenshot.png">
 
 This repository contains an example of the Telegram Web App, which allows you to find your soulmate literally at first sight!
+Open an real example in Telegram — [@at_first_sight_bot](https://t.me/at_first_sight_bot)
 
 ##### For users:
 
@@ -17,6 +18,12 @@ This repository contains an example of the Telegram Web App, which allows you to
 - Microservice architecture of the application, where each service performs its own strictly defined task, which can be developed by different people. You will understand exactly what tasks the designer, Backend-developer, Frontend-developer performs and what unites them;
 - A modern stack of technologies for developing the Frontend-part of the application, which is suitable for almost any Telegram Web App, as well as for creating a modern website;
 - An example of the Backend part, which consists of a REST API, working with a database and saving thousands of files. And all this without using any frameworks, the study of which takes a lot of time;
+
+### First run of project
+
+This repository has client and server code, but also several infrastructure services, such as a MongoDB database, Minio object storage, and a server for proxying images from this storage. The entire set of services is started with a single command using Docker, but before that you need to create the necessary configuration files (as a rule, this is done only once).
+
+[Instruction for first run project](./docs/en/00-first-run.md)
 
 ### What won't we consider?
 
@@ -34,6 +41,7 @@ I always suggest starting the development of a new product (application) with th
 
 This whole process can be described in one word — design — and it is the first step in our instructions, which is presented on a separate page.
 
+- Instruction for first run project / [in English](./docs/en/00-first-run.md) / [на русском языке](./docs/ru/00-first-run.md)
 - Design / [in English](./docs/en/01-design.md) / [на русском языке](./docs/ru/01-design.md)
 - Project Setup / [in English](./docs/en/02-design.md) / [на русском языке](./docs/ru/02-design.md)
 - Creating a project for the frontend / [in English](./docs/ru/03-create-frontend-project.md) / [на русском языке](./docs/ru/03-create-frontend-project.md)
@@ -41,6 +49,7 @@ This whole process can be described in one word — design — and it is the fir
 - Detailed study of the interface / [in English](./docs/en/05-interface-details.md) / [на русском языке](./docs/ru/05-interface-details.md)
 - Preparing the backend for the application / [in English](./docs/en/06-prepare-backend.md) / [на русском языке](./docs/ru/06-prepare-backend.md)
 - Registration and authorization / [in English](./docs/en/07-auth-reg.md) / [на русском языке](./docs/ru/07-auth-reg.md)
+- Payments inside Telegram Web App / [in English](./docs/en/08-payments.md) / [на русском языке](./docs/ru/08-payments.md)
 
 ### About author
 
