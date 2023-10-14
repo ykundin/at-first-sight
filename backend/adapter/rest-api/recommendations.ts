@@ -1,5 +1,4 @@
 import { shouldBeAuth } from "./middlewares/should-be-auth";
-import { shouldBeNotLimited } from "./middlewares/should-be-not-limited";
 import { Matcher } from "~/app/matcher";
 
 import type { HttpRoute } from "./entities/http-route";
@@ -23,7 +22,6 @@ export const recommendationsRoutes: HttpRoute[] = [
   {
     method: "POST",
     path: "/api/send-reaction",
-    before: [shouldBeNotLimited],
     async handler({ user, request }) {
       const matcher = new Matcher();
       const targetUserId = request.body.targetUserId;
