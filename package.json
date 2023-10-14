@@ -3,7 +3,7 @@
   "scripts": {
     "object-storage": "docker-compose -f docker-compose.dev.yml up object-storage",
     "dev": "docker-compose -f docker-compose.dev.yml up",
-    "public-link": "ngrok http 5173"
+    "public-link": "ngrok http --host-header=at-first-sight.localhost 80"
   },
   "type": "module",
   "dependencies": {

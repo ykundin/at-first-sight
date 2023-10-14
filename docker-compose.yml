@@ -69,6 +69,8 @@ services:
       dockerfile: Dockerfile
     restart: always
     working_dir: /app
+    volumes:
+      - ./backend/tmp:/app/tmp
     env_file:
       - .env
     environment:

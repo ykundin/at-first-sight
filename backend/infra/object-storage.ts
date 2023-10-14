@@ -1,12 +1,12 @@
-import AWS from "aws-sdk";
+import S3 from "aws-sdk/clients/s3";
 
 export class ObjectStorage {
-  #client: AWS.S3;
+  #client: S3;
 
   #bucket: string;
 
   constructor() {
-    this.#client = new AWS.S3({
+    this.#client = new S3({
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID || "",
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || "",
@@ -20,13 +20,19 @@ export class ObjectStorage {
     this.#bucket = process.env.AWS_BUCKET || "";
   }
 
-  uploadFile(key: string, file: any) {
-    return this.#client
-      .upload({
-        Bucket: this.#bucket,
-        Key: key,
-        Body: file,
-      })
-      .promise();
+  async uploadFile(key: string, file: Buffer) {
+    return new Promise<any>((resolve, reject) => {
+      this.#client.upload(
+        {
+          Bucket: this.#bucket,
+          Key: key,
+          Body: file,
+        },
+        (err, data) => {
+          if (err) reject(err);
+          resolve(data);
+        }
+      );
+    });
   }
 }

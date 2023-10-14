@@ -1,4 +1,5 @@
 import crypto from "node:crypto";
+import fs from "node:fs/promises";
 import { nanoid } from "nanoid";
 
 import { ObjectStorage } from "~/infra/object-storage";
@@ -110,20 +111,15 @@ class Auth {
     return result.acknowledged;
   }
 
-  async #uploadFile(file: Blob): Promise<string> {
-    const types = {
-      "image/jpeg": "jpg",
-      "image/jpg": "jpg",
-      "image/png": "png",
-    };
-    const extension = (types as any)[file.type];
+  async #uploadFile(file: any): Promise<string> {
+    const chunks = file.originalFilename.split(".");
+    const extension = chunks[chunks.length - 1];
     const filename = `${nanoid()}.${extension}`;
 
     if (!extension) throw new Error("Invalid format of photo!");
 
     // Upload photo to object storage
-    const fileArrayBuffer = await file.arrayBuffer();
-    const fileBuffer = Buffer.from(fileArrayBuffer);
+    const fileBuffer = await fs.readFile(file.path);
     const fileInfo = await this.#objectStorage.uploadFile(filename, fileBuffer);
 
     return `/image/${fileInfo.Key}`;
@@ -152,8 +148,11 @@ class Auth {
     return user;
   }
 
-  async register(form: FormData, tgUser: TelegramUser): Promise<User> {
-    const file = form.get("photo") as Blob;
+  async register(tgUser: TelegramUser, form: any): Promise<User> {
+    const [photo] = form.photo;
+    const [ageRange] = form["age-range"];
+    const [interests] = form.interests;
+    const [gender] = form.gender;
 
     // Maybe user already exists?
     const dbUser = await this.getUserById(tgUser.id);
@@ -162,14 +161,14 @@ class Auth {
     }
 
     // TODO: Add the validation of form data
-    if (!file) throw new Error("Photo is required!");
+    if (!photo || photo.size < 1) throw new Error("Photo is required!");
 
     const user = {
       ...tgUser,
-      gender: String(form.get("gender")) || "",
-      interestsGender: String(form.get("interests")) || "",
-      ageRange: String(form.get("age-range")) || "",
-      photo: await this.#uploadFile(file),
+      gender: gender,
+      interestsGender: interests,
+      ageRange: ageRange,
+      photo: await this.#uploadFile(photo),
       restScores: 30,
     };
 
@@ -178,8 +177,10 @@ class Auth {
     return user;
   }
 
-  async editUser(userId: User["id"], form: FormData) {
-    const file = form.get("photo") as Blob;
+  async editUser(userId: User["id"], form: any) {
+    const [photo] = form.photo;
+    const [ageRange] = form["age-range"];
+    const [interests] = form.interests;
     const user = await this.getUserById(userId);
 
     if (!user) {
@@ -187,13 +188,13 @@ class Auth {
     }
 
     let input = {
-      interestsGender: String(form.get("interests")) || user.interestsGender,
-      ageRange: String(form.get("age-range")) || user.ageRange,
+      interestsGender: interests || user.interestsGender,
+      ageRange: ageRange || user.ageRange,
       photo: user.photo,
     };
 
-    if (file && file.size > 0) {
-      input.photo = await this.#uploadFile(file);
+    if (photo && photo.size > 0) {
+      input.photo = await this.#uploadFile(photo);
     }
 
     return await this.#editUserById(userId, input);

@@ -8,6 +8,7 @@ export interface HttpRoute {
   path: string;
   before?: RequestMiddleware[];
   handler(params: {
+    req: any;
     request: HttpRequest;
     response: HttpResponse;
     user: User;
