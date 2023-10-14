@@ -1,5 +1,4 @@
-import TgBotApi from "~/infra/tg-bot-api";
-import Auth from "~/app/auth";
+import { DI } from "~/infra/di";
 
 import type { HttpRoute } from "./entities/http-route";
 
@@ -8,24 +7,34 @@ export const webhookRoutes: HttpRoute[] = [
     method: "POST",
     path: "/webhook",
     async handler({ request }) {
-      const botApi = new TgBotApi();
-      const auth = new Auth();
+      const botApi = DI.get().botApi;
 
-      // TODO: Check the payment!
-      if (request.body.pre_checkout_query) {
-        await botApi.query("answerPreCheckoutQuery", {
-          ok: true,
-          pre_checkout_query_id: request.body.pre_checkout_query.id,
-        });
+      if (request.body.message) {
+        const message = request.body.message;
+
+        botApi.emit("message", { body: request.body });
+
+        if (message.successful_payment) {
+          botApi.emit("successful_payment", { body: request.body });
+        }
+
+        if (message.web_app_data) {
+          botApi.emit("web_app_data", { body: request.body });
+        }
+
+        if (message.entities?.length > 0) {
+          message.entities.forEach((entity) => {
+            if (entity.type === "bot_command") {
+              const command = message.text.slice(entity.offset, entity.length);
+
+              botApi.emit("commands", { command, body: request.body });
+            }
+          });
+        }
       }
 
-      // Info about success payment
-      if (request.body.message?.successful_payment) {
-        const payment = request.body.message.successful_payment;
-        const payload = JSON.parse(payment.invoice_payload);
-
-        console.log("New payment", payment);
-        await auth.addScores(payload.currentUserId, payload.scores);
+      if (request.body.pre_checkout_query) {
+        botApi.emit("pre_checkout_query", { body: request.body });
       }
 
       return { ok: true };

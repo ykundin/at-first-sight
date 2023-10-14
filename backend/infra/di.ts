@@ -1,7 +1,9 @@
 import type { MongoStore } from "~/infra/mongo-store";
+import type { TgBotApi } from "./tg-bot-api";
 
 export interface DIDeps {
   store: MongoStore;
+  botApi: TgBotApi;
 }
 
 interface DIStore {

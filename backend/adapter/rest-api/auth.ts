@@ -1,7 +1,6 @@
 import multiparty from "multiparty";
 
 import Auth from "~/app/auth";
-import { ObjectStorage } from "~/infra/object-storage";
 import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 import type { HttpRoute } from "./entities/http-route";

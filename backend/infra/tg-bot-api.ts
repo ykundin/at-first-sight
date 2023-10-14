@@ -1,7 +1,19 @@
-class TgBotApi {
+interface Listener {
+  event: string;
+  callback: (params: any) => void;
+}
+
+interface TgMessage {
+  chat_id: string;
+  text: string;
+}
+
+export class TgBotApi {
   #token: string;
 
   #host: string = "https://api.telegram.org";
+
+  #listeners: Listener[] = [];
 
   constructor() {
     this.#token = process.env.TELEGRAM_BOT_API || "";
@@ -11,6 +23,10 @@ class TgBotApi {
     const url = process.env.PUBLIC_URL || "";
 
     return this.query("setWebhook", { url: `${url}/webhook` });
+  }
+
+  async sendMessage(message: TgMessage) {
+    return this.query("sendMessage", message);
   }
 
   async query<T>(method: string, body?: Record<any, any>): Promise<T> {
@@ -35,6 +51,34 @@ class TgBotApi {
 
     return data.result;
   }
-}
 
-export default TgBotApi;
+  // Events
+
+  emit(event: string, params: any): void {
+    const listeners = this.#listeners.filter((listener) => {
+      return listener.event === event;
+    });
+
+    listeners.forEach((listener) => listener.callback(params));
+  }
+
+  onMessage(callback: (params: any) => void): void {
+    this.#listeners.push({ event: "message", callback });
+  }
+
+  onCommands(callback: (params: any) => void): void {
+    this.#listeners.push({ event: "commands", callback });
+  }
+
+  onPreCheckoutQuery(callback: (params: any) => void): void {
+    this.#listeners.push({ event: "pre_checkout_query", callback });
+  }
+
+  onSuccessfulPayment(callback: (params: any) => void): void {
+    this.#listeners.push({ event: "successful_payment", callback });
+  }
+
+  onWebAppData(callback: (params: any) => void): void {
+    this.#listeners.push({ event: "web_app_data", callback });
+  }
+}

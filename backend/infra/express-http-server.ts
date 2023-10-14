@@ -10,7 +10,7 @@ import { ValidationError } from "~/app/errors/validation-error";
 import { ServiceError } from "~/app/errors/service-error";
 import { restApiRoutes } from "~/adapter/rest-api";
 import { HttpRequest } from "~/adapter/rest-api/entities/http-request";
-import TgBotApi from "./tg-bot-api";
+import { chatListeners } from "~/adapter/chat-listeners";
 
 import type { HttpRoute } from "~/adapter/rest-api/entities/http-route";
 import type { HttpResponse } from "~/adapter/rest-api/entities/http-response";
@@ -18,13 +18,14 @@ import type { HttpServer } from "~/infra/entities/http-server";
 
 export class ExpressHttpServer implements HttpServer {
   #auth: Auth;
-  #botApi: TgBotApi;
   #server: Express;
 
   constructor() {
     this.#auth = new Auth();
-    this.#botApi = new TgBotApi();
     this.#server = express();
+
+    // Initialize the all chat listeners
+    chatListeners.forEach((ChatListener) => new ChatListener());
 
     // Set up the http server
     this.#server.disable("x-powered-by");
@@ -116,8 +117,6 @@ export class ExpressHttpServer implements HttpServer {
   }
 
   async listen(port: number, callback?: () => void): Promise<void> {
-    await this.#botApi.setWebhook();
-
     this.#server.listen(port, callback);
   }
 }

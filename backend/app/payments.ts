@@ -1,12 +1,13 @@
-import TgBotApi from "~/infra/tg-bot-api";
+import { DI } from "~/infra/di";
 
 import type { Order } from "~/domain/order";
+import type { TgBotApi } from "~/infra/tg-bot-api";
 
 class Payments {
   #botApi: TgBotApi;
 
   constructor() {
-    this.#botApi = new TgBotApi();
+    this.#botApi = DI.get().botApi;
   }
 
   async #createInvoiceLink(order: Order): Promise<string> {

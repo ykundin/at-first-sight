@@ -24,9 +24,14 @@ class Auth {
 
   #objectStorage: ObjectStorage;
 
+  #admins: number[] = [];
+
   constructor() {
     this.#store = DI.get().store;
     this.#objectStorage = new ObjectStorage();
+    this.#admins = (process.env.ADMINS || "")
+      .split(",")
+      .map((id) => Number(id));
   }
 
   get cookieName(): string {
@@ -94,6 +99,10 @@ class Auth {
         message: "Incorrect format of user",
       });
     }
+  }
+
+  isAdmin(id: number): boolean {
+    return this.#admins.includes(id);
   }
 
   async #saveUser(user: User): Promise<boolean> {
