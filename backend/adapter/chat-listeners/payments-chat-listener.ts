@@ -1,4 +1,4 @@
-import Auth from "~/app/auth";
+import { Auth } from "~/app/auth";
 import { DI } from "~/infra/di";
 
 import type { TgBotApi } from "~/infra/tg-bot-api";

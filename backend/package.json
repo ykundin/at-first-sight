@@ -2,7 +2,8 @@
   "name": "@at-first-sight/backend",
   "scripts": {
     "dev": "ts-node-dev -r tsconfig-paths/register run-dev-mode.ts",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/aws-sdk": "^2.7.0",

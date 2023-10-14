@@ -1,6 +1,6 @@
 import multiparty from "multiparty";
 
-import Auth from "~/app/auth";
+import { Auth } from "~/app/auth";
 import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 import type { HttpRoute } from "./entities/http-route";

@@ -17,7 +17,7 @@ interface TelegramUser {
   languageCode: string;
 }
 
-class Auth {
+export class Auth {
   #cookieName = "session_id";
 
   #store: MongoStore;
@@ -140,6 +140,12 @@ class Auth {
     return user;
   }
 
+  async getUserByUsername(username: User["username"]): Promise<User | null> {
+    const user = await this.#users.findOne({ username: username });
+
+    return user;
+  }
+
   async createSession(userId: User["id"]): Promise<string | null> {
     const sessionId = nanoid();
     const result = await this.#sessions.insertOne({
@@ -162,6 +168,7 @@ class Auth {
     const [ageRange] = form["age-range"];
     const [interests] = form.interests;
     const [gender] = form.gender;
+    const [description] = form.description;
 
     // Maybe user already exists?
     const dbUser = await this.getUserById(tgUser.id);
@@ -178,6 +185,7 @@ class Auth {
       interestsGender: interests,
       ageRange: ageRange,
       photo: await this.#uploadFile(photo),
+      description: description,
       restScores: 30,
     };
 
@@ -227,5 +235,3 @@ class Auth {
     return result.acknowledged;
   }
 }
-
-export default Auth;

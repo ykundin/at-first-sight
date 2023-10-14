@@ -1,4 +1,4 @@
-import Auth from "~/app/auth";
+import { Auth } from "~/app/auth";
 import { AccessDeniedError } from "~/app/errors/access-denied-error";
 import { DI } from "~/infra/di";
 

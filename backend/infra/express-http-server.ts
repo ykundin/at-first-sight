@@ -3,9 +3,10 @@ import express, {
   Express,
   Request as ExpressRequest,
   Response as ExpressResponse,
+  NextFunction,
 } from "express";
 
-import Auth from "~/app/auth";
+import { Auth } from "~/app/auth";
 import { ValidationError } from "~/app/errors/validation-error";
 import { ServiceError } from "~/app/errors/service-error";
 import { restApiRoutes } from "~/adapter/rest-api";
@@ -33,7 +34,7 @@ export class ExpressHttpServer implements HttpServer {
     this.#server.use(express.urlencoded({ extended: true }));
     this.#server.use(cookieParser());
 
-    this.#server.use((req, res) => {
+    this.#server.use((req, res, next) => {
       const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
 
       // Handle all REST API routes
@@ -48,13 +49,21 @@ export class ExpressHttpServer implements HttpServer {
         return new Response("Not found!", { status: 404 });
       }
 
-      this.#createRequestHandler(route)(req, res);
+      try {
+        this.#createRequestHandler(route)(req, res, next);
+      } catch (err) {
+        next(err);
+      }
     });
 
     this.#server.use((error: any, req: any, res: any, next: any) => {
+      if (res.headersSent) {
+        return next(error);
+      }
+
       // It is validation error
       if (error instanceof ValidationError) {
-        res.status(500).json({
+        return res.status(500).json({
           ok: false,
           error: error.toObject(),
         });
@@ -62,7 +71,9 @@ export class ExpressHttpServer implements HttpServer {
 
       // It's known error, send as response
       if (error instanceof ServiceError) {
-        res.status(500).json({ ok: false, error: { message: error.message } });
+        return res
+          .status(500)
+          .json({ ok: false, error: { message: error.message } });
       }
 
       // It's unknown error, log full error and send as dump info as response
@@ -78,39 +89,46 @@ export class ExpressHttpServer implements HttpServer {
   #createRequestHandler(route: HttpRoute) {
     const requestHandler = async (
       req: ExpressRequest,
-      res: ExpressResponse
+      res: ExpressResponse,
+      next: NextFunction
     ) => {
-      const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
-      const userAgent = req.headers["user-agent"] || "";
-      const ip = String(req.headers["x-forwarded-for"]);
+      try {
+        const url = new URL(req.url, `${req.protocol}://${req.hostname}`);
+        const userAgent = req.headers["user-agent"] || "";
+        const ip = String(req.headers["x-forwarded-for"]);
 
-      // Try to find user by sessionId in cookies
-      const sessionId = req.cookies[this.#auth.cookieName];
-      const user: any = await this.#auth.getUserFromSession(sessionId);
+        // Try to find user by sessionId in cookies
+        const sessionId = req.cookies[this.#auth.cookieName];
+        const user: any = await this.#auth.getUserFromSession(sessionId);
 
-      const request = new HttpRequest({
-        query: url.searchParams as any,
-        body: req.body,
-        userAgent: userAgent,
-        ip: ip,
-      });
+        const request = new HttpRequest({
+          query: url.searchParams as any,
+          body: req.body,
+          userAgent: userAgent,
+          ip: ip,
+        });
 
-      const response: HttpResponse = {
-        setCookie: res.cookie.bind(res),
-      };
+        const response: HttpResponse = {
+          setCookie: res.cookie.bind(res),
+        };
 
-      // Run the before middlewares
-      await Promise.all(
-        (route.before || []).map((middleware) => middleware({ request, user }))
-      );
+        // Run the before middlewares
+        await Promise.all(
+          (route.before || []).map((middleware) =>
+            middleware({ request, user })
+          )
+        );
 
-      const result = await route.handler({ req, request, response, user });
+        const result = await route.handler({ req, request, response, user });
 
-      if (typeof result === "string") {
-        res.header("Content-Type", "text/plain").send(result);
+        if (typeof result === "string") {
+          res.header("Content-Type", "text/plain").send(result);
+        }
+
+        res.json(result);
+      } catch (err) {
+        next(err);
       }
-
-      res.json(result);
     };
 
     return requestHandler;
