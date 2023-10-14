@@ -12,6 +12,7 @@ import { ServiceError } from "~/app/errors/service-error";
 import { restApiRoutes } from "~/adapter/rest-api";
 import { HttpRequest } from "~/adapter/rest-api/entities/http-request";
 import { chatListeners } from "~/adapter/chat-listeners";
+import { DI } from "./di";
 
 import type { HttpRoute } from "~/adapter/rest-api/entities/http-route";
 import type { HttpResponse } from "~/adapter/rest-api/entities/http-response";
@@ -77,13 +78,17 @@ export class ExpressHttpServer implements HttpServer {
       }
 
       // It's unknown error, log full error and send as dump info as response
-      console.error(error);
+      this.#logger.error(error);
 
       res.status(500).json({
         ok: false,
         error: { ok: false, error: { message: "Unknown error" } },
       });
     });
+  }
+
+  get #logger() {
+    return DI.get().logger;
   }
 
   #createRequestHandler(route: HttpRoute) {

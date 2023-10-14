@@ -7,6 +7,7 @@ async function runDevMode() {
   DI.setMany({
     store: new MongoStore(),
     botApi: new TgBotApi(),
+    logger: console,
   });
 
   const port = Number(process.env.PORT) || 3000;
