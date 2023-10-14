@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useQueryClient } from "@tanstack/react-query";
 import cn from "classnames";
@@ -20,6 +20,8 @@ const MatchesScreen: FC = () => {
   const webApp = useWebApp();
   const fire = useFire();
   const recommendations = useRecommendations();
+  const [animation, setAnimation] = useState("none");
+  const [loading, setLoading] = useState(false);
 
   const isLimited = recommendations.data?.locked || false;
   const [firstPeople, secondPeople] = recommendations.data?.peoples || [];
@@ -27,9 +29,24 @@ const MatchesScreen: FC = () => {
     ? fire.data.locked.length + fire.data.opened.length
     : 0;
 
+  const currentPeople = useMemo(() => {
+    const peoples = recommendations.data?.peoples || [];
+
+    return peoples.length > 2 ? peoples[1] : peoples[0];
+  }, [recommendations.data]);
+
   const sendReaction = useCallback(
     async (reaction: "no" | "yes") => {
+      const minTimeout = 700;
+      const startTime = Date.now();
+
       webApp.HapticFeedback.selectionChanged();
+
+      setAnimation(() => {
+        if (reaction === "no") return "swipe-left";
+        return "swipe-right";
+      });
+      setLoading(true);
 
       try {
         const res = await fetch("/api/send-reaction", {
@@ -44,10 +61,11 @@ const MatchesScreen: FC = () => {
         if (result.ok) {
           const data = result.data;
 
-          queryClient.setQueryData(["recommendations"], () => {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          queryClient.setQueryData(["recommendations"], (prev: any) => {
             return {
               locked: data.locked,
-              peoples: [secondPeople, data.newPeople],
+              peoples: [...prev.peoples, data.newPeople],
             };
           });
         } else {
@@ -56,9 +74,27 @@ const MatchesScreen: FC = () => {
       } catch (err) {
         console.error(err);
         alert("Unknown error, try later");
+      } finally {
+        const endTime = Date.now();
+        const diffTime = endTime - startTime;
+        const timeout = diffTime < minTimeout ? minTimeout - diffTime : 0;
+
+        setTimeout(() => {
+          setAnimation("none");
+          setLoading(false);
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          queryClient.setQueryData(["recommendations"], (prev: any) => {
+            return {
+              ...prev,
+              peoples:
+                prev.peoples.length > 2 ? prev.peoples.slice(1) : prev.peoples,
+            };
+          });
+        }, timeout);
       }
     },
-    [firstPeople, queryClient, secondPeople, webApp]
+    [firstPeople, queryClient, webApp]
   );
 
   const handleBuyScores = useCallback(async () => {
@@ -125,16 +161,18 @@ const MatchesScreen: FC = () => {
       </div>
 
       <div className={cn(styles.photo, { [styles.limited]: isLimited })}>
-        <img
-          className={cn(styles.image, { [styles.first]: true })}
-          src={firstPeople.photo}
-          alt=""
+        <div
+          className={cn(styles.image, {
+            [styles.first]: true,
+            [styles.swipeLeft]: animation === "swipe-left",
+            [styles.swipeRight]: animation === "swipe-right",
+          })}
+          style={{ backgroundImage: `url(${firstPeople.photo})` }}
         />
 
-        <img
+        <div
           className={cn(styles.image, { [styles.second]: true })}
-          src={secondPeople.photo}
-          alt=""
+          style={{ backgroundImage: `url(${secondPeople.photo})` }}
         />
       </div>
 
@@ -150,20 +188,26 @@ const MatchesScreen: FC = () => {
           <>
             <div className={styles.profile}>
               <div className={styles.name}>
-                <span>{`${firstPeople.firstName}`}</span>
-                {firstPeople.age && <span>{`, ${firstPeople.age}`}</span>}
+                <span>{`${currentPeople.firstName}`}</span>
+                {currentPeople.age && <span>{`, ${currentPeople.age}`}</span>}
               </div>
               <div className={styles.description}>
-                {firstPeople.description || "No description"}
+                {currentPeople.description || "No description"}
               </div>
             </div>
 
             <div className={styles.buttons}>
-              <CircleButton onClick={() => sendReaction("no")}>
+              <CircleButton
+                disabled={loading}
+                onClick={() => sendReaction("no")}
+              >
                 <img src={iconNo} alt="" />
               </CircleButton>
 
-              <CircleButton onClick={() => sendReaction("yes")}>
+              <CircleButton
+                disabled={loading}
+                onClick={() => sendReaction("yes")}
+              >
                 <img src={iconYes} alt="" />
               </CircleButton>
             </div>

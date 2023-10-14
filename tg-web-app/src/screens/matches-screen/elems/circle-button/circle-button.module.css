@@ -11,4 +11,8 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  user-select: none;
+}
+.button:not(:disabled):active {
+  background-color: var(--app-button-color);
 }

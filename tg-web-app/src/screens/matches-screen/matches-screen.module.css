@@ -92,14 +92,22 @@
   position: absolute;
   width: 100%;
   height: inherit;
-  height: inherit;
-  object-fit: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .image.first {
   z-index: 2;
 }
 .image.second {
   z-index: 1;
+}
+
+.image.swipeLeft {
+  animation: swipe-left 0.7s forwards;
+}
+.image.swipeRight {
+  animation: swipe-right 0.7s forwards;
 }
 
 .name,
@@ -141,4 +149,18 @@
 
 .message span {
   color: var(--app-brand-color);
+}
+
+@keyframes swipe-left {
+  100% {
+    transform: rotate(-12deg) translate3d(-100%, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes swipe-right {
+  100% {
+    transform: rotate(12deg) translate3d(100%, 0, 0);
+    opacity: 0;
+  }
 }
