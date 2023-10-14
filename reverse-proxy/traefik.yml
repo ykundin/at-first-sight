@@ -17,6 +17,9 @@ entryPoints:
   web-secure:
     address: ":443"
 
+  mongo:
+    address: ":27017"
+
 certificatesResolvers:
   letsEncryptStaging:
     acme:
