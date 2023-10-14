@@ -3,7 +3,7 @@ import { DI } from "~/infra/di";
 import { MongoStore } from "~/infra/mongo-store";
 import { TgBotApi } from "~/infra/tg-bot-api";
 
-async function start() {
+async function runDevMode() {
   DI.setMany({
     store: new MongoStore(),
     botApi: new TgBotApi(),
@@ -19,4 +19,4 @@ async function start() {
   });
 }
 
-start();
+runDevMode();
