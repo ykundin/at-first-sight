@@ -24,8 +24,6 @@ services:
     restart: always
     env_file:
       - .env
-    ports:
-      - 27017:27017
     volumes:
       - db_prod_data:/data/db
       - ./mongo/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d:ro
@@ -36,6 +34,7 @@ services:
       - traefik.tcp.routers.db.rule=HostSNI(`db.kundin.pro`)
       - traefik.tcp.routers.db.tls=true
       - traefik.tcp.routers.db.tls.certresolver=letsencrypt
+      - traefik.tcp.routers.db-1.tls.domains[0].main=db.kundin.pro
       - traefik.tcp.services.db.loadbalancer.server.port=27017
 
   object-storage:
