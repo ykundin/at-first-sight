@@ -3,11 +3,13 @@ import { DI } from "~/infra/di";
 import { MongoStore } from "~/infra/mongo-store";
 import { TgBotApi } from "./infra/tg-bot-api";
 import { SentryLogger } from "./infra/loggers/sentry-logger";
+import { IPRegistryInformer } from "./infra/ip-registry-informer";
 
 async function runProdMode() {
   DI.setMany({
     store: new MongoStore(),
     botApi: new TgBotApi(),
+    ipInformer: new IPRegistryInformer(),
     logger: new SentryLogger(),
   });
 

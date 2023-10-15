@@ -82,7 +82,7 @@ export class ExpressHttpServer implements HttpServer {
 
       res.status(500).json({
         ok: false,
-        error: { ok: false, error: { message: "Unknown error" } },
+        error: { message: "Unknown error" },
       });
     });
   }

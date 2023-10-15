@@ -1,6 +1,7 @@
 import multiparty from "multiparty";
 
 import { Auth } from "~/app/auth";
+import { Visitor } from "~/app/visitor";
 import { shouldBeAuth } from "./middlewares/should-be-auth";
 
 import type { HttpRoute } from "./entities/http-route";
@@ -10,19 +11,17 @@ export const authRoutes: HttpRoute[] = [
     method: "POST",
     path: "/api/get-user",
     async handler({ request, response }) {
-      console.log("ip", request.ip);
-
       const auth = new Auth();
+      const visitor = new Visitor();
       const tgUser = auth.getUserByInitData(request.body.initData);
       let user = await auth.updateUser(tgUser);
 
       // First visit of user before full registration
       if (!user) {
-        console.log("create", tgUser);
         user = await auth.createUser(tgUser);
-        console.log("user", user);
       }
 
+      // Create a new session
       if (user) {
         const sessionId = await auth.createSession(user.id);
 
@@ -33,6 +32,14 @@ export const authRoutes: HttpRoute[] = [
             httpOnly: true,
           });
         }
+      }
+
+      // Add info about new visit (but not waiting this)
+      if (user) {
+        visitor.addVisit({
+          userName: user.username,
+          ip: request.ip,
+        });
       }
 
       return {
