@@ -105,12 +105,6 @@ export class Auth {
     return this.#admins.includes(id);
   }
 
-  async #saveUser(user: User): Promise<boolean> {
-    const result = await this.#users.insertOne(user);
-
-    return result.acknowledged;
-  }
-
   async #editUserById(
     userId: User["id"],
     input: Partial<User>
@@ -118,6 +112,18 @@ export class Auth {
     const result = await this.#users.updateOne({ id: userId }, { $set: input });
 
     return result.acknowledged;
+  }
+
+  async #editUserByUsername(
+    username: User["username"],
+    input: Partial<User>
+  ): Promise<User | null> {
+    const result = await this.#users.updateOne({ username }, { $set: input });
+    const user = result.acknowledged
+      ? await this.getUserByUsername(username)
+      : null;
+
+    return user;
   }
 
   async #uploadFile(file: any): Promise<string> {
@@ -134,14 +140,14 @@ export class Auth {
     return `/image/${fileInfo.Key}`;
   }
 
-  async getUserById(userId: User["id"]): Promise<User | null> {
-    const user = await this.#users.findOne({ id: userId });
+  async getUserById(id: User["id"]): Promise<User | null> {
+    const user = await this.#users.findOne({ id });
 
     return user;
   }
 
   async getUserByUsername(username: User["username"]): Promise<User | null> {
-    const user = await this.#users.findOne({ username: username });
+    const user = await this.#users.findOne({ username });
 
     return user;
   }
@@ -163,18 +169,12 @@ export class Auth {
     return user;
   }
 
-  async register(tgUser: TelegramUser, form: any): Promise<User> {
+  async register(tgUser: TelegramUser, form: any): Promise<User | null> {
     const [photo] = form.photo;
     const [ageRange] = form["age-range"];
     const [interests] = form.interests;
     const [gender] = form.gender;
-    const [description] = form.description;
-
-    // Maybe user already exists?
-    const dbUser = await this.getUserById(tgUser.id);
-    if (dbUser) {
-      return dbUser;
-    }
+    const [description] = form.description || [undefined];
 
     // TODO: Add the validation of form data
     if (!photo || photo.size < 1) throw new Error("Photo is required!");
@@ -189,7 +189,32 @@ export class Auth {
       restScores: 30,
     };
 
-    await this.#saveUser(user);
+    return await this.#editUserByUsername(tgUser.username, user);
+  }
+
+  async updateUser(user: Partial<User>): Promise<User | null> {
+    const input = {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      languageCode: user.languageCode,
+    };
+    const editedUser = await this.#editUserByUsername(user.username, input);
+
+    return editedUser;
+  }
+
+  async createUser(tgUser: TelegramUser): Promise<User | null> {
+    const result = await this.#users.insertOne({
+      ...tgUser,
+      gender: undefined,
+      interestsGender: undefined,
+      ageRange: undefined,
+      photo: undefined,
+      restScores: 30,
+    });
+    const user = result.acknowledged
+      ? await this.getUserByUsername(tgUser.username)
+      : null;
 
     return user;
   }

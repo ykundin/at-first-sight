@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import PeopleCard from "./elems/people-card";
 import useWebApp from "../../queries/useWebApp";
 import useFire from "../../queries/useFire";
+import useTranslation from "./useTranslation";
 import iconFire from "./icons/fire.svg";
 import styles from "./fire-screen.module.css";
 
@@ -13,6 +14,7 @@ const FireScreen: FC = () => {
   const navigate = useNavigate();
   const webApp = useWebApp();
   const { data: fire } = useFire();
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Show the back button
@@ -29,7 +31,7 @@ const FireScreen: FC = () => {
     <div className={styles.screen}>
       <div className={styles.header}>
         <img className={styles.iconFire} src={iconFire} alt="" />
-        <div className={styles.title}>People who suit you</div>
+        <div className={styles.title}>{t.title}</div>
       </div>
 
       <div className={styles.groups}>
@@ -43,7 +45,7 @@ const FireScreen: FC = () => {
 
         {(fire?.locked.length || 0) > 0 && (
           <div className={styles.group}>
-            <div className={styles.groupTitle}>Showed interest</div>
+            <div className={styles.groupTitle}>{t.showedInterest}</div>
             <div className={styles.items}>
               {fire?.locked.map((people) => (
                 <PeopleCard key={people.id} people={people} locked />

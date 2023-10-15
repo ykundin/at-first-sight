@@ -10,17 +10,16 @@ export const authRoutes: HttpRoute[] = [
     method: "POST",
     path: "/api/get-user",
     async handler({ request, response, user: authUser }) {
-      // User already authorized
-      if (authUser) {
-        return {
-          ok: true,
-          data: authUser,
-        };
-      }
-
       const auth = new Auth();
       const tgUser = auth.getUserByInitData(request.body.initData);
-      const user = await auth.getUserById(tgUser.id);
+      let user = await auth.updateUser(tgUser);
+
+      // First visit of user before full registration
+      if (!user) {
+        console.log("create", tgUser);
+        user = await auth.createUser(tgUser);
+        console.log("user", user);
+      }
 
       if (user) {
         const sessionId = await auth.createSession(user.id);

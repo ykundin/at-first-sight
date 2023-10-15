@@ -2,6 +2,7 @@ import { useCallback } from "react";
 import cn from "classnames";
 
 import useWebApp from "../../../../queries/useWebApp";
+import useTranslation from "../../useTranslation";
 import styles from "./people-card.module.css";
 
 import type { HTMLAttributes, FC } from "react";
@@ -15,6 +16,7 @@ export interface PeopleCardProps extends HTMLAttributes<HTMLDivElement> {
 
 const PeopleCard: FC<PeopleCardProps> = (props) => {
   const { people, locked, ...restProps } = props;
+  const { t } = useTranslation();
   const webApp = useWebApp();
 
   const handleOpenProfile = useCallback(() => {
@@ -58,11 +60,11 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
         <div className={styles.footer}>
           {locked ? (
             <span className={styles.link} onClick={handleUnlockUser}>
-              Unlock the user
+              {t.unlockUser}
             </span>
           ) : (
             <span className={styles.link} onClick={handleOpenProfile}>
-              Open a profile
+              {t.openProfile}
             </span>
           )}
         </div>

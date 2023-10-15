@@ -18,7 +18,7 @@ const StartStep: FC<StartStepProps> = (props) => {
 
   useEffect(() => {
     const id = setTimeout(() => {
-      if (user.data) {
+      if (user.data?.gender) {
         if (onFinish) onFinish();
       } else {
         if (onEnd) onEnd();

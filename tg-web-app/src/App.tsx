@@ -20,6 +20,7 @@ const Root: FC = () => {
   const user = useUser();
   const webApp = useWebApp();
 
+  // App is ready?
   useEffect(() => {
     if (user.isLoading) return;
     if (user.isError) {
@@ -27,8 +28,10 @@ const Root: FC = () => {
       return;
     }
 
-    webApp.ready();
-    webApp.expand();
+    setTimeout(() => {
+      webApp.ready();
+      webApp.expand();
+    }, 100);
   }, [user, webApp]);
 
   if (user.isLoading || user.isError) return null;

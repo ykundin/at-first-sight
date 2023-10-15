@@ -6,6 +6,7 @@ import cn from "classnames";
 import useWebApp from "../../queries/useWebApp";
 import useFire from "../../queries/useFire";
 import useRecommendations from "../../queries/useRecommendations";
+import useTranslation from "./useTranslation";
 import CircleButton from "./elems/circle-button";
 import iconFire from "./icons/fire.svg";
 import iconClock from "./icons/clock.svg";
@@ -20,6 +21,7 @@ const MatchesScreen: FC = () => {
   const webApp = useWebApp();
   const fire = useFire();
   const recommendations = useRecommendations();
+  const { t } = useTranslation();
   const [animation, setAnimation] = useState("none");
   const [loading, setLoading] = useState(false);
 
@@ -134,13 +136,13 @@ const MatchesScreen: FC = () => {
 
     // Show the main button
     webApp.MainButton.show();
-    webApp.MainButton.setText("I want to continue");
+    webApp.MainButton.setText(t.continue);
 
     // Open the payment by click
     webApp.MainButton.onClick(handleBuyScores);
 
     return cleanup;
-  }, [isLimited, handleBuyScores, webApp]);
+  }, [isLimited, handleBuyScores, webApp, t]);
 
   if (!recommendations.data) return;
 
@@ -179,10 +181,7 @@ const MatchesScreen: FC = () => {
       <div className={styles.footer}>
         {isLimited ? (
           <div className={styles.message}>
-            <p>
-              You have already watched more than <span>30 people</span> today!
-              I'm sure you'll be noticed soon, let's wait?
-            </p>
+            <p dangerouslySetInnerHTML={{ __html: t.limitMessage }} />
           </div>
         ) : (
           <>
@@ -192,7 +191,7 @@ const MatchesScreen: FC = () => {
                 {currentPeople.age && <span>{`, ${currentPeople.age}`}</span>}
               </div>
               <div className={styles.description}>
-                {currentPeople.description || "No description"}
+                {currentPeople.description || t.noDescription}
               </div>
             </div>
 

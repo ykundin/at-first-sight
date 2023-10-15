@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import cn from "classnames";
 
 import RadioButtons from "../../../../ui/radio-buttons";
 import UploadButton from "../../../../ui/upload-button";
+import useTranslation from "../../useTranslation";
+import useWebApp from "../../../../queries/useWebApp";
 import styles from "./messages-step.module.css";
 
 import type { HTMLAttributes, FC, FormEventHandler } from "react";
@@ -37,95 +40,15 @@ interface UploadMessage {
   type: "in" | "out";
   view: "upload";
   field: string;
+  text: string;
 }
 
-type Message = TextMessage | VariantsMessage | UploadMessage;
+export type Message = TextMessage | VariantsMessage | UploadMessage;
 
 interface MessageComponentProps<T> extends HTMLAttributes<HTMLDivElement> {
   message: T;
   onEnd?: (message: T) => void;
 }
-
-const allMessages: Message[] = [
-  {
-    id: 1,
-    type: "in",
-    text: "But first we need to know a little more about you",
-    view: "text",
-  },
-  { id: 2, type: "in", text: "Select your gender, please", view: "text" },
-  {
-    id: 3,
-    type: "out",
-    view: "variants",
-    field: "gender",
-    variants: [
-      { id: "man", text: "Man" },
-      { id: "woman", text: "Woman" },
-    ],
-  },
-  {
-    id: 4,
-    type: "in",
-    view: "text",
-    text: `Cool! Now let's decide who you want to find here`,
-  },
-  {
-    id: 5,
-    type: "out",
-    view: "variants",
-    field: "interests",
-    variants: [
-      { id: "man", text: "A man" },
-      { id: "woman", text: "A woman" },
-    ],
-  },
-  {
-    id: 6,
-    type: "in",
-    view: "text",
-    text: `No problem! And also — please specify how old you are at the moment`,
-  },
-  {
-    id: 7,
-    type: "out",
-    view: "variants",
-    field: "age-range",
-    variants: [
-      { id: "14-18", text: "14-18" },
-      { id: "19-23", text: "19-23" },
-      { id: "24-30", text: "24-30" },
-      { id: "31-36", text: "31-36" },
-      { id: "37-45", text: "37-45" },
-      { id: "46-53", text: "46-53" },
-      { id: "older", text: "53 and older" },
-    ],
-  },
-  {
-    id: 8,
-    type: "in",
-    view: "text",
-    text: `And finally — choose a photo that we will show to other people`,
-  },
-  {
-    id: 9,
-    type: "out",
-    view: "upload",
-    field: "photo",
-  },
-  {
-    id: 10,
-    type: "in",
-    view: "submit",
-    text: `Just a second, we save your information...`,
-  },
-  {
-    id: 10,
-    type: "in",
-    view: "text",
-    text: `Welcome!`,
-  },
-];
 
 const TextMessage: FC<MessageComponentProps<TextMessage>> = (props) => {
   const { message, onEnd } = props;
@@ -180,7 +103,7 @@ const UploadMessage: FC<MessageComponentProps<UploadMessage>> = (props) => {
   return (
     <div className={styles.uploadMessage}>
       <UploadButton name={message.field} onChange={handleChange}>
-        Select photo
+        {message.text}
       </UploadButton>
 
       {file && (
@@ -198,12 +121,14 @@ const UploadMessage: FC<MessageComponentProps<UploadMessage>> = (props) => {
 
 const MessagesStep: FC<MessagesStepProps> = (props) => {
   const { onFinish } = props;
+  const { t } = useTranslation();
   const [index, setIndex] = useState(1);
+  const queryClient = useQueryClient();
   const refButton = useRef<HTMLButtonElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const initData = (window as any).Telegram.WebApp.initData;
+  const webApp = useWebApp();
+  const initData = webApp.initData;
 
-  const messages = allMessages.slice(0, index);
+  const messages = t.allMessages.slice(0, index);
 
   const handleNextMessage = useCallback(
     (message: Message) => {
@@ -229,12 +154,16 @@ const MessagesStep: FC<MessagesStepProps> = (props) => {
       if (result.ok) {
         setIndex((p) => p + 1);
 
+        queryClient.setQueryData(["user"], () => {
+          return result.data;
+        });
+
         setTimeout(() => {
           if (onFinish) onFinish();
         }, 1000);
       }
     },
-    [onFinish]
+    [onFinish, queryClient]
   );
 
   useEffect(() => {

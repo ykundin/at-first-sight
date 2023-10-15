@@ -1,37 +1,39 @@
 import { useEffect, useCallback, useRef, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 
 import RadioButtons from "../../ui/radio-buttons";
 import useWebApp from "../../queries/useWebApp";
 import useUser from "../../queries/useUser";
+import useTranslation from "./useTranslation";
 import styles from "./settings-screen.module.css";
 
 import type { ChangeEventHandler, FC, FormEventHandler } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-
-const interestItems = [
-  { id: "man", text: "A man" },
-  { id: "woman", text: "A woman" },
-];
-
-const ageItems = [
-  { id: "14-18", text: "14-18" },
-  { id: "19-23", text: "19-23" },
-  { id: "24-30", text: "24-30" },
-  { id: "31-36", text: "31-36" },
-  { id: "37-45", text: "37-45" },
-  { id: "46-53", text: "46-53" },
-  { id: "older", text: "53 and older" },
-];
 
 const SettingsScreen: FC = () => {
   const navigate = useNavigate();
   const { data: user } = useUser();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const queryClient = useQueryClient();
   const webApp = useWebApp();
   const refButton = useRef<HTMLButtonElement>(null);
+
+  const interestItems = [
+    { id: "man", text: t.man },
+    { id: "woman", text: t.woman },
+  ];
+
+  const ageItems = [
+    { id: "14-18", text: "14-18" },
+    { id: "19-23", text: "19-23" },
+    { id: "24-30", text: "24-30" },
+    { id: "31-36", text: "31-36" },
+    { id: "37-45", text: "37-45" },
+    { id: "46-53", text: "46-53" },
+    { id: "older", text: t.older },
+  ];
 
   const src = useMemo(() => {
     if (file) return URL.createObjectURL(file);
@@ -91,7 +93,7 @@ const SettingsScreen: FC = () => {
 
     // Show the main button
     if (!webApp.MainButton.isVisible) {
-      webApp.MainButton.setText("Save changes");
+      webApp.MainButton.setText(t.save);
       webApp.MainButton.show();
 
       // Open the payment by click
@@ -99,7 +101,7 @@ const SettingsScreen: FC = () => {
     }
 
     return cleanup;
-  }, [handleSave, webApp]);
+  }, [handleSave, webApp, t.save]);
 
   useEffect(() => {
     if (loading) {
@@ -134,7 +136,7 @@ const SettingsScreen: FC = () => {
       <div className={styles.photo}>
         <img className={styles.image} src={src} alt="" />
         <div className={styles.photoFooter}>
-          <span className={styles.changePhoto}>Change photo</span>
+          <span className={styles.changePhoto}>{t.changePhoto}</span>
         </div>
         <input
           className={styles.upload}
@@ -150,14 +152,16 @@ const SettingsScreen: FC = () => {
           <div className={styles.name}>
             {`${user.firstName} ${user.lastName}, 27`}
           </div>
-          <div className={styles.description}>Work smart, not hard</div>
+          <div className={styles.description}>
+            {user.description || t.noDescription}
+          </div>
         </div>
 
         <div className={styles.separator} />
 
         <div className={styles.content}>
           <div className={styles.group}>
-            <div className={styles.label}>Interests:</div>
+            <div className={styles.label}>{t.interests}</div>
             <div className={styles.groupContent}>
               <RadioButtons
                 name="interests"
@@ -168,7 +172,7 @@ const SettingsScreen: FC = () => {
           </div>
 
           <div className={styles.group}>
-            <div className={styles.label}>Age:</div>
+            <div className={styles.label}>{t.age}</div>
             <div className={styles.groupContent}>
               <RadioButtons
                 name="age-range"
