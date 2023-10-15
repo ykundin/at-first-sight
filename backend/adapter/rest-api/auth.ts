@@ -9,7 +9,9 @@ export const authRoutes: HttpRoute[] = [
   {
     method: "POST",
     path: "/api/get-user",
-    async handler({ request, response, user: authUser }) {
+    async handler({ request, response }) {
+      console.log("ip", request.ip);
+
       const auth = new Auth();
       const tgUser = auth.getUserByInitData(request.body.initData);
       let user = await auth.updateUser(tgUser);
