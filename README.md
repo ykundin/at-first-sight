@@ -43,7 +43,7 @@ This whole process can be described in one word — design — and it is the fir
 
 - Instruction for first run project / [in English](./docs/en/00-first-run.md) / [на русском языке](./docs/ru/00-first-run.md)
 - Design / [in English](./docs/en/01-design.md) / [на русском языке](./docs/ru/01-design.md)
-- Project Setup / [in English](./docs/en/02-design.md) / [на русском языке](./docs/ru/02-design.md)
+- Project Setup / [in English](./docs/en/02-settings.md) / [на русском языке](./docs/ru/02-settings.md)
 - Creating a project for the frontend / [in English](./docs/ru/03-create-frontend-project.md) / [на русском языке](./docs/ru/03-create-frontend-project.md)
 - Interface development / [in English](./docs/en/04-develop-interface.md) / [на русском языке](./docs/ru/04-develop-interface.md)
 - Detailed study of the interface / [in English](./docs/en/05-interface-details.md) / [на русском языке](./docs/ru/05-interface-details.md)
