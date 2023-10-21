@@ -12,7 +12,7 @@ async function runProdMode() {
     botApi: new TgBotApi(),
     ipInformer: new IPRegistryInformer(),
     logger: new SentryLogger(),
-    stats: new Stats();
+    stats: new Stats(),
   });
 
   const port = Number(process.env.PORT) || 3000;
