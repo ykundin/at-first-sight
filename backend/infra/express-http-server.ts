@@ -128,6 +128,7 @@ export class ExpressHttpServer implements HttpServer {
 
         if (typeof result === "string") {
           res.header("Content-Type", "text/plain").send(result);
+          return;
         }
 
         res.json(result);
