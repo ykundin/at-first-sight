@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-import type { People } from "../domain/people";
+import type { User } from "../domain/user";
 
 export interface Result {
-  opened: People[];
-  locked: People[];
+  opened: User[];
+  locked: User[];
 }
 
 function useFire() {

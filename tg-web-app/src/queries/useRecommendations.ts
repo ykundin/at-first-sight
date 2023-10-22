@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 
-import type { People } from "../domain/people";
+import type { User } from "../domain/user";
 
 interface Result {
   locked: boolean;
-  peoples: People[];
+  peoples: User[];
 }
 
 function useRecommendations() {

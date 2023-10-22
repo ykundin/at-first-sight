@@ -191,7 +191,6 @@ const MatchesScreen: FC = () => {
             <div className={styles.profile}>
               <div className={styles.name}>
                 <span>{`${currentPeople.firstName}`}</span>
-                {currentPeople.age && <span>{`, ${currentPeople.age}`}</span>}
               </div>
               <div className={styles.description}>
                 {currentPeople.description || t.noDescription}

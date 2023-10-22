@@ -37,8 +37,8 @@ const FireScreen: FC = () => {
       <div className={styles.groups}>
         <div className={styles.group}>
           <div className={styles.items}>
-            {fire?.opened.map((people) => (
-              <PeopleCard key={people.id} people={people} />
+            {fire?.opened.map((user) => (
+              <PeopleCard key={user.username} user={user} />
             ))}
           </div>
         </div>
@@ -47,8 +47,8 @@ const FireScreen: FC = () => {
           <div className={styles.group}>
             <div className={styles.groupTitle}>{t.showedInterest}</div>
             <div className={styles.items}>
-              {fire?.locked.map((people) => (
-                <PeopleCard key={people.id} people={people} locked />
+              {fire?.locked.map((user) => (
+                <PeopleCard key={user.username} user={user} locked />
               ))}
             </div>
           </div>
