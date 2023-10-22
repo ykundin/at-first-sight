@@ -2,6 +2,7 @@ import { DI } from "~/infra/di";
 
 import type { Order } from "~/domain/order";
 import type { TgBotApi } from "~/infra/tg-bot-api";
+import type { User } from "~/domain/user";
 
 class Payments {
   #botApi: TgBotApi;
@@ -20,9 +21,11 @@ class Payments {
   }
 
   async unlockProfile(params: {
-    currentUserId: number;
-    requestUserId: number;
+    currentUsername: User["username"];
+    requestUsername: User["username"];
   }): Promise<string> {
+    const { currentUsername, requestUsername } = params;
+
     const orderInfo = {
       title: "Unlock the profile",
       description: "Unlocks the profile that showed interests to you",
@@ -35,15 +38,19 @@ class Payments {
       ],
       payload: JSON.stringify({
         paymentId: "test",
-        currentUserId: params.currentUserId,
-        requestUserId: params.requestUserId,
+        currentUsername,
+        requestUsername,
       }),
     };
 
     return this.#createInvoiceLink(orderInfo);
   }
 
-  async buyScores(params: { currentUserId: number }): Promise<string> {
+  async buyScores(params: {
+    currentUsername: User["username"];
+  }): Promise<string> {
+    const { currentUsername } = params;
+
     const orderInfo = {
       title: "Buy 100 scores",
       description: "You will get another 100 points to evaluate other people",
@@ -56,7 +63,7 @@ class Payments {
       ],
       payload: JSON.stringify({
         paymentId: "test",
-        currentUserId: params.currentUserId,
+        currentUsername: currentUsername,
         scores: 100,
       }),
     };

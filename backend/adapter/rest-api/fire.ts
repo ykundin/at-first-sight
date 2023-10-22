@@ -10,7 +10,7 @@ export const fireRoutes: HttpRoute[] = [
     before: [shouldBeAuth],
     async handler({ user }) {
       const matcher = new Matcher();
-      const info = await matcher.getFire(user.id);
+      const info = await matcher.getFire(user.username);
 
       return {
         ok: true,

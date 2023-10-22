@@ -105,15 +105,6 @@ export class Auth {
     return this.#admins.includes(id);
   }
 
-  async #editUserById(
-    userId: User["id"],
-    input: Partial<User>
-  ): Promise<boolean> {
-    const result = await this.#users.updateOne({ id: userId }, { $set: input });
-
-    return result.acknowledged;
-  }
-
   async #editUserByUsername(
     username: User["username"],
     input: Partial<User>
@@ -140,23 +131,17 @@ export class Auth {
     return `/image/${fileInfo.Key}`;
   }
 
-  async getUserById(id: User["id"]): Promise<User | null> {
-    const user = await this.#users.findOne({ id });
-
-    return user;
-  }
-
   async getUserByUsername(username: User["username"]): Promise<User | null> {
     const user = await this.#users.findOne({ username });
 
     return user;
   }
 
-  async createSession(userId: User["id"]): Promise<string | null> {
+  async createSession(username: User["username"]): Promise<string | null> {
     const sessionId = nanoid();
     const result = await this.#sessions.insertOne({
       id: sessionId,
-      userId: userId,
+      username: username,
     });
 
     return result.acknowledged ? sessionId : null;
@@ -164,7 +149,9 @@ export class Auth {
 
   async getUserFromSession(sessionId: string): Promise<User | null> {
     const session = await this.#sessions.findOne({ id: sessionId });
-    const user = session ? await this.getUserById(session.userId) : null;
+    const user = session
+      ? await this.getUserByUsername(session.username)
+      : null;
 
     return user;
   }
@@ -238,11 +225,11 @@ export class Auth {
     return user;
   }
 
-  async editUser(userId: User["id"], form: any) {
+  async editUser(username: User["username"], form: any) {
     const [photo] = form.photo;
     const [ageRange] = form["age-range"];
     const [interests] = form.interests;
-    const user = await this.getUserById(userId);
+    const user = await this.getUserByUsername(username);
 
     if (!user) {
       throw new Error("User not found!");
@@ -258,21 +245,21 @@ export class Auth {
       input.photo = await this.#uploadFile(photo);
     }
 
-    return await this.#editUserById(userId, input);
+    return await this.#editUserByUsername(username, input);
   }
 
-  async decreaseScores(userId: User["id"]) {
+  async decreaseScores(username: User["username"]) {
     const result = await this.#users.updateOne(
-      { id: userId },
+      { username: username },
       { $inc: { restScores: -1 } }
     );
 
     return result.acknowledged;
   }
 
-  async addScores(userId: User["id"], scores: number) {
+  async addScores(username: User["username"], scores: number) {
     const result = await this.#users.updateOne(
-      { id: userId },
+      { username: username },
       { $inc: { restScores: scores } }
     );
 

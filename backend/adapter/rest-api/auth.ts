@@ -23,7 +23,7 @@ export const authRoutes: HttpRoute[] = [
 
       // Create a new session
       if (user) {
-        const sessionId = await auth.createSession(user.id);
+        const sessionId = await auth.createSession(user.username);
 
         // Save the sessionId in cookie
         if (sessionId) {
@@ -70,7 +70,7 @@ export const authRoutes: HttpRoute[] = [
       const user = await auth.register(tgUser, { ...fields, ...files });
 
       if (user) {
-        const sessionId = await auth.createSession(user.id);
+        const sessionId = await auth.createSession(user.username);
 
         // Save the sessionId in cookie
         if (sessionId) {
@@ -106,7 +106,10 @@ export const authRoutes: HttpRoute[] = [
       }
 
       const { fields, files } = await parseForm();
-      const status = await auth.editUser(user.id, { ...fields, ...files });
+      const status = await auth.editUser(user.username, {
+        ...fields,
+        ...files,
+      });
 
       return {
         ok: status,

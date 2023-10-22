@@ -10,7 +10,7 @@ export const recommendationsRoutes: HttpRoute[] = [
     before: [shouldBeAuth],
     async handler({ user }) {
       const matcher = new Matcher();
-      const info = await matcher.getRecommendations(user.id);
+      const info = await matcher.getRecommendations(user.username);
 
       return {
         ok: true,
@@ -24,11 +24,11 @@ export const recommendationsRoutes: HttpRoute[] = [
     path: "/api/send-reaction",
     async handler({ user, request }) {
       const matcher = new Matcher();
-      const targetUserId = request.body.targetUserId;
+      const targetUsername = request.body.targetUsername;
       const reaction = request.body.reaction;
       const info = await matcher.sendReaction({
-        userId: user.id,
-        targetUserId,
+        username: user.username,
+        targetUsername: targetUsername,
         reaction,
       });
 

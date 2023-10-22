@@ -12,8 +12,8 @@ export const paymentsRoutes: HttpRoute[] = [
       const payments = new Payments();
 
       const link = await payments.unlockProfile({
-        currentUserId: user.id,
-        requestUserId: request.body.userId,
+        currentUsername: user.username,
+        requestUsername: request.body.username,
       });
 
       return {
@@ -31,7 +31,7 @@ export const paymentsRoutes: HttpRoute[] = [
       const payments = new Payments();
 
       const link = await payments.buyScores({
-        currentUserId: user.id,
+        currentUsername: user.username,
       });
 
       return {

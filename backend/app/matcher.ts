@@ -25,8 +25,8 @@ export class Matcher {
       .toArray();
   }
 
-  async getRecommendations(userId: User["id"]) {
-    const user = await this.#auth.getUserById(userId);
+  async getRecommendations(username: User["username"]) {
+    const user = await this.#auth.getUserByUsername(username);
     const peoples = await this.#findPeoples(user, 2);
 
     return {
@@ -36,16 +36,16 @@ export class Matcher {
   }
 
   async sendReaction(params: {
-    userId: User["id"];
-    targetUserId: User["id"];
+    username: User["username"];
+    targetUsername: User["username"];
     reaction: "no" | "yes";
   }) {
-    const { userId, targetUserId } = params;
-    const decreased = await this.#auth.decreaseScores(userId);
+    const { username, targetUsername } = params;
+    const decreased = await this.#auth.decreaseScores(username);
 
     if (!decreased) throw new Error("Fail to decrease scores!");
 
-    const user = await this.#auth.getUserById(userId);
+    const user = await this.#auth.getUserByUsername(username);
     const allPeoples = await this.#findPeoples(user, 10);
     const randomIndex = this.#getRandomInt(0, allPeoples.length - 1);
     const newPeople = allPeoples[randomIndex];
@@ -56,8 +56,8 @@ export class Matcher {
     };
   }
 
-  async getFire(userId: User["id"]) {
-    const user = await this.#auth.getUserById(userId);
+  async getFire(username: User["username"]) {
+    const user = await this.#auth.getUserByUsername(username);
     const peoples = await this.#findPeoples(user, 3);
     const opened = [peoples[0], peoples[1]];
     const locked = [peoples[2]];

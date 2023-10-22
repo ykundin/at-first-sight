@@ -30,7 +30,7 @@ const PeopleCard: FC<PeopleCardProps> = (props) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId: people.id }),
+      body: JSON.stringify({ username: people.username }),
     });
     const result = await res.json();
 

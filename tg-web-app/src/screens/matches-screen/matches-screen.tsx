@@ -56,7 +56,10 @@ const MatchesScreen: FC = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ targetUserId: firstPeople?.id, reaction }),
+          body: JSON.stringify({
+            targetUsername: firstPeople.username,
+            reaction,
+          }),
         });
         const result = await res.json();
 
