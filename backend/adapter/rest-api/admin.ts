@@ -33,28 +33,7 @@ export const adminRoutes: HttpRoute[] = [
         languageCode: fields.languageCode[0],
       };
 
-      const dbUser = await auth.getUserByUsername(tgUser.username);
-
-      if (dbUser) {
-        throw new ValidationError({
-          field: "username",
-          message: "User already exists!",
-        });
-      }
-
       const user = await auth.register(tgUser, { ...fields, ...files });
-
-      if (user) {
-        const sessionId = await auth.createSession(user.id);
-
-        // Save the sessionId in cookie
-        if (sessionId) {
-          response.setCookie(auth.cookieName, sessionId, {
-            secure: true,
-            httpOnly: true,
-          });
-        }
-      }
 
       return {
         ok: true,
