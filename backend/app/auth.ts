@@ -182,6 +182,7 @@ export class Auth {
     const dbUser = this.getUserByUsername(tgUser.username);
 
     if (dbUser) {
+      console.log(dbUser);
       throw new ValidationError({
         field: "username",
         message: "User already exists!",
