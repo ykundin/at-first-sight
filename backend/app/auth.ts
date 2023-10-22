@@ -179,16 +179,6 @@ export class Auth {
     // TODO: Add the validation of form data
     if (!photo || photo.size < 1) throw new Error("Photo is required!");
 
-    const dbUser = this.getUserByUsername(tgUser.username);
-
-    if (dbUser) {
-      console.log(dbUser);
-      throw new ValidationError({
-        field: "username",
-        message: "User already exists!",
-      });
-    }
-
     const input = {
       ...tgUser,
       gender: gender,
@@ -198,9 +188,23 @@ export class Auth {
       description: description,
       restScores: 30,
     };
+    const dbUser = await this.getUserByUsername(tgUser.username);
 
-    const result = await this.#users.insertOne(input);
-    const user = result.acknowledged
+    let acknowledged: boolean = false;
+    if (dbUser) {
+      const result = await this.#users.updateOne(
+        { username: tgUser.username },
+        { $set: input }
+      );
+
+      acknowledged = result.acknowledged;
+    } else {
+      const result = await this.#users.insertOne(input);
+
+      acknowledged = result.acknowledged;
+    }
+
+    const user = acknowledged
       ? await this.getUserByUsername(tgUser.username)
       : null;
 
