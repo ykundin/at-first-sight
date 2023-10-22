@@ -216,6 +216,7 @@ export class Auth {
       interestsGender: undefined,
       ageRange: undefined,
       photo: undefined,
+      description: undefined,
       restScores: 30,
     });
     const user = result.acknowledged
