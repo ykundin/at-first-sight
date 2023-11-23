@@ -3,6 +3,7 @@
   "module": "run-dev-mode.ts",
   "type": "module",
   "scripts": {
+    "predev": "bun i",
     "dev": "bun run --watch run-dev-mode.ts"
   },
   "devDependencies": {
